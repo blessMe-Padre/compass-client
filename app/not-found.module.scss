@@ -1,4 +1,4 @@
-@import '@/app/mixins';
+@use '@/app/mixins' as *;
 // @include adaptiv-value("font-size", 24, 13);
 
 .wrapper {
@@ -20,7 +20,6 @@
     @media (max-width: 560px) {
         font-size: 160px;
     }
-
 }
 
 .text {

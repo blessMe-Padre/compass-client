@@ -1,0 +1,64 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
+.nav_wrapper {}
+
+.list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.link {
+    font-weight: 400;
+    @include adaptiv-value("font-size", 18, 16);
+    color: var(--white);
+    transition: color 0.3s ease;
+}
+
+.active {
+    color: var(--blue);
+}
+
+.nav_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.nav_contacts {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.phone_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.phone_icon {
+    fill: var(--white);
+}
+
+.icons_wrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--white);
+    border-radius: 100%;
+}
+
+.icon svg {
+    fill: var(--black2);
+}
