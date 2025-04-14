@@ -90,3 +90,12 @@ ul {
   padding: 0 20px;
   margin: 0 auto;
 }
+
+.relative {
+  position: relative;
+}
+
+svg,
+svg path {
+  transition: fill 0.3s ease;
+}

@@ -1,7 +1,10 @@
 @use '@/app/mixins' as *;
 // @include adaptiv-value("font-size", 24, 13);
 
-.nav_wrapper {}
+.nav_wrapper {
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--white);
+}
 
 .list {
     display: flex;
@@ -15,11 +18,16 @@
     @include adaptiv-value("font-size", 18, 16);
     color: var(--white);
     transition: color 0.3s ease;
+
+    &:hover {
+        color: var(--blue);
+    }
 }
 
 .active {
     color: var(--blue);
 }
+
 
 .nav_wrapper {
     display: flex;
@@ -38,6 +46,20 @@
     display: flex;
     align-items: center;
     gap: 10px;
+
+    a {
+        font-weight: 700;
+        @include adaptiv-value("font-size", 18, 16);
+        transition: color 0.3s ease;
+    }
+
+    &:hover {
+        color: var(--blue);
+    }
+
+    &:hover svg {
+        fill: var(--blue);
+    }
 }
 
 .phone_icon {
@@ -57,8 +79,17 @@
     justify-content: center;
     background-color: var(--white);
     border-radius: 100%;
-}
+    transition: all 0.3s ease;
 
-.icon svg {
-    fill: var(--black2);
+    svg {
+        fill: var(--black2);
+    }
+
+    &:hover {
+        background-color: var(--blue);
+
+        svg {
+            fill: var(--white);
+        }
+    }
 }

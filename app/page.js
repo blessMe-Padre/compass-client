@@ -12,7 +12,6 @@ export default function Home() {
         height={38}
         priority
       /> */}
-      <p className={styles.text}>Одежда для охоты,рыбалки от бренда КОМПАС</p>
     </main>
   );
 }
