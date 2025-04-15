@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PageMenu } from './../index';
 import styles from './style.module.scss';
@@ -287,6 +287,24 @@ const catalogLinks = [
 ]
 
 const Header = () => {
+    const [activeSubmenuLvl1, setActiveSubmenuLvl1] = useState(null);
+    const [hoveredSubmenuItem, setHoveredSubmenuItem] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkIsMobile(); // запустить после монтирования
+        window.addEventListener('resize', checkIsMobile);
+
+        return () => {
+            window.removeEventListener('resize', checkIsMobile);
+        };
+    }, []);
+
+
     const menuClick = (e) => {
 
         document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
@@ -328,10 +346,14 @@ const Header = () => {
         };
     }, []);
 
+    const returnToPrev = () => {
+        console.log('click');
+        setHoveredSubmenuItem(null);
+    };
     return (
         <header className={styles.header}>
             <div className="container">
-                <PageMenu />
+                {/* <PageMenu /> */}
 
                 <div className={styles.header_wrapper}>
                     <Image
@@ -342,40 +364,54 @@ const Header = () => {
                         height={74}
                         priority
                     />
-                    <ul className={`${styles.catalog_list} relative`}>
-                        {
-                            catalogLinks.map((item, index) => {
-                                return (
-                                    <li key={index}>
-                                        <Link
-                                            href={item.link}
-                                            onClick={menuClick}
-                                        >
-                                            {item.title}
-                                        </Link>
-                                        <ul className={styles.submenu}>
-                                            {item.subMenuLvl1.map((item, index) => {
-                                                return (
-                                                    <li key={index}>
-                                                        <Link href={item.link}>{item.title}</Link>
-                                                        <ul className={styles.submenu_2}>
-                                                            {item.subMenuLvl2.map((item, index) => {
-                                                                return (
-                                                                    <li key={index}>
-                                                                        <Link href={item.link}>{item.title}</Link>
-                                                                    </li>
-                                                                )
-                                                            })}
-                                                        </ul>
-                                                    </li>
-                                                )
-                                            })}
-                                        </ul>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
+                    <div className='relative'>
+                        <ul className={`${styles.catalog_list}`}>
+                            {catalogLinks.map((item, index) => (
+                                <li key={index} className={styles.catalog_list_item}>
+                                    <Link href={item.link} onClick={menuClick}>
+                                        {item.title}
+                                    </Link>
+
+                                    {/* subMenuLvl1 */}
+                                    <ul className={styles.submenu}>
+                                        {item.subMenuLvl1.map((subItem, subIndex) => (
+                                            <li
+                                                key={subIndex}
+                                                onMouseEnter={() => {
+                                                    setHoveredSubmenuItem(subItem);
+                                                    setActiveSubmenuLvl1(subItem);
+                                                }}
+                                                onMouseLeave={() => setHoveredSubmenuItem(null)}
+                                            >
+                                                <Link href={subItem.link}>{subItem.title}</Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            ))}
+                        </ul>
+                        {hoveredSubmenuItem?.subMenuLvl2?.length > 0 && (
+                            <div
+                                className={`${styles.submenu_2} ${styles.active}`}
+                                onMouseEnter={() => setHoveredSubmenuItem(hoveredSubmenuItem)}
+                                onMouseLeave={() => setHoveredSubmenuItem(null)}
+                            >
+                                {isMobile &&
+                                    <p onClick={returnToPrev} className={styles.text}>
+                                        ← {hoveredSubmenuItem.title}
+                                    </p>
+                                }
+
+                                {hoveredSubmenuItem.subMenuLvl2.map((subItem, index) => (
+                                    <Link key={index} href={subItem.link}>
+                                        {subItem.title}
+                                    </Link>
+                                ))}
+                            </div>
+                        )}
+
+                    </div>
+
                 </div>
 
             </div>
