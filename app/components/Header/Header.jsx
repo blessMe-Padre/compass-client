@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { useEffect, useState } from 'react';
 
-import { PageMenu } from './../index';
+import { MenuButton, PageMenu } from './../index';
 import styles from './style.module.scss';
 import Image from "next/image";
 
@@ -287,9 +287,12 @@ const catalogLinks = [
 ]
 
 const Header = () => {
+    const [isMobile, setIsMobile] = useState(false);
+    const [opened, setOpened] = useState(false);
+
+    // состояния меню каталога
     const [activeSubmenuLvl1, setActiveSubmenuLvl1] = useState(null);
     const [hoveredSubmenuItem, setHoveredSubmenuItem] = useState(null);
-    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const checkIsMobile = () => {
@@ -362,6 +365,12 @@ const Header = () => {
         <header className={styles.header}>
             <div className="container">
                 {/* <PageMenu /> */}
+                <MenuButton
+                    onClick={() => {
+                        setOpened(!opened);
+                    }}
+                    opened={opened}
+                />
 
                 <div className={styles.header_wrapper}>
                     <Image
