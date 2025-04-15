@@ -326,14 +326,14 @@ const Header = () => {
     }
 
     useEffect(() => {
+        if (isMobile) return;
+
         const handleClickOutside = (e) => {
             const menu = document.querySelector(`.${styles.catalog_list}`);
             if (menu && !menu.contains(e.target)) {
-
                 document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
                     link.classList.remove(styles.catalog_item_active);
                 });
-
                 document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
                     ul.classList.remove(styles.submenu_active);
                 });
@@ -344,12 +344,20 @@ const Header = () => {
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
-    }, []);
+    }, [isMobile]);
 
     const returnToPrev = () => {
-        console.log('click');
         setHoveredSubmenuItem(null);
     };
+
+    const closeMobileCatalogMenu = () => {
+        setHoveredSubmenuItem(null);
+        setActiveSubmenuLvl1(null);
+        document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
+            ul.classList.remove(styles.submenu_active);
+        });
+    };
+
     return (
         <header className={styles.header}>
             <div className="container">
@@ -365,15 +373,30 @@ const Header = () => {
                         priority
                     />
                     <div className='relative'>
+
                         <ul className={`${styles.catalog_list}`}>
                             {catalogLinks.map((item, index) => (
                                 <li key={index} className={styles.catalog_list_item}>
                                     <Link href={item.link} onClick={menuClick}>
                                         {item.title}
                                     </Link>
-
                                     {/* subMenuLvl1 */}
                                     <ul className={styles.submenu}>
+                                        {isMobile &&
+                                            <div className={styles.menu_wrapper}>
+                                                <p onClick={returnToPrev} className={styles.text}>Каталог</p>
+                                                <div onClick={closeMobileCatalogMenu}>
+                                                    <Image
+                                                        className={styles.logo}
+                                                        src="/сlose.svg"
+                                                        alt="сlose"
+                                                        width={20}
+                                                        height={20}
+                                                        priority
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
                                         {item.subMenuLvl1.map((subItem, subIndex) => (
                                             <li
                                                 key={subIndex}
@@ -390,6 +413,7 @@ const Header = () => {
                                 </li>
                             ))}
                         </ul>
+
                         {hoveredSubmenuItem?.subMenuLvl2?.length > 0 && (
                             <div
                                 className={`${styles.submenu_2} ${styles.active}`}
@@ -397,9 +421,21 @@ const Header = () => {
                                 onMouseLeave={() => setHoveredSubmenuItem(null)}
                             >
                                 {isMobile &&
-                                    <p onClick={returnToPrev} className={styles.text}>
-                                        ← {hoveredSubmenuItem.title}
-                                    </p>
+                                    <div className={styles.menu_wrapper}>
+                                        <p onClick={returnToPrev} className={styles.text}>
+                                            ← {hoveredSubmenuItem.title}
+                                        </p>
+                                        <div onClick={closeMobileCatalogMenu}>
+                                            <Image
+                                                className={styles.logo}
+                                                src="/сlose.svg"
+                                                alt="сlose"
+                                                width={20}
+                                                height={20}
+                                                priority
+                                            />
+                                        </div>
+                                    </div>
                                 }
 
                                 {hoveredSubmenuItem.subMenuLvl2.map((subItem, index) => (
