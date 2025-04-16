@@ -1,11 +1,11 @@
 'use client'
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-
-import { useEffect, useState } from 'react';
-
-import { MenuButton, PageMenu } from './../index';
-import styles from './style.module.scss';
 import Image from "next/image";
+import { motion } from "framer-motion";
+import styles from './style.module.scss';
+
+import { MenuButton, PageMenu, Search } from './../index';
 
 const catalogLinks = [
     {
@@ -289,6 +289,7 @@ const catalogLinks = [
 const Header = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [opened, setOpened] = useState(false);
+    const [searchOpened, setSearchOpened] = useState(false);
 
     // состояния меню каталога
     const [activeSubmenuLvl1, setActiveSubmenuLvl1] = useState(null);
@@ -306,7 +307,6 @@ const Header = () => {
             window.removeEventListener('resize', checkIsMobile);
         };
     }, []);
-
 
     const menuClick = (e) => {
 
@@ -361,42 +361,130 @@ const Header = () => {
         });
     };
 
+    // Работа с поиском
+    const variants = {
+        visible: {
+            opacity: 1,
+            height: "auto",
+            visibility: 'visible',
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+            },
+        },
+        hidden: {
+            opacity: 0,
+            height: 0,
+            visibility: 'hidden',
+        },
+    };
+    const menuRef = useRef(null);
+    const buttonRef = useRef(null);
+
+    // закрываем поиск при клике вне попапа
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target) &&
+                buttonRef.current && !buttonRef.current.contains(event.target)) {
+                setSearchOpened(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [setSearchOpened]);
+
     return (
         <header className={styles.header}>
+
+            <div ref={menuRef}>
+                <motion.div
+                    layout
+                    variants={variants}
+                    initial={"hidden"}
+                    animate={searchOpened ? "visible" : "hidden"}
+                    className="overflow-hidden"
+                >
+                    <Search />
+                </motion.div>
+            </div>
+
             <div className="container">
-                {/* <PageMenu /> */}
-                <MenuButton
-                    onClick={() => {
-                        setOpened(!opened);
-                    }}
-                    opened={opened}
-                />
-
+                <PageMenu opened={opened} setOpened={setOpened} />
                 <div className={styles.header_wrapper}>
-                    <Image
-                        className={styles.logo}
-                        src="/logo.svg"
-                        alt="logo"
-                        width={192}
-                        height={74}
-                        priority
-                    />
-                    <div className='relative'>
+                    <div className={styles.header_inner}>
+                        <Link href="/">
+                            <Image
+                                className={styles.logo}
+                                src="/logo.svg"
+                                alt="logo"
+                                width={192}
+                                height={74}
+                                priority
+                            />
+                        </Link>
 
-                        <ul className={`${styles.catalog_list}`}>
-                            {catalogLinks.map((item, index) => (
-                                <li key={index} className={styles.catalog_list_item}>
-                                    <Link href={item.link} onClick={menuClick}>
-                                        {item.title}
-                                    </Link>
-                                    {/* subMenuLvl1 */}
-                                    <ul className={styles.submenu}>
+                        <div className={styles.header_block}>
+                            <MenuButton
+                                onClick={() => {
+                                    setOpened(!opened);
+                                }}
+                                opened={opened}
+                            />
+                            <div className='relative'>
+                                <ul className={`${styles.catalog_list}`}>
+                                    {catalogLinks.map((item, index) => (
+                                        <li key={index} className={styles.catalog_list_item}>
+                                            <Link href={item.link} onClick={menuClick}>
+                                                {item.title}
+                                            </Link>
+                                            {/* subMenuLvl1 */}
+                                            <ul className={styles.submenu}>
+                                                {isMobile &&
+                                                    <div className={styles.menu_wrapper}>
+                                                        <p onClick={returnToPrev} className={styles.text}>Каталог</p>
+                                                        <div onClick={closeMobileCatalogMenu}>
+                                                            <Image
+                                                                src="/сlose.svg"
+                                                                alt="сlose"
+                                                                width={20}
+                                                                height={20}
+                                                                priority
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                }
+                                                {item.subMenuLvl1.map((subItem, subIndex) => (
+                                                    <li
+                                                        key={subIndex}
+                                                        onMouseEnter={() => {
+                                                            setHoveredSubmenuItem(subItem);
+                                                            setActiveSubmenuLvl1(subItem);
+                                                        }}
+                                                        onMouseLeave={() => setHoveredSubmenuItem(null)}
+                                                    >
+                                                        <Link href={subItem.link}>{subItem.title}</Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                {hoveredSubmenuItem?.subMenuLvl2?.length > 0 && (
+                                    <div
+                                        className={`${styles.submenu_2} ${styles.active}`}
+                                        onMouseEnter={() => setHoveredSubmenuItem(hoveredSubmenuItem)}
+                                        onMouseLeave={() => setHoveredSubmenuItem(null)}
+                                    >
                                         {isMobile &&
                                             <div className={styles.menu_wrapper}>
-                                                <p onClick={returnToPrev} className={styles.text}>Каталог</p>
+                                                <p onClick={returnToPrev} className={styles.text}>
+                                                    ← {hoveredSubmenuItem.title}
+                                                </p>
                                                 <div onClick={closeMobileCatalogMenu}>
                                                     <Image
-                                                        className={styles.logo}
                                                         src="/сlose.svg"
                                                         alt="сlose"
                                                         width={20}
@@ -406,54 +494,58 @@ const Header = () => {
                                                 </div>
                                             </div>
                                         }
-                                        {item.subMenuLvl1.map((subItem, subIndex) => (
-                                            <li
-                                                key={subIndex}
-                                                onMouseEnter={() => {
-                                                    setHoveredSubmenuItem(subItem);
-                                                    setActiveSubmenuLvl1(subItem);
-                                                }}
-                                                onMouseLeave={() => setHoveredSubmenuItem(null)}
-                                            >
-                                                <Link href={subItem.link}>{subItem.title}</Link>
-                                            </li>
+
+                                        {hoveredSubmenuItem.subMenuLvl2.map((subItem, index) => (
+                                            <Link key={index} href={subItem.link}>
+                                                {subItem.title}
+                                            </Link>
                                         ))}
-                                    </ul>
-                                </li>
-                            ))}
-                        </ul>
-
-                        {hoveredSubmenuItem?.subMenuLvl2?.length > 0 && (
-                            <div
-                                className={`${styles.submenu_2} ${styles.active}`}
-                                onMouseEnter={() => setHoveredSubmenuItem(hoveredSubmenuItem)}
-                                onMouseLeave={() => setHoveredSubmenuItem(null)}
-                            >
-                                {isMobile &&
-                                    <div className={styles.menu_wrapper}>
-                                        <p onClick={returnToPrev} className={styles.text}>
-                                            ← {hoveredSubmenuItem.title}
-                                        </p>
-                                        <div onClick={closeMobileCatalogMenu}>
-                                            <Image
-                                                className={styles.logo}
-                                                src="/сlose.svg"
-                                                alt="сlose"
-                                                width={20}
-                                                height={20}
-                                                priority
-                                            />
-                                        </div>
                                     </div>
-                                }
+                                )}
 
-                                {hoveredSubmenuItem.subMenuLvl2.map((subItem, index) => (
-                                    <Link key={index} href={subItem.link}>
-                                        {subItem.title}
-                                    </Link>
-                                ))}
                             </div>
-                        )}
+                        </div>
+                    </div>
+
+
+                    {/* Кнопки пользователя */}
+                    <div className={styles.user_nav}>
+                        <button
+                            ref={buttonRef}
+                            className={styles.button}
+                            onClick={() => setSearchOpened(!searchOpened)}
+                        >
+                            <Image
+                                src="/icons/search-icon.svg"
+                                alt="Поиск"
+                                width={25}
+                                height={25}
+                            />
+                        </button>
+                        <button className={styles.button}>
+                            <Image
+                                src="/icons/heart-icon.svg"
+                                alt="Избранное"
+                                width={25}
+                                height={25}
+                            />
+                        </button>
+                        <button className={styles.button}>
+                            <Image
+                                src="/icons/cart-icon.svg"
+                                alt="Корзина"
+                                width={25}
+                                height={25}
+                            />
+                        </button>
+                        <button className={styles.button}>
+                            <Image
+                                src="/icons/user-icon.svg"
+                                alt="Пользователь"
+                                width={25}
+                                height={25}
+                            />
+                        </button>
 
                     </div>
 

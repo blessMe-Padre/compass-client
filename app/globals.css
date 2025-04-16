@@ -11,10 +11,15 @@
   --orange: #f79410;
   --grey-grey: #eaeaea;
 
+  --hover-blue:#438db8;
+
   --font-family: "Ubuntu", sans-serif;
   --second-family: "GT Eesti Pro Display", sans-serif;
   --third-family: "Jost", sans-serif;
   --font3: "Futura PT", sans-serif;
+
+  /* animation function */
+  --anim-function: 0.3s ease;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -55,12 +60,10 @@ body {
   min-height: 100vh;
   display: grid;
   grid-template-rows: min-content 1fr min-content;
-}
-
-body {
   color: var(--white);
   background: var(--background);
   font-family: var(--font-family);
+  background-color: #2e2e2e;
 }
 
 * {

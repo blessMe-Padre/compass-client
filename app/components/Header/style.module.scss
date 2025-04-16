@@ -7,6 +7,34 @@
     align-items: center;
     padding-top: 20px;
     gap: 20px;
+    justify-content: space-between;
+
+    @media (max-width: 768px) {
+        padding-top: 0;
+        gap: 10px;
+    }
+
+    @media (max-width: 560px) {
+        align-items: flex-start;
+    }
+}
+
+.header_inner {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    @media (max-width: 560px) {
+        flex-wrap: wrap;
+        gap: 10px;
+        max-width: 240px;
+    }
+}
+
+.header_block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .catalog_list {
@@ -35,7 +63,6 @@
     }
 }
 
-
 .submenu {
     opacity: 0;
     visibility: hidden;
@@ -46,6 +73,7 @@
     width: 50%;
     min-height: 60vh;
     overflow-x: auto;
+    z-index: 1;
 
     background-color: var(--white);
 
@@ -120,4 +148,33 @@
     align-items: center;
     gap: 20px;
     justify-content: space-between;
+
+    @media (max-width: 768px) {
+        gap: 10px;
+    }
+}
+
+.logo {
+    @media (max-width: 768px) {
+        width: 120px;
+        height: 46px;
+    }
+}
+
+.user_nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    .button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    @media (max-width:560px) {
+        position: absolute;
+        top: 34px;
+        right: 20px;
+    }
 }

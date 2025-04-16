@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './style.module.scss';
+import Image from "next/image";
 
 /**
  * добавить asyng/await для получение menuLinks по api
@@ -34,11 +35,32 @@ const menuLinks = [
     },
 ]
 
-const PageMenu = () => {
+const PageMenu = ({ opened, setOpened }) => {
     const pathname = usePathname();
 
+    console.log(opened);
+
+
     return (
-        <div className={styles.nav_wrapper}>
+        <div className={`${styles.nav_wrapper} ${opened ? styles.popup_active : ''}`}>
+            <Image
+                className={styles.popup_logo}
+                src="/logo.svg"
+                alt="logo"
+                width={120}
+                height={46}
+                priority
+            />
+
+            <Image
+                className={styles.popup_close}
+                src="/сlose.svg"
+                alt="сlose"
+                width={20}
+                height={20}
+                priority
+                onClick={() => setOpened(false)}
+            />
             <nav className={styles.nav}>
                 <ul className={styles.list}>
                     {menuLinks.map(item => {
