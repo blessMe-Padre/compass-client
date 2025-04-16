@@ -1,0 +1,16 @@
+.main_slider {
+    width: 0;
+    min-width: 100%;
+    position: relative;
+    height: 200px;
+}
+
+.pagination_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom_pagination {
+    max-width: 690px !important;
+}

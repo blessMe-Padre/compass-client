@@ -22,7 +22,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ru">
-      <body className={`${ubuntu.variable} ${jost.variable}`}>
+      <body className={`${ubuntu.variable} ${jost.variable} relative`}>
         <Header />
         {children}
         <Footer />

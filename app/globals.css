@@ -1,6 +1,6 @@
 :root {
   --background: #ffffff;
-  --toggle-color: #ffffff;
+  --toggle-color: #1b1b1b;
   --blue: #007cc2;
   --black: #1b1b1b;
   --black2: #262626;
@@ -25,7 +25,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #2e2e2e;
-    --toggle-color: #1b1b1b;
+    --toggle-color: #ffffff;
   }
 }
 
@@ -60,10 +60,10 @@ body {
   min-height: 100vh;
   display: grid;
   grid-template-rows: min-content 1fr min-content;
-  color: var(--white);
+  color: var(--toggle-color);
   background: var(--background);
   font-family: var(--font-family);
-  background-color: #2e2e2e;
+  /* background-color: #2e2e2e; */
 }
 
 * {
@@ -88,6 +88,19 @@ ul {
   }
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
 .container {
   max-width: 1480px;
   padding: 0 20px;
@@ -101,4 +114,14 @@ ul {
 svg,
 svg path {
   transition: fill 0.3s ease;
+}
+
+.swiper-pagination-bullet {
+  background: var(--white) !important;
+  opacity: 1 !important;
+  width: 23% !important;
+  height: 2px !important;
+}
+.swiper-pagination-bullet-active {
+  background: var(--light-grey) !important;
 }

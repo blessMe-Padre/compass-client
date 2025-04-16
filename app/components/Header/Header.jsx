@@ -387,16 +387,25 @@ const Header = () => {
             if (menuRef.current && !menuRef.current.contains(event.target) &&
                 buttonRef.current && !buttonRef.current.contains(event.target)) {
                 setSearchOpened(false);
+                console.log('2222222');
             }
         };
+
+        // обработчик кастомного события (клик по слайдеру)
+        const handleSliderClick = () => {
+            setSearchOpened(false);
+        };
+
         document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("sliderClick", handleSliderClick);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("sliderClick", handleSliderClick);
         };
     }, [setSearchOpened]);
 
     return (
-        <header className={styles.header}>
+        <header className={`${styles.header} header`}>
 
             <div ref={menuRef}>
                 <motion.div
