@@ -38,9 +38,6 @@ const menuLinks = [
 const PageMenu = ({ opened, setOpened }) => {
     const pathname = usePathname();
 
-    console.log(opened);
-
-
     return (
         <div className={`${styles.nav_wrapper} ${opened ? styles.popup_active : ''}`}>
             <Image
@@ -69,7 +66,9 @@ const PageMenu = ({ opened, setOpened }) => {
                             <li key={item.link}>
                                 <Link
                                     className={`${styles.link} ${isActive ? styles.active : ''}`}
-                                    href={item.link}>
+                                    href={item.link}
+                                    onClick={() => setOpened(false)}
+                                >
                                     {item.title}
                                 </Link>
                             </li>
