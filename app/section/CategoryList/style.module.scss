@@ -13,6 +13,7 @@
 .slide {
     height: 100%;
     max-height: 223px;
+    position: relative;
 }
 
 .image_wrapper {
@@ -33,4 +34,21 @@
 
 .item {
     max-height: 223px;
+    position: relative;
+}
+
+.text {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-shadow: 1px 1px 2px black;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--white);
+
+    @media (max-width: 560px) {
+        font-size: 18px;
+    }
 }

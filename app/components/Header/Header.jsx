@@ -309,7 +309,6 @@ const Header = () => {
     }, []);
 
     const menuClick = (e) => {
-
         document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
             link.classList.remove(`${styles.catalog_item_active}`);
         });
@@ -317,7 +316,6 @@ const Header = () => {
         document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
             ul.classList.remove(styles.submenu_active);
         });
-
 
         const targetLink = e.target;
         targetLink.classList.add(`${styles.catalog_item_active}`);
@@ -380,18 +378,23 @@ const Header = () => {
     };
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
+    const submenuRef = useRef(null);
 
     // закрываем поиск при клике вне попапа
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target) &&
-                buttonRef.current && !buttonRef.current.contains(event.target)) {
+            if (!searchOpened) return;
+            console.log(handleClickOutside);
+
+
+            const isClickOutsideMenu = !menuRef.current || !menuRef.current.contains(event.target);
+            const isClickOutsideButton = !buttonRef.current || !buttonRef.current.contains(event.target);
+
+            if (isClickOutsideMenu && isClickOutsideButton) {
                 setSearchOpened(false);
-                console.log('2222222');
             }
         };
 
-        // обработчик кастомного события (клик по слайдеру)
         const handleSliderClick = () => {
             setSearchOpened(false);
         };
@@ -402,7 +405,7 @@ const Header = () => {
             document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("sliderClick", handleSliderClick);
         };
-    }, [setSearchOpened]);
+    }, [searchOpened]);
 
     return (
         <header className={`${styles.header} header`}>
@@ -483,6 +486,7 @@ const Header = () => {
 
                                 {hoveredSubmenuItem?.subMenuLvl2?.length > 0 && (
                                     <div
+                                        ref={submenuRef}
                                         className={`${styles.submenu_2} ${styles.active}`}
                                         onMouseEnter={() => setHoveredSubmenuItem(hoveredSubmenuItem)}
                                         onMouseLeave={() => setHoveredSubmenuItem(null)}
@@ -555,13 +559,9 @@ const Header = () => {
                                 height={25}
                             />
                         </button>
-
                     </div>
-
                 </div>
-
             </div>
-
         </header>
     )
 }

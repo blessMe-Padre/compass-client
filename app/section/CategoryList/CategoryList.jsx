@@ -10,7 +10,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { LinkButton } from '@/app/components';
-import { Unkempt } from 'next/font/google';
 
 const slides = [
     {
@@ -19,7 +18,7 @@ const slides = [
     },
     {
         image: '/remove/category-slide-1.jpg',
-        text: 'спецодежда',
+        text: 'зимняя одежда',
     },
     {
         image: '/remove/category-slide.jpg',
@@ -71,7 +70,7 @@ const CategoryList = () => {
                         breakpoints={{
                             320: { slidesPerView: 1 },
                             375: { slidesPerView: 1.5 },
-                            425: { slidesPerView: 2.5 },
+                            560: { slidesPerView: 2.5 },
                         }}
                     >
                         {slides.map((slide, index) => {
@@ -89,6 +88,7 @@ const CategoryList = () => {
                                                 blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                             />
                                         </div>
+                                        <h3 className={styles.text}>{slide?.text}</h3>
                                     </div>
                                 </SwiperSlide>
 
@@ -111,6 +111,8 @@ const CategoryList = () => {
                                             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                         />
                                     </div>
+
+                                    <h3 className={styles.text}>{slide?.text}</h3>
                                 </div>
                             )
                         })}
