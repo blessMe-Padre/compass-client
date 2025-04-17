@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import { MainSlider } from "./section";
+import { CategoryList, MainSlider } from "./section";
 
 export default function Home() {
   return (
@@ -16,6 +16,7 @@ export default function Home() {
         blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
       /> */}
       <MainSlider />
+      <CategoryList />
     </main>
   );
 }

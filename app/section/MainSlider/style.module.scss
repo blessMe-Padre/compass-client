@@ -5,7 +5,15 @@
     width: 0;
     min-width: 100%;
     position: relative;
-    height: 200px;
+    min-height: 100vh;
+
+    @media (max-width: 768px) {
+        min-height: 550px;
+    }
+
+    @media (max-width: 560px) {
+        min-height: 640px;
+    }
 }
 
 .custom_pagination {
@@ -32,11 +40,12 @@
 
 .slide {
     position: relative;
-    min-height: 100vh;
 
     display: flex;
     align-items: flex-end;
     justify-content: center;
+
+    min-height: 100vh;
 
     @media (max-width: 768px) {
         min-height: 550px;
