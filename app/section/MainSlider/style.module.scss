@@ -1,3 +1,6 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
 .main_slider {
     width: 0;
     min-width: 100%;
@@ -5,12 +8,74 @@
     height: 200px;
 }
 
-.pagination_wrapper {
+.custom_pagination {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    gap: 10px;
+    gap: 5px;
+    width: 100%;
+    max-width: 690px !important;
+    position: absolute;
+    left: 50% !important;
+    bottom: 70px !important;
+    z-index: 20;
+    transform: translateX(-50%);
+    padding: 0 20px;
+
+    @media (max-width: 768px) {
+        bottom: 40px !important;
+    }
+
+    @media (max-width: 560px) {
+        bottom: 20px !important;
+    }
 }
 
-.custom_pagination {
-    max-width: 690px !important;
+.slide {
+    position: relative;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    @media (max-width: 768px) {
+        min-height: 550px;
+    }
+
+    @media (max-width: 560px) {
+        min-height: 640px;
+    }
+}
+
+.image_wrapper {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+}
+
+.image_wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide_content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    @include adaptiv-value("padding-bottom", 204, 103);
+}
+
+.slide_text {
+    font-family: var(--font-family);
+    font-weight: 700;
+    @include adaptiv-value("font-size", 70, 28);
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    max-width: 1050px;
+    padding: 0 20px;
 }

@@ -11,7 +11,7 @@
   --orange: #f79410;
   --grey-grey: #eaeaea;
 
-  --hover-blue:#438db8;
+  --hover-blue: #438db8;
 
   --font-family: "Ubuntu", sans-serif;
   --second-family: "GT Eesti Pro Display", sans-serif;
@@ -119,9 +119,10 @@ svg path {
 .swiper-pagination-bullet {
   background: var(--white) !important;
   opacity: 1 !important;
-  width: 23% !important;
+  width: 100% !important;
   height: 2px !important;
 }
+
 .swiper-pagination-bullet-active {
   background: var(--light-grey) !important;
 }
