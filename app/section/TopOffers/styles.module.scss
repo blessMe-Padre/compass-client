@@ -1,0 +1,88 @@
+@use '@/app/mixins' as *;
+
+.section_top_offers {
+    padding: 120px 0;
+
+    @media (max-width: 780px) {
+        padding: 80px 0;
+    }
+
+    @media (max-width: 780px) {
+        padding: 20px 0;
+    }
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 780px) {
+        flex-direction: column;
+        gap: 10px;
+        justify-content: start;
+        align-items: start;
+    }
+}
+
+.top_items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+
+    
+    @media (max-width: 780px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.title_top_offers {
+    color: var(--blue);
+    text-transform: uppercase;
+    font-weight: 500;
+
+    @include adaptiv-value("font-size", 44, 22);
+
+    @media (max-width: 480px) {
+        font-size: 22px;
+    }
+}
+
+.link_to_catalog {
+    display: flex;
+    align-items: center;
+    color: var(--blue);
+    gap: 5px;
+
+    font-size: 18px;
+
+    transition: all 0.3s ease-in-out;
+}
+
+
+.link_to_catalog:hover {
+   color: var(--white);
+}
+
+.link_to_catalog:active {
+    color: var(--orange);
+ }
+ 
+ .link_to_catalog svg path {
+    transition: all 0.3s ease-in-out;
+ }
+
+ 
+.link_to_catalog:hover svg path{
+    fill: var(--white);
+ }
+ 
+.link_to_catalog:active svg path{
+    fill: var(--orange);
+ }
+ 
+ 
