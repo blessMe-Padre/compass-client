@@ -1,1 +1,211 @@
-.footer {}
+@use '@/app/mixins' as *;
+
+.footer {
+    padding: 50px 0;
+
+    @media (max-width: 480px) {
+        padding: 20px 0;
+    }
+}
+
+.logo__footer {
+
+    @media (max-width: 780px) {
+        width: 120px;
+        height: 70px;
+    }
+
+    @media (max-width: 480px) {
+        width: 100px;
+        height: 40px;
+    }
+}
+
+.footer_logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 0;
+
+    border-top: 1px solid var(--gray);
+    border-bottom: 1px solid var(--gray);
+
+    @media (max-width: 800px) {
+        padding: 10px 0;
+    }
+}
+
+.title_info {
+    color: var(--white);
+    font-weight: 500;
+    text-transform: uppercase;
+    @include adaptiv-value("font-size", 20, 18);
+
+    padding-bottom: 20px;
+
+    @media (max-width: 480px) {
+        font-size: 14px;
+    }
+}
+
+.socials_links img {
+    padding-bottom: 10px;
+}
+
+.social_adress {
+    transition: all .3s ease-in-out;
+}
+
+.socials_links_email {
+    color: var(--white);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 18, 16);
+
+    margin-bottom: 20px;
+    margin-top: 20px;
+
+    @media (max-width: 480px) {
+        font-size: 12px;
+    }
+
+    transition: all 0.3s ease-in-out;
+}
+
+.socials_links_email:hover, .social_adress:hover {
+    color: var(--blue);
+}
+
+
+.socials_links_email:active, .social_adress:active {
+    color: var(--orange);
+}
+
+.social_adress a {
+    @include adaptiv-value("font-size", 18, 16);
+
+    @media (max-width: 480px) {
+        font-size: 12px;
+    }
+}
+
+.socials_links {
+    margin-top: 20px;
+}
+
+.contacts_item, .socials_links p {
+    color: var(--white);
+    text-transform: uppercase;
+    font-weight: 500;
+    @include adaptiv-value("font-size", 18, 16);
+
+    margin-bottom: 10px;
+
+    @media (max-width: 480px) {
+        font-size: 14px;
+    }
+
+    transition: all 0.3s ease-in-out;
+}
+
+.contacts_item:hover {
+    color: var(--blue);
+}
+
+
+.contacts_item:active {
+    color: var(--orange);
+}
+
+.socials_links svg rect, .socials_links svg path {
+    transition: all 0.3s ease-in-out;
+}
+
+.socials_links svg:hover rect {
+    fill: var(--blue);
+}
+
+
+.socials_links svg:active rect {
+    fill: var(--orange);
+}
+
+.socials_links svg:hover path {
+    fill: var(--white);
+}
+
+
+.socials_links svg:active path {
+    fill: var(--white);
+}
+
+.footer_info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 30px;
+    @media (max-width:900px) {
+        justify-content: space-around;
+    }
+
+    @media (max-width:500px) {
+        justify-content: space-between;
+    }
+}
+
+.footer_info_other {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 1px solid var(--gray);
+    border-bottom: 1px solid var(--gray);
+
+
+    @media (max-width: 780px) {
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+
+        gap: 5px;
+        
+        font-size: 12px;
+     }
+}
+
+.menu_item {
+    @include adaptiv-value("font-size", 16, 14);
+    color: var(--light-gray);
+    margin-bottom: 10px;
+}
+
+.menu_categories {
+    column-count: 2;
+    @media (max-width:480px) {
+        column-count: 1;
+    }
+}
+
+.wrapper_catalog_menu {
+    @media (max-width:900px) {
+        order: 2;
+    }
+
+    @media (max-width:480px) {
+        order: 0;
+    }
+}
+
+.menu_clients li, .menu_categories li {
+    transition: all .3s ease-in-out;
+}
+
+.menu_clients li:hover, .menu_categories li:hover{
+    color: var(--blue);
+}
+
+.menu_clients li:active, .menu_categories li:active{
+    color: var(--orange);
+}

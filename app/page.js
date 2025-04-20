@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import { CategoryList, MainSlider } from "./section";
+import { CategoryList, InfoSection, MainSlider } from "./section";
 
 export default function Home() {
   return (
@@ -17,6 +17,7 @@ export default function Home() {
       /> */}
       <MainSlider />
       <CategoryList />
+      <InfoSection />
     </main>
   );
 }

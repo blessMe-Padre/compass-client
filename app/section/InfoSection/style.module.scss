@@ -1,0 +1,48 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
+.info_section_img {
+    position: absolute;
+
+    max-width: 1400px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.info_section_content {
+    position: relative;
+    z-index: 1;
+
+    padding: 80px 50px;
+
+    max-width: 700px;
+   
+}
+
+.info_title {
+    text-transform: uppercase;
+    color: var(--white);
+
+    margin-bottom: 40px;
+
+    @include adaptiv-value("font-size", 44, 30);
+
+    @media (max-width:500px) {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+}
+
+.info_content_text {
+    margin-bottom: 40px;
+}
+
+.info_content_text p {
+    margin-bottom: 15px;
+
+    @media (max-width:500px) {
+        margin-bottom: 10px;
+    }
+
+}
