@@ -5,11 +5,11 @@
   --black: #1b1b1b;
   --black2: #262626;
   --white: #ffffff;
-  --grey: #6b6b6b;
-  --light-grey: #c4c4c4;
-  --super-light-grey: #f6f6f6;
+  --gray: #6b6b6b;
+  --light-gray: #c4c4c4;
+  --super-light-gray: #f6f6f6;
   --orange: #f79410;
-  --grey-grey: #eaeaea;
+  --gray-gray: #eaeaea;
 
   --hover-blue: #438db8;
 
@@ -96,7 +96,7 @@ ul {
   border: 0;
   padding: 0;
   white-space: nowrap;
-  clip-path: inset(100%);
+  clipPath: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
@@ -132,10 +132,33 @@ svg path {
 }
 
 .swiper-pagination-bullet-active {
-  background: var(--light-grey) !important;
+  background: var(--light-gray) !important;
 }
 
 .section {
   padding-top: clamp(3.125rem, 1.585rem + 6.573vw, 7.5rem);
   padding-bottom: clamp(3.125rem, 1.585rem + 6.573vw, 7.5rem);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.gap-10 {
+  gap: 10px;
+}
+
+
+.gap-5 {
+  gap: 5px;
+}
+
+.align-center {
+  align-items: center;
 }
