@@ -162,3 +162,7 @@ svg path {
 .align-center {
   align-items: center;
 }
+
+.thumbnail_list .swiper-slide-thumb-active {
+  border: 2px solid var(--blue);
+}

@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import { Counter } from "@/app/components";
+import { AddToCartButton, Counter } from "@/app/components";
 
 const data = {
     "data": [
@@ -31,6 +31,204 @@ const data = {
                 "priceString": null,
                 "imgs": {
                     "data": [
+                        {
+                            "id": 21167,
+                            "attributes": {
+                                "name": "cart-image.jpg",
+                                "alternativeText": null,
+                                "caption": null,
+                                "width": 5176,
+                                "height": 2698,
+                                "formats": {
+                                    "thumbnail": {
+                                        "name": "cart-image",
+                                        "hash": "thumbnail_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 245,
+                                        "height": 128,
+                                        "size": 3.44,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "large": {
+                                        "name": "cart-image",
+                                        "hash": "large_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 1000,
+                                        "height": 521,
+                                        "size": 29.46,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "medium": {
+                                        "name": "medium_import_files/17/172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902.jpg",
+                                        "hash": "medium_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 750,
+                                        "height": 391,
+                                        "size": 18.4,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "small": {
+                                        "name": "small_import_files/17/172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902.jpg",
+                                        "hash": "small_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 500,
+                                        "height": 260,
+                                        "size": 9.66,
+                                        "url": "/remove/cart-image.jpg"
+                                    }
+                                },
+                                "hash": "172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                "ext": ".jpg",
+                                "mime": "image/jpg",
+                                "size": 200.25,
+                                "url": "/remove/cart-image.jpg",
+                                "previewUrl": null,
+                                "provider": "local",
+                                "provider_metadata": null,
+                                "createdAt": "2024-03-26T01:09:16.222Z",
+                                "updatedAt": "2024-03-26T01:09:16.222Z"
+                            }
+                        },
+                        {
+                            "id": 21167,
+                            "attributes": {
+                                "name": "cart-image.jpg",
+                                "alternativeText": null,
+                                "caption": null,
+                                "width": 5176,
+                                "height": 2698,
+                                "formats": {
+                                    "thumbnail": {
+                                        "name": "cart-image",
+                                        "hash": "thumbnail_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 245,
+                                        "height": 128,
+                                        "size": 3.44,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "large": {
+                                        "name": "cart-image",
+                                        "hash": "large_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 1000,
+                                        "height": 521,
+                                        "size": 29.46,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "medium": {
+                                        "name": "medium_import_files/17/172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902.jpg",
+                                        "hash": "medium_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 750,
+                                        "height": 391,
+                                        "size": 18.4,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "small": {
+                                        "name": "small_import_files/17/172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902.jpg",
+                                        "hash": "small_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 500,
+                                        "height": 260,
+                                        "size": 9.66,
+                                        "url": "/remove/cart-image.jpg"
+                                    }
+                                },
+                                "hash": "172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                "ext": ".jpg",
+                                "mime": "image/jpg",
+                                "size": 200.25,
+                                "url": "/remove/category-slide-1.jpg",
+                                "previewUrl": null,
+                                "provider": "local",
+                                "provider_metadata": null,
+                                "createdAt": "2024-03-26T01:09:16.222Z",
+                                "updatedAt": "2024-03-26T01:09:16.222Z"
+                            }
+                        },
+                        {
+                            "id": 21167,
+                            "attributes": {
+                                "name": "cart-image.jpg",
+                                "alternativeText": null,
+                                "caption": null,
+                                "width": 5176,
+                                "height": 2698,
+                                "formats": {
+                                    "thumbnail": {
+                                        "name": "cart-image",
+                                        "hash": "thumbnail_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 245,
+                                        "height": 128,
+                                        "size": 3.44,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "large": {
+                                        "name": "cart-image",
+                                        "hash": "large_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 1000,
+                                        "height": 521,
+                                        "size": 29.46,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "medium": {
+                                        "name": "medium_import_files/17/172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902.jpg",
+                                        "hash": "medium_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 750,
+                                        "height": 391,
+                                        "size": 18.4,
+                                        "url": "/remove/cart-image.jpg"
+                                    },
+                                    "small": {
+                                        "name": "small_import_files/17/172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902.jpg",
+                                        "hash": "small_172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpg",
+                                        "path": null,
+                                        "width": 500,
+                                        "height": 260,
+                                        "size": 9.66,
+                                        "url": "/remove/cart-image.jpg"
+                                    }
+                                },
+                                "hash": "172bc2da744111e88108bcee7b8bc990_4deb50f4dab911ee813c00155d025902_cf42c3d1f0",
+                                "ext": ".jpg",
+                                "mime": "image/jpg",
+                                "size": 200.25,
+                                "url": "/remove/cart-image.jpg",
+                                "previewUrl": null,
+                                "provider": "local",
+                                "provider_metadata": null,
+                                "createdAt": "2024-03-26T01:09:16.222Z",
+                                "updatedAt": "2024-03-26T01:09:16.222Z"
+                            }
+                        },
                         {
                             "id": 21167,
                             "attributes": {
@@ -282,9 +480,13 @@ const variantList = [
     { size: '44-46', height: '170-176' },
 ]
 
+const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
+
 const page = () => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
+    const [active, setActive] = useState(0);
+    const openTab = e => setActive(+e.target.dataset.index);
 
     const imageList = data?.data[0]?.attributes?.imgs?.data;
 
@@ -298,6 +500,7 @@ const page = () => {
                             <Swiper
                                 direction="vertical"
                                 modules={[Thumbs]}
+                                slidesPerView={4}
                                 watchSlidesProgress
                                 onSwiper={setThumbsSwiper}
                                 spaceBetween={10}
@@ -374,12 +577,33 @@ const page = () => {
                             }
                         </ul>
                         <div className={styles.total}>Итого: 18 193 ₽/шт <span>  25 990 ₽</span></div>
-
+                        <AddToCartButton text={'В корзину'} />
                     </div>
                 </div>
 
-
+                <div className={styles.tab_buttons_wrapper}>
+                    {
+                        tabButtons.map((button, index) => (
+                            <button
+                                className={`${styles.tabs_btn} ${index === active ? `${styles.btn_active}` : ''}`}
+                                onClick={openTab}
+                                data-index={index}
+                                key={index}
+                            >{button.title}</button>
+                        ))
+                    }
+                </div>
+                <div
+                    className={`${active === 0 ? `${styles.block}` : `${styles.none}`}`}
+                >11111</div>
+                <div
+                    className={`${active === 1 ? `${styles.block}` : `${styles.none}`}`}
+                >22222</div>
+                <div
+                    className={`${active === 2 ? `${styles.block}` : `${styles.none}`}`}
+                >33333</div>
             </div>
+
         </section>
     )
 }
