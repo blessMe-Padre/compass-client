@@ -1,0 +1,29 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    font-family: var(--font-family);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 18, 16);
+    border-radius: 6px;
+    border: none;
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 10px 25px;
+
+    width: 100%;
+    // max-width: 256px;
+    transition: background-color var(--anim-function);
+
+    &:hover {
+        background-color: var(--hover-blue);
+    }
+}
