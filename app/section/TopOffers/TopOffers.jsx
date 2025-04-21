@@ -1,6 +1,12 @@
-import React from 'react'
+'use client'
+import React, {useState, useEffect} from 'react'
 import styles from './styles.module.scss';
 import { CardItem } from '../../components'
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 function TopOffers() {
     const list_top_items = [
@@ -8,50 +14,45 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
+            'item_hit': '',
+            'item_promo': 'true',
+            'item_promo_name': 'Летняя акция',
+            'imgs': [
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
+            ],
+            'item_link': '/',
+        },
+        {
+            'item_name': 'Костюм "STRONG" -40 ПК',
+            'item_price': '15 0320',
+            'item_sale_price': '18 500',
+            'item_hit': '',
+            'item_promo': 'true',
+            'item_promo_name': 'Весенняя акция',
+            'imgs': [
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
+            ],
+            'item_link': '/',
+        },
+        {  
+            'item_name': 'Костюм "STRONG" -40 ПК',
+            'item_price': '15 0320',
+            'item_sale_price': '18 500',
             'item_hit': 'true',
             'item_promo': 'true',
             'item_promo_name': 'Зимняя акция',
             'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_1.png',
-                    'item_link_img_slide_2': '../top/item_1.png',
-                    'item_link_img_slide_2': '../top/item_1.png',
-                }
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
         },
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
-            'item_promo_name': 'Зимняя акция',
-            'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_2.png',
-                    'item_link_img_slide_2': '../top/item_2.png',
-                    'item_link_img_slide_2': '../top/item_2.png',
-                }
-            ],
-            'item_link': '/',
-        },
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
-            'item_promo_name': 'Зимняя акция',
-            'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                }
-            ],
-            'item_link': '/',
-        },
+
         {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
@@ -60,11 +61,9 @@ function TopOffers() {
             'item_promo': 'true',
             'item_promo_name': '',
             'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                }
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
         },
@@ -76,27 +75,9 @@ function TopOffers() {
             'item_promo': 'true',
             'item_promo_name': 'Летняя акция',
             'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_1.png',
-                    'item_link_img_slide_2': '../top/item_1.png',
-                    'item_link_img_slide_2': '../top/item_1.png',
-                }
-            ],
-            'item_link': '/',
-        },
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo': '',
-            'item_promo_name': '',
-            'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_2.png',
-                    'item_link_img_slide_2': '../top/item_2.png',
-                    'item_link_img_slide_2': '../top/item_2.png',
-                }
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
         },
@@ -106,34 +87,59 @@ function TopOffers() {
             'item_sale_price': '18 500',
             'item_hit': '',
             'item_promo': 'true',
-            'item_promo_name': 'Зимняя акция',
+            'item_promo_name': 'Весенняя акция',
             'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                }
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
         },
+        {  
+            'item_name': 'Костюм "STRONG" -40 ПК',
+            'item_price': '15 0320',
+            'item_sale_price': '18 500',
+            'item_hit': 'true',
+            'item_promo': 'true',
+            'item_promo_name': 'Зимняя акция',
+            'imgs': [
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
+            ],
+            'item_link': '/',
+        },
+
         {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
             'item_promo': 'true',
-            'item_promo_name': 'Весенняя акция',
+            'item_promo_name': '',
             'imgs': [
-                {
-                    'item_link_img_slide_1': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                    'item_link_img_slide_2': '../top/item_3.png',
-                }
+                { 'item_link_img_slide': '/top/item_1.png' },
+                { 'item_link_img_slide': '/top/item_2.png' },
+                { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
         },
-
     ]
+
+    const [isMobile, setIsMobile] = useState(false);
+    
+        useEffect(() => {
+            const checkIsMobile = () => {
+                setIsMobile(window.innerWidth <= 768);
+            };
+    
+            checkIsMobile();
+            window.addEventListener('resize', checkIsMobile);
+    
+            return () => {
+                window.removeEventListener('resize', checkIsMobile);
+            };
+        }, []);
 
     return (
         <section className={styles.section_top_offers}>
@@ -151,15 +157,49 @@ function TopOffers() {
                     </div>
                 </div>
 
-                <ul className={styles.top_items}>
-                    {list_top_items.map((el, idx) => 
-                        <CardItem 
-                            key={idx}
-                            element={el}
-                        />                                   
+                        {isMobile
+                            ? (
+                                <div className={styles.swiper_wrapper}>
+                                    <Swiper
+                                        spaceBetween={20}
+                                        loop={true}
+                                        pagination={{
+                                            clickable: true,
+                                            el: '.custom-pagination',
+                                        }}
+                                        
+                                        breakpoints={{
+                                            320: { slidesPerView: 1 },
+                                            375: { slidesPerView: 1.5 },
+                                            560: { slidesPerView: 2.5 },
+                                        }}
+                                
+                                        // отправляем кастомное событие при клике на слайдер
+                                        onTouchEnd={(swiper, event) => {
+                                            document.dispatchEvent(new CustomEvent("sliderClick"));
+                                        }}
+                                    >
+
+                                        {list_top_items.map((el, idx) => 
+                                            <SwiperSlide key={idx}>
+                                                <CardItem element={el} />                                   
+                                            </SwiperSlide>
+                                        )}
+                                    </Swiper>
+                                </div>
+
+                            )
+                    : (
+                        <ul className={styles.top_items}>
+                            {
+                                list_top_items.map((el, idx) => <CardItem element={el} />)
+                            }
+
+                        </ul>
+
                     
-                    )}
-                </ul>
+                    )
+                    }
             </div>
         </section>
     )

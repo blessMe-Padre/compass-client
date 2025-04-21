@@ -5,7 +5,15 @@
     position: relative;
 
     background-color: var(--white);
-    padding: 10px;
+    padding: 20px;
+
+    border: 1px solid #C4C4C4B2;
+}
+
+.swiper_image_wrapper {
+    width: 0;
+    min-width: 100%;
+    position: relative;
 }
 
 .item_price, .name, .item_sale_price {
@@ -40,7 +48,7 @@
     border-radius: 40px;
     color: var(--white);
 
-    padding: 10px;
+    padding: 6px 10px;
 }
 
 .badges_container {
@@ -48,16 +56,21 @@
     gap: 10px;
 
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 15px;
+    left: 10px;
     width: 100%;
+    z-index: 1;
 }
 
 .favorite {
     position: absolute;
-    top: 10px;
+    top:10px;
     right: 0;
     padding: 10px;
+
+    background-color: var(--white);
+    border-radius: 50%;
+    z-index: 1;
 }
 
 .hit_badge {
@@ -65,5 +78,11 @@
     border-radius: 40px;
     color: var(--white);
 
-    padding: 10px;
+    padding: 6px 10px;
+}
+
+.price_container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }

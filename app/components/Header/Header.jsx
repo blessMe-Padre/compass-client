@@ -384,8 +384,6 @@ const Header = () => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!searchOpened) return;
-            console.log(handleClickOutside);
-
 
             const isClickOutsideMenu = !menuRef.current || !menuRef.current.contains(event.target);
             const isClickOutsideButton = !buttonRef.current || !buttonRef.current.contains(event.target);
