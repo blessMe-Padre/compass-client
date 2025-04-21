@@ -1,0 +1,40 @@
+@use '@/app/mixins' as *;
+
+// @include adaptiv-value("font-size", 24, 13);
+.section_wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+}
+
+.thumbnail_wrapper {
+    width: 100px;
+    height: 100px;
+
+    cursor: pointer;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slider {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 20px;
+}
+
+.thumbnail_list {
+    height: 100%;
+    overflow: hidden;
+
+    .swiper {
+        height: 100%;
+    }
+
+    .swiper-slide-active {
+        border: 2px solid red;
+    }
+}
