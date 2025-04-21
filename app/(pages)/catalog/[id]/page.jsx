@@ -3,7 +3,6 @@ import Image from "next/image";
 
 import { useRef, useState } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
-import { Controller } from 'swiper/modules'
 import { Thumbs } from 'swiper/modules';
 
 import "swiper/css";
@@ -11,6 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
+import { Counter } from "@/app/components";
 
 const data = {
     "data": [
@@ -272,6 +272,16 @@ const data = {
     }
 }
 
+const variantList = [
+    { size: '44-46', height: '170-176' },
+    { size: '44-46', height: '170-176' },
+    { size: '44-46', height: '170-176' },
+    { size: '44-46', height: '170-176' },
+    { size: '44-46', height: '170-176' },
+    { size: '44-46', height: '170-176' },
+    { size: '44-46', height: '170-176' },
+]
+
 const page = () => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
@@ -279,9 +289,9 @@ const page = () => {
     const imageList = data?.data[0]?.attributes?.imgs?.data;
 
     return (
-        <section>
+        <section className={styles.section}>
             <div className="container">
-                <h1>{data?.data[0]?.attributes?.title}</h1>
+                <h1 className={styles.title}>{data?.data[0]?.attributes?.title}</h1>
                 <div className={styles.section_wrapper}>
                     <div className={styles.slider}>
                         <div className={`${styles.thumbnail_list} thumbnail_list`}>
@@ -341,7 +351,31 @@ const page = () => {
                             </Swiper>
                         </div>
                     </div>
-                    <div className={styles.item}>222</div>
+                    <div className={styles.description}>
+                        <p className={styles.article}>Артикул: Z00014</p>
+                        <ul className={styles.list}>
+                            <li className={styles.list_header}>
+                                <div className={styles.list_header_text}>Размер:</div>
+                                <div className={styles.list_header_text}>Рост:</div>
+                                <div className={styles.list_header_text}>Кол-во:</div>
+                            </li>
+                            {
+                                variantList.map((item, index) => {
+                                    return (
+                                        <li className={styles.list_item} key={index}>
+                                            <div className={styles.size}>{item.size}</div>
+                                            <div className={styles.height}>{item.height}</div>
+                                            <div className={styles.qty}>
+                                                <Counter />
+                                            </div>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                        <div className={styles.total}>Итого: 18 193 ₽/шт <span>  25 990 ₽</span></div>
+
+                    </div>
                 </div>
 
 
