@@ -11,116 +11,6 @@ import "swiper/css/navigation";
 import fetchData from '@/app/utils/fetchData';
 
 function TopOffers() {
-    const list_top_items = [
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_new': 'true',
-            'item_promo_name': 'Летняя акция',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo_name': 'Весенняя акция',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-        {  
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo_name': 'Зимняя акция',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo_name': '',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_new': 'true',
-            'item_promo_name': 'Летняя акция',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo_name': 'Весенняя акция',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-        {  
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo_name': 'Зимняя акция',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        },
-
-        {
-            'item_name': 'Костюм "STRONG" -40 ПК',
-            'item_price': '15 0320',
-            'item_sale_price': '18 500',
-            'item_hit': 'true',
-            'item_promo_name': '',
-            'imgs': [
-                { 'item_link_img_slide': '/top/item_1.png' },
-                { 'item_link_img_slide': '/top/item_2.png' },
-                { 'item_link_img_slide': '/top/item_3.png' }
-            ],
-            'item_link': '/',
-        }
-    ]
 
     const [isMobile, setIsMobile] = useState(false);
     
@@ -142,16 +32,20 @@ function TopOffers() {
     const apiUrl = 'http://90.156.134.142:1337/api/products?populate=*';
 
     useEffect(() => {
-        try {
-            const data = fetchData(apiUrl);
-            console.log('data', data);
-            setProducts(data[0]?.products);
-        } catch (error) {
-            console.error('Произошла ошибка при получени продуктов', error);
-        }
-    }, [])
+        const loadData = async () => {
+            try {
+                const response = await fetchData(apiUrl);
+                setProducts(response.data);
+            
+            } catch (error) {
+                console.error('Произошла ошибка', error);
+            }
+        };
 
-    console.log(process.env.PUBLIC_SITE_URL)
+        loadData();
+    }, []);
+
+    console.log(products);
 
     return (
         <section className={styles.section_top_offers}>
@@ -193,8 +87,8 @@ function TopOffers() {
                                     >
 
                                 {
-                                    list_top_items.map((el, idx) => {
-                                        if (el?.item_hit === 'true') {       
+                                    products.map((el, idx) => {
+                                        if (el.hit === true) {
                                             return (
                                                 <SwiperSlide key={idx}>
                                                     <CardItem element={el} />                                   
@@ -211,11 +105,17 @@ function TopOffers() {
                     : (
                         <ul className={styles.top_items}>
                                 
-                            {list_top_items.map((el, idx) => {
-                                if (el.item_hit === 'true') {
+                            {products.map((el, idx) => 
+                            {
+                                console.log(el)
+                                if (el?.hit === true) {
                                     return (
-                                        <CardItem element={el} />
+                                        <CardItem key={idx} element={el} />
                                     )
+                                } else {
+                                    <div>
+                                        Данных нет
+                                    </div>
                                 }
                             })}
 
