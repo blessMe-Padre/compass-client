@@ -15,8 +15,8 @@ function CardItem({ element }) {
         item_price,
         item_sale_price,
         item_hit,
-        item_promo,
         item_promo_name,
+        item_new,
         imgs,
         item_link
     } = element;
@@ -57,13 +57,13 @@ function CardItem({ element }) {
             <h3 className={styles.name}>{item_name}</h3>
 
             <div className={styles.badges_container}>
-                {item_hit === 'true' && (
+                {item_new === 'true' && (
                     <div className={styles.hit_badge}>
                         <span>Новинка</span>
                     </div>
                 )}
 
-                {item_promo && item_promo_name && (
+                {item_promo_name && (
                     <div className={styles.promo_badge}>
                         {item_promo_name}
                     </div>

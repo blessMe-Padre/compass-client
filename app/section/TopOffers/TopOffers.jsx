@@ -8,14 +8,16 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+import fetchData from '@/app/utils/fetchData';
+
 function TopOffers() {
     const list_top_items = [
         {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
+            'item_new': 'true',
             'item_promo_name': 'Летняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -28,8 +30,7 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
             'item_promo_name': 'Весенняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -43,7 +44,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': 'Зимняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_2.png' },
@@ -58,7 +58,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': '',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -71,8 +70,8 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
+            'item_new': 'true',
             'item_promo_name': 'Летняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -85,8 +84,7 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
             'item_promo_name': 'Весенняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -100,7 +98,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': 'Зимняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_2.png' },
@@ -115,7 +112,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': '',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -123,7 +119,7 @@ function TopOffers() {
                 { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
-        },
+        }
     ]
 
     const [isMobile, setIsMobile] = useState(false);
@@ -140,6 +136,22 @@ function TopOffers() {
                 window.removeEventListener('resize', checkIsMobile);
             };
         }, []);
+    
+    const [products, setProducts] = useState([]);
+
+    const apiUrl = 'http://90.156.134.142:1337/api/products?populate=*';
+
+    useEffect(() => {
+        try {
+            const data = fetchData(apiUrl);
+            console.log('data', data);
+            setProducts(data[0]?.products);
+        } catch (error) {
+            console.error('Произошла ошибка при получени продуктов', error);
+        }
+    }, [])
+
+    console.log(process.env.PUBLIC_SITE_URL)
 
     return (
         <section className={styles.section_top_offers}>
@@ -180,20 +192,32 @@ function TopOffers() {
                                         }}
                                     >
 
-                                        {list_top_items.map((el, idx) => 
-                                            <SwiperSlide key={idx}>
-                                                <CardItem element={el} />                                   
-                                            </SwiperSlide>
-                                        )}
+                                {
+                                    list_top_items.map((el, idx) => {
+                                        if (el?.item_hit === 'true') {       
+                                            return (
+                                                <SwiperSlide key={idx}>
+                                                    <CardItem element={el} />                                   
+                                                </SwiperSlide>
+                                            )
+                                        }
+                                    }
+                                    )
+                                }
                                     </Swiper>
                                 </div>
 
                             )
                     : (
                         <ul className={styles.top_items}>
-                            {
-                                list_top_items.map((el, idx) => <CardItem element={el} />)
-                            }
+                                
+                            {list_top_items.map((el, idx) => {
+                                if (el.item_hit === 'true') {
+                                    return (
+                                        <CardItem element={el} />
+                                    )
+                                }
+                            })}
 
                         </ul>
 
