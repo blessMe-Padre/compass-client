@@ -8,6 +8,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+import fetchData from '@/app/utils/fetchData';
+
 function TopOffers() {
     const list_top_items = [
         {
@@ -134,6 +136,22 @@ function TopOffers() {
                 window.removeEventListener('resize', checkIsMobile);
             };
         }, []);
+    
+    const [products, setProducts] = useState([]);
+
+    const apiUrl = 'http://90.156.134.142:1337/api/products?populate=*';
+
+    useEffect(() => {
+        try {
+            const data = fetchData(apiUrl);
+            console.log('data', data);
+            setProducts(data[0]?.products);
+        } catch (error) {
+            console.error('Произошла ошибка при получени продуктов', error);
+        }
+    }, [])
+
+    console.log(process.env.PUBLIC_SITE_URL)
 
     return (
         <section className={styles.section_top_offers}>
