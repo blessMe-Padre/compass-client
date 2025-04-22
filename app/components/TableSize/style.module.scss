@@ -3,15 +3,15 @@
 // @include adaptiv-value("font-size", 24, 13);
 .section {
     padding: 40px 0 0;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .table {
     margin-bottom: 40px;
-    max-width: 905px;
-    min-width: 700px;
-    // width: 900px;
-    overflow-x: auto;
+    // max-width: 905px;
+    // min-width: 700px;
+    width: 900px;
+    // overflow-x: auto;
     display: block;
     white-space: nowrap;
 }
