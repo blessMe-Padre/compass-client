@@ -6,3 +6,5 @@ export { default as Search } from './Search/Search';
 export { default as AddToCartButton } from './Buttons/AddToCartButton/AddToCartButton'
 export { default as LinkButton } from './Buttons/LinkButton/LinkButton';
 export { default as CardItem } from './CardItem/CardItem';
+export { default as Counter } from './Counter/Counter';
+export { default as TableSize } from './TableSize/TableSize';
