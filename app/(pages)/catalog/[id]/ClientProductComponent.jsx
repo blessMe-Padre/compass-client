@@ -24,7 +24,7 @@ const ClientProductComponent = ({ data, variantList }) => {
     const [direction, setDirection] = useState('vertical');
 
     const imageList = data?.imgs;
-    const domain = 'http://90.156.134.142:1337/';
+    const domain = 'http://90.156.134.142:1337';
 
     console.log(imageList);
 
@@ -61,21 +61,28 @@ const ClientProductComponent = ({ data, variantList }) => {
                                     650: { slidesPerView: 5 },
                                 }}
                             >
-                                {imageList.map((slide, index) => (
-                                    <SwiperSlide key={`thumb-${index}`}>
-                                        <div className={styles.thumbnail_wrapper}>
-                                            <Image
-                                                className={styles.image}
-                                                src={`${domain}${slide[0]?.url}`}
-                                                alt={`thumb-${index}`}
-                                                width={100}
-                                                height={100}
-                                                placeholder="blur"
-                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                            />
-                                        </div>
-                                    </SwiperSlide>
-                                ))}
+                                {imageList.map((slide, index) => {
+                                    return (
+
+                                        <SwiperSlide key={`thumb-${index}`}>
+                                            <div className={styles.thumbnail_wrapper}>
+                                                <Image
+                                                    className={styles.image}
+                                                    src={`${domain}${slide?.url}`}
+                                                    alt={`thumb-${index}`}
+                                                    width={100}
+                                                    height={100}
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                />
+                                            </div>
+                                        </SwiperSlide>
+
+                                    )
+                                }
+                                )
+                                }
+
                             </Swiper>
                         </div>
 
@@ -95,7 +102,7 @@ const ClientProductComponent = ({ data, variantList }) => {
                                             <div className={styles.image_wrapper}>
                                                 <Image
                                                     className={styles.image}
-                                                    src={`${domain}${slide[0]?.url}`}
+                                                    src={`${domain}${slide?.url}`}
                                                     alt={`main-${index}`}
                                                     width={582}
                                                     height={730}
