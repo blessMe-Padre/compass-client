@@ -1,18 +1,16 @@
 import ClientProductComponent from "./ClientProductComponent";
+import getProductById from '@/app/utils/getProductById';
 
 export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
-    // const { slug } = params;
-    // const page = await getEventsBySlug(slug);
+    const { id } = params;
+    const product = await getProductById(id);
     return {
-        //   title: page.title,
-        //   description: page.description,
-        title: 'Страница товара',
-        description: 'Страница товара описание',
+        title: product.title,
+        description: product.description,
     }
 }
-
 
 const data = {
     "data": [
@@ -483,10 +481,12 @@ const variantList = [
 ]
 
 export default async function Page({ params }) {
+    const { id } = params;
+    const product = await getProductById(id);
 
     return (
         <ClientProductComponent
-            data={data}
+            data={product}
             variantList={variantList}
         />
     );

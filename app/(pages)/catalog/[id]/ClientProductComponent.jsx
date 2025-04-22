@@ -15,6 +15,7 @@ import { AddToCartButton, Counter, TableSize } from "@/app/components";
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
 
 const ClientProductComponent = ({ data, variantList }) => {
+
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
@@ -22,7 +23,11 @@ const ClientProductComponent = ({ data, variantList }) => {
 
     const [direction, setDirection] = useState('vertical');
 
-    const imageList = data?.data[0]?.attributes?.imgs?.data;
+    const imageList = data?.imgs;
+    const domain = 'http://90.156.134.142:1337/';
+
+    console.log(imageList);
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -38,7 +43,7 @@ const ClientProductComponent = ({ data, variantList }) => {
     return (
         <section className={styles.section}>
             <div className="container">
-                <h1 className={styles.title}>{data?.data[0]?.attributes?.title}</h1>
+                <h1 className={styles.title}>{data?.title}</h1>
                 <div className={styles.section_wrapper}>
                     <div className={styles.slider}>
                         <div className={`${styles.thumbnail_list} thumbnail_list`}>
@@ -61,7 +66,7 @@ const ClientProductComponent = ({ data, variantList }) => {
                                         <div className={styles.thumbnail_wrapper}>
                                             <Image
                                                 className={styles.image}
-                                                src={slide?.attributes?.url}
+                                                src={`${domain}${slide[0]?.url}`}
                                                 alt={`thumb-${index}`}
                                                 width={100}
                                                 height={100}
@@ -90,7 +95,7 @@ const ClientProductComponent = ({ data, variantList }) => {
                                             <div className={styles.image_wrapper}>
                                                 <Image
                                                     className={styles.image}
-                                                    src={slide?.attributes?.url}
+                                                    src={`${domain}${slide[0]?.url}`}
                                                     alt={`main-${index}`}
                                                     width={582}
                                                     height={730}
