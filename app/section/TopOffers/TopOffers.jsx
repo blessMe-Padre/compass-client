@@ -14,8 +14,8 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
+            'item_new': 'true',
             'item_promo_name': 'Летняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -28,8 +28,7 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
             'item_promo_name': 'Весенняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -43,7 +42,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': 'Зимняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_2.png' },
@@ -58,7 +56,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': '',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -71,8 +68,8 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
+            'item_new': 'true',
             'item_promo_name': 'Летняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -85,8 +82,7 @@ function TopOffers() {
             'item_name': 'Костюм "STRONG" -40 ПК',
             'item_price': '15 0320',
             'item_sale_price': '18 500',
-            'item_hit': '',
-            'item_promo': 'true',
+            'item_hit': 'true',
             'item_promo_name': 'Весенняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -100,7 +96,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': 'Зимняя акция',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_2.png' },
@@ -115,7 +110,6 @@ function TopOffers() {
             'item_price': '15 0320',
             'item_sale_price': '18 500',
             'item_hit': 'true',
-            'item_promo': 'true',
             'item_promo_name': '',
             'imgs': [
                 { 'item_link_img_slide': '/top/item_1.png' },
@@ -123,7 +117,7 @@ function TopOffers() {
                 { 'item_link_img_slide': '/top/item_3.png' }
             ],
             'item_link': '/',
-        },
+        }
     ]
 
     const [isMobile, setIsMobile] = useState(false);
@@ -180,20 +174,32 @@ function TopOffers() {
                                         }}
                                     >
 
-                                        {list_top_items.map((el, idx) => 
-                                            <SwiperSlide key={idx}>
-                                                <CardItem element={el} />                                   
-                                            </SwiperSlide>
-                                        )}
+                                {
+                                    list_top_items.map((el, idx) => {
+                                        if (el?.item_hit === 'true') {       
+                                            return (
+                                                <SwiperSlide key={idx}>
+                                                    <CardItem element={el} />                                   
+                                                </SwiperSlide>
+                                            )
+                                        }
+                                    }
+                                    )
+                                }
                                     </Swiper>
                                 </div>
 
                             )
                     : (
                         <ul className={styles.top_items}>
-                            {
-                                list_top_items.map((el, idx) => <CardItem element={el} />)
-                            }
+                                
+                            {list_top_items.map((el, idx) => {
+                                if (el.item_hit === 'true') {
+                                    return (
+                                        <CardItem element={el} />
+                                    )
+                                }
+                            })}
 
                         </ul>
 
