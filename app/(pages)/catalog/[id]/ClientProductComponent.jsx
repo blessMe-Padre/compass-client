@@ -45,11 +45,16 @@ const ClientProductComponent = ({ data, variantList }) => {
                             <Swiper
                                 direction={direction}
                                 modules={[Thumbs]}
-                                slidesPerView={4}
                                 watchSlidesProgress
                                 onSwiper={setThumbsSwiper}
                                 spaceBetween={10}
                                 className={styles.thumbnail_list}
+                                breakpoints={{
+                                    320: { slidesPerView: 3 },
+                                    450: { slidesPerView: 3.5 },
+                                    500: { slidesPerView: 4 },
+                                    650: { slidesPerView: 5 },
+                                }}
                             >
                                 {imageList.map((slide, index) => (
                                     <SwiperSlide key={`thumb-${index}`}>

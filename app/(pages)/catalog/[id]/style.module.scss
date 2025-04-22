@@ -48,9 +48,15 @@
 }
 
 .thumbnail_wrapper {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.thumbnail_wrapper img {
     width: 100%;
     height: 100%;
-    cursor: pointer;
+    object-fit: cover;
 }
 
 .image {
@@ -165,6 +171,7 @@
 
     @media (max-width: 560px) {
         padding: 15px 0;
+        font-size: 16px;
 
         &+& {
             border-top: 1px solid var(--white);
