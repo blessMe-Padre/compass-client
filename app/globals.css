@@ -55,11 +55,11 @@
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: min-content 1fr min-content;
+  /* max-width: 100vw; */
+  /* overflow-x: hidden; */
+  /* min-height: 100vh; */
+  /* display: grid; */
+  /* grid-template-rows: min-content 1fr min-content; */
   color: var(--toggle-color);
   background: var(--background);
   font-family: var(--font-family);
@@ -80,7 +80,6 @@ a {
 ul {
   list-style: none;
 }
-
 
 @media (prefers-color-scheme: dark) {
   html {
@@ -149,11 +148,9 @@ svg path {
   flex-direction: column;
 }
 
-
 .gap-10 {
   gap: 10px;
 }
-
 
 .gap-5 {
   gap: 5px;
