@@ -8,5 +8,6 @@ export { default as TableSize } from './TableSize/TableSize';
 export { default as MenuButton } from './MenuButton/MenuButton';
 export { default as Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
 export { default as LinkButton } from './Buttons/LinkButton/LinkButton';
+
 export { default as ContentRenderer } from './ContentRenderer/ContentRenderer';
 export { default as AddToCartButton } from './Buttons/AddToCartButton/AddToCartButton'

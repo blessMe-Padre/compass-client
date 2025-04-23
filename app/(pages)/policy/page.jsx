@@ -1,3 +1,4 @@
+
 import ContentPage from './ContentPage';
 import fetchData from '@/app/utils/fetchData';
 
