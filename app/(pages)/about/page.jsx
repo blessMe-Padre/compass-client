@@ -1,28 +1,27 @@
-import styles from './style.module.scss';
+import fetchData from '@/app/utils/fetchData';
+import ContentPage from './ContentPage';
 
 export const metadata = {
     title: "Компас СП | О компании",
     description: "Магазин «КОМПАС» — ваш надежный проводник в мире качественной одежды и обуви для охоты, рыбалки и работы!",
 }
 
-
-const apiUrl = 'http://90.156.134.142:1337/api/products?populate=*';
-
-
+const apiUrl = 'http://90.156.134.142:1337/api/stranicza-o-kompanii?populate=*';
 
 export default async function page() {
+    let data = null;
 
     try {
-        const response = await getData(`${process.env.NEXT_PUBLIC_DOMAIN}/api/nashi-raboties?populate=*`);
-        data = response || null;
-
+        const response = await fetchData(apiUrl);
+        data = response?.data || null;
+    
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
 
     return (
         <>
-            <h1>О компании</h1>
+           <ContentPage data={data} />
         </>
     )
 }

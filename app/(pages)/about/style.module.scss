@@ -1,0 +1,17 @@
+.image {
+    width: 100%;
+    height: 100%;
+
+    @media (max-width: 780px) {
+        height: 240px;
+        object-fit: cover;
+    }
+}
+
+.designer_fckg_wrapper {
+    max-width: 40%;
+
+    @media (max-width: 780px) {
+       max-width: 40%;
+    }
+}

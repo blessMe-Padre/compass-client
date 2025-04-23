@@ -45,8 +45,6 @@ function TopOffers() {
         loadData();
     }, []);
 
-    console.log(products);
-
     return (
         <section className={styles.section_top_offers}>
             <div className='container'>
@@ -107,7 +105,6 @@ function TopOffers() {
                                 
                             {products.map((el, idx) => 
                             {
-                                console.log(el)
                                 if (el?.hit === true) {
                                     return (
                                         <CardItem key={idx} element={el} />
