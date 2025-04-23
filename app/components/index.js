@@ -8,3 +8,4 @@ export { default as LinkButton } from './Buttons/LinkButton/LinkButton';
 export { default as CardItem } from './CardItem/CardItem';
 export { default as Counter } from './Counter/Counter';
 export { default as TableSize } from './TableSize/TableSize';
+export { default as PrivateRoute } from './PrivateRoute/PrivateRoute';
