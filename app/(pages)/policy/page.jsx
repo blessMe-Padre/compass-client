@@ -1,14 +1,28 @@
-import styles from './style.module.scss';
+
+import ContentPage from './ContentPage';
+import fetchData from '@/app/utils/fetchData';
 
 export const metadata = {
-    title: "Компас СП | Способы оплаты",
+    title: "Компас СП | Политика конфиденциальности",
     description: "Магазин «КОМПАС» — ваш надежный проводник в мире качественной одежды и обуви для охоты, рыбалки и работы!",
 }
 
-export default function page() {
+const apiUrl = 'http://90.156.134.142:1337/api/stranicza-politika-konfidenczialnosti?populate=*';
+
+export default async function page() {
+    let data = null;
+
+    try {
+        const response = await fetchData(apiUrl);
+        data = response?.data || null;
+    
+    } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+    }
+
     return (
         <>
-            <h1>Политика конфиденциальности</h1>
+           <ContentPage data={data} />
         </>
     )
 }

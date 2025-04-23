@@ -9,16 +9,16 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+const apiUrl = 'http://90.156.134.142:1337'
+
 function CardItem({ element }) {
-    const { 
-        item_name,
-        item_price,
-        item_sale_price,
-        item_hit,
-        item_promo_name,
-        item_new,
+    const {
+        title,
+        price,
+        priceSales,
+        promoName,
+        modern,
         imgs,
-        item_link
     } = element;
 
     return (
@@ -39,33 +39,38 @@ function CardItem({ element }) {
                             document.dispatchEvent(new CustomEvent("sliderClick"));
                         }}
                         >
-                            {imgs?.map((img, idx) => (
+                        {imgs?.map((img, idx) => {
+                            return (
                                 <SwiperSlide key={idx}>
-                                            <Image 
-                                                src={img.item_link_img_slide} 
-                                                alt={item_name} 
-                                                width={300}
-                                                height={300}
-                                                className={styles.card_image}
-                                                />  
-                                    </SwiperSlide>
-                                ))}
+                                    <Image 
+                                        src={`${apiUrl}${img?.url}`}
+                                        alt={title} 
+                                        width={305}
+                                        objectFit='contain'
+                                        height={360}
+                                        className={styles.card_image}
+                                        placeholder="blur"
+                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                    /> 
+                                </SwiperSlide>
+                            )
+                        })}
                     </Swiper>
                     </div>
             </div>
 
-            <h3 className={styles.name}>{item_name}</h3>
+            <h3 className={styles.name}>{title}</h3>
 
             <div className={styles.badges_container}>
-                {item_new === 'true' && (
+                {modern === true && (
                     <div className={styles.hit_badge}>
                         <span>Новинка</span>
                     </div>
                 )}
 
-                {item_promo_name && (
+                {promoName && (
                     <div className={styles.promo_badge}>
-                        {item_promo_name}
+                        {promoName}
                     </div>
                 )}
             </div>
@@ -77,13 +82,13 @@ function CardItem({ element }) {
             </div>
         
             <div className={styles.price_container}>
-                {item_sale_price ? (
+                {priceSales ? (
                     <>
-                        <p className={styles.item_sale_price}>{item_sale_price} Р / шт.</p>
-                        <p className={`${styles.item_price} ${styles.price_underline}`}>{item_price} Р / шт.</p>
+                        <p className={styles.item_sale_price}>{priceSales} Р / шт.</p>
+                        <p className={`${styles.item_sale_price} ${styles.price_underline}`}>{price} Р / шт.</p>
                     </>
                 ) : (
-                    <p className={styles.item_price}>{item_price} Р / шт.</p>
+                    <p className={styles.price}>{price} Р / шт.</p>
                 )}
             </div>
             

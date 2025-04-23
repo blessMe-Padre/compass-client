@@ -163,3 +163,16 @@ svg path {
 .thumbnail_list .swiper-slide-thumb-active {
   border: 2px solid var(--blue);
 }
+
+.page_title {
+  color: var(--toggle-color);
+  font-family: 700;
+  font-size: 44px;
+
+  padding: 40px 0;
+
+  @media (max-width: 780px) {
+    font-size: 16px;
+    padding: 20px 0;
+  }
+}
