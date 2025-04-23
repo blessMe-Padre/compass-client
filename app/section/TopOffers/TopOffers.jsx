@@ -144,14 +144,14 @@ function TopOffers() {
     useEffect(() => {
         try {
             const data = fetchData(apiUrl);
-            console.log('data', data);
+            // console.log('data', data);
             setProducts(data[0]?.products);
         } catch (error) {
             console.error('Произошла ошибка при получени продуктов', error);
         }
     }, [])
 
-    console.log(process.env.PUBLIC_SITE_URL)
+    // console.log(process.env.PUBLIC_SITE_URL)
 
     return (
         <section className={styles.section_top_offers}>

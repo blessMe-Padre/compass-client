@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './style.module.scss';
 
+import { useRouter } from 'next/navigation';
+
 const url = 'http://90.156.134.142:1337/api/auth/local/';
 // Иван
 // zarodiny@yandex.ru
@@ -27,18 +29,18 @@ const Login = () => {
     const [error, setError] = useState();
     const [isSending, setIsSending] = useState(false);
 
+    const router = useRouter();
+
     const onSubmit = async (formData) => {
         setIsSending(true);
         setError(null);
 
         try {
             const { response, data } = await loginUserService(formData);
-
             if (response.ok) {
-                localStorage.setItem('tokendgvSDfghsdghdrhgzdfrh', data.jwt);
-                console.log(response);
-                console.log(data);
-
+                document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
+                console.log('Успешный вход', data?.user?.username);
+                router.push('/dashboard');
             } else {
                 setError('Ошибка входа: неверный логин/пароль');
             }
