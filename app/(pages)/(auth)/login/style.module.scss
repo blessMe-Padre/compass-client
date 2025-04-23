@@ -4,20 +4,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    @include adaptiv-value("padding-top", 100, 40);
+    @include adaptiv-value("padding-bottom", 100, 40);
 }
 
 .form_wrapper {
-    max-width: 480px;
-    border: 1px solid red;
-    padding: 30px;
-    border: 1px solid var(--gray);
-    border-radius: 6px;
+    max-width: 420px;
 }
 
 .title {
+    font-family: var(--font-family);
+    font-weight: 500;
     font-size: 40px;
-    margin-bottom: 30px;
+    color: var(--toggle-color);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.sub_title {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--toggle-color);
+    margin-bottom: 20px;
 }
 
 .form_item {
@@ -53,4 +62,27 @@
 
 .error {
     border: 1px solid red;
+}
+
+.form_item_checkbox {
+    margin-bottom: 20px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.checkbox_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    a {
+        display: block;
+        text-decoration: underline;
+    }
 }

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import styles from './style.module.scss';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const url = 'http://90.156.134.142:1337/api/auth/local/';
 // Иван
@@ -55,7 +56,8 @@ const Login = () => {
         <div className={styles.page_wrapper}>
             <div className="container">
                 <div>
-                    <h1 className={styles.title}>Вход</h1>
+                    <h1 className={styles.title}>Авторизация</h1>
+                    <p className={styles.sub_title}>Для входа на сайт введите ваш номер телефона</p>
                     <div className={styles.form_wrapper}>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className={styles.form_item}>
@@ -85,6 +87,26 @@ const Login = () => {
                                 />
                                 <div className={styles.input_text_error}>{errors['password'] && errors['password'].message}</div>
                             </div>
+
+                            <div className={styles.form_item_checkbox}>
+                                <div className={styles.checkbox_wrapper}>
+                                    <input
+                                        id="checkbox"
+                                        name="checkbox"
+                                        type="checkbox"
+                                        className={`${styles.checkbox} ${errors.checkbox ? styles.error : ''}`}
+                                        {...register('checkbox', { required: { value: true, message: 'Подтвердите согласие' } })}
+                                        error={errors.name}
+                                    />
+                                    <div>
+                                        Нажимая кнопку, даю согласие на <Link href='/policy'>обработку персональных данных</Link>
+                                    </div>
+                                </div>
+
+                                <div className={styles.input_text_error}>{errors['checkbox'] && errors['checkbox'].message}</div>
+                            </div>
+
+
                             <button className={styles.form_button}>
                                 Войти
                                 {!isSending &&
