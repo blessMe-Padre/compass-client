@@ -37,7 +37,7 @@ const catalogLinks = [
                 ]
             },
             {
-                title: 'Одежда', link: '#', subMenuLvl2: [
+                title: 'Одежда', link: '/catalog/category/11', subMenuLvl2: [
                     { title: 'меню3', link: '#' },
                     { title: 'меню3', link: '#' },
                     { title: 'меню3', link: '#' },

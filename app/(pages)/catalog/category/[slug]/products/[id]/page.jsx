@@ -8,16 +8,17 @@ export async function generateMetadata({ params }) {
     const { id } = await params;
     const product = await getProductById(id);
     return {
-        title: product.title,
-        description: product.description,
+        title: product?.title,
+        description: product?.description,
     }
 }
-
 export default async function Page({ params }) {
     const { id } = await params;
     const product = await getProductById(id);
     const productTitle = await product?.title;
     const sameProducts = await getAllProductsByTitle(productTitle);
+
+    console.log(id)
 
     return (
         <ClientProductComponent
