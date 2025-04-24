@@ -43,3 +43,4 @@ jobs:
           target: "/var/www/html/client-compas"
 
       # Шаг 7: Перезапуск Nginx (опционально)
+      # Шаг 7: Перезапуск Nginx (опционально)
