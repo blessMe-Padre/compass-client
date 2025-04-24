@@ -1,0 +1,88 @@
+@use '@/app/mixins' as *;
+
+.page_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include adaptiv-value("padding-top", 100, 40);
+    @include adaptiv-value("padding-bottom", 100, 40);
+}
+
+.form_wrapper {
+    max-width: 420px;
+}
+
+.title {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 40px;
+    color: var(--toggle-color);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.sub_title {
+    font-family: var(--font-family);
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--toggle-color);
+    margin-bottom: 20px;
+}
+
+.form_item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form_item label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form_item input {
+    padding: 10px 20px;
+}
+
+.form_button {
+    color: white;
+    background-color: var(--blue);
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border-radius: 6px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.input_text_error {
+    font-size: 12px;
+    color: red;
+}
+
+.error {
+    border: 1px solid red;
+}
+
+.form_item_checkbox {
+    margin-bottom: 20px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.checkbox_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    a {
+        display: block;
+        text-decoration: underline;
+    }
+}
