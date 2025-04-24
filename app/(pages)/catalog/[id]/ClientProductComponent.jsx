@@ -26,8 +26,7 @@ const ClientProductComponent = ({ data, variantList }) => {
     const imageList = data?.imgs;
     const domain = 'http://90.156.134.142:1337';
 
-    console.log(imageList);
-
+    // console.log(imageList);
 
     useEffect(() => {
         const handleResize = () => {
