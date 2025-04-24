@@ -26,12 +26,19 @@
 .link {
     font-weight: 400;
     @include adaptiv-value("font-size", 18, 16);
-    color: var(--toggle-color);
     transition: color 0.3s ease;
 
     &:hover {
         color: var(--blue);
     }
+}
+
+.link_homeColor {
+    color: var(--white);
+}
+
+.link_otherColor {
+    color: var(--toggle-color);
 }
 
 .active {
@@ -70,6 +77,10 @@
     fill: var(--white);
 }
 
+.phone_icon_black {
+    fill: var(--black);
+}
+
 .icons_wrapper {
     display: flex;
     gap: 20px;
@@ -81,13 +92,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--white);
     border-radius: 100%;
     transition: all 0.3s ease;
-
-    svg {
-        fill: var(--black2);
-    }
 
     &:hover {
         background-color: var(--blue);
@@ -95,6 +101,22 @@
         svg {
             fill: var(--white);
         }
+    }
+}
+
+.icon_homeColor {
+    background-color: var(--white);
+
+    svg {
+        fill: var(--black);
+    }
+}
+
+.icon_otherColor {
+    background-color: var(--toggle-color);
+
+    svg {
+        fill: var(--reverse-color);
     }
 }
 
@@ -153,4 +175,12 @@
         right: 30px;
         cursor: pointer;
     }
+}
+
+.link_homeColor {
+    color: var(--white);
+}
+
+.link_otherColor {
+    color: var(--toggle-color);
 }

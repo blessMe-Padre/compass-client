@@ -1,6 +1,7 @@
 :root {
   --background: #ffffff;
   --toggle-color: #1b1b1b;
+  --reverse-color: #ffffff;
   --blue: #007cc2;
   --black: #1b1b1b;
   --black2: #262626;
@@ -26,6 +27,7 @@
   :root {
     --background: #2e2e2e;
     --toggle-color: #ffffff;
+    --reverse-color: #1b1b1b;
   }
 }
 

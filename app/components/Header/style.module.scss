@@ -21,6 +21,14 @@
     }
 }
 
+.link_homeColor {
+    color: var(--white);
+}
+
+.link_otherColor {
+    color: var(--toggle-color);
+}
+
 .header_inner {
     display: flex;
     gap: 20px;
@@ -178,5 +186,18 @@
         position: absolute;
         top: 34px;
         right: 20px;
+    }
+}
+
+.button_homeColor {
+
+    svg {
+        fill: var(--white);
+    }
+}
+
+.button_otherColor {
+    svg {
+        fill: var(--toggle-color);
     }
 }
