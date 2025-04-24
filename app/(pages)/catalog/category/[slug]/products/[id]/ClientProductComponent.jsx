@@ -48,8 +48,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         let totalSales = Number(data.priceSales.replace(/\s/g, ''));
 
         sameProducts.forEach((item, index) => {
-            const priceSales = Number(item.priceSales.replace(/\s/g, ''));
-            const price = Number(item.price.replace(/\s/g, ''));
+            const priceSales = Number(item?.priceSales.replace(/\s/g, ''));
+            const price = Number(item?.price?.replace(/\s/g, ''));
 
             const quantity = quantities[index] || 0;
             total += quantity * price;

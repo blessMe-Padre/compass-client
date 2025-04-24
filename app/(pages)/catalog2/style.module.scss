@@ -1,0 +1,47 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
+.section {
+    padding-top: 20px;
+    @include adaptiv-value("padding-bottom", 120, 50);
+}
+
+.products_list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    width: 0;
+    min-width: 100%;
+    position: relative;
+
+    
+    @media (max-width: 780px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+
+.catalog_wrapper {
+    display: grid;
+    grid-template-columns: 20% 78%; 
+    gap: 2%; 
+    align-items: start; 
+
+    
+    @media (max-width: 480px) {
+        display: flex;
+        flex-direction: column; 
+    }
+}
+
+
+.categories_list {
+    position: sticky;
+    top: 20px; /* Фиксируем позицию при скролле */
+    height: fit-content;
+}
