@@ -41,6 +41,7 @@ const Login = () => {
             if (response.ok) {
                 document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
                 console.log('Успешный вход', data?.user?.username);
+                console.log('Данные пользователя', data);
                 router.push('/dashboard');
             } else {
                 setError('Ошибка входа: неверный логин/пароль');

@@ -105,7 +105,7 @@ const Register = () => {
                                 <div className={styles.input_text_error}>{errors['password'] && errors['password'].message}</div>
                             </div>
 
-                            <div className={styles.form_item_checkbox}>
+                            {/* <div className={styles.form_item_checkbox}>
                                 <div className={styles.checkbox_wrapper}>
                                     <input
                                         id="checkbox"
@@ -121,7 +121,7 @@ const Register = () => {
                                 </div>
 
                                 <div className={styles.input_text_error}>{errors['checkbox'] && errors['checkbox'].message}</div>
-                            </div>
+                            </div> */}
                             <button className={styles.form_button}>
                                 зарегистрироваться
                                 {!sending &&

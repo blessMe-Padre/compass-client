@@ -10,4 +10,5 @@ export { default as Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
 export { default as LinkButton } from './Buttons/LinkButton/LinkButton';
 
 export { default as ContentRenderer } from './ContentRenderer/ContentRenderer';
-export { default as AddToCartButton } from './Buttons/AddToCartButton/AddToCartButton'
+export { default as AddToCartButton } from './Buttons/AddToCartButton/AddToCartButton';
+export { default as UserForm } from './UserForm/UserForm';
