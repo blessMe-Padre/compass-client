@@ -107,7 +107,7 @@ const UserForm = ({ user }) => {
 
         try {
 
-            response = await updateUserDateService(
+            const response = await updateUserDateService(
                 2,
                 formDataObj,
                 url
