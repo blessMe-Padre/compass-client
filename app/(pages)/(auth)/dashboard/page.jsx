@@ -81,7 +81,6 @@ const Dashboard = () => {
                     variants={variants}
                     initial={"hidden"}
                     animate={active === 0 ? "visible" : "hidden"}
-                    className="overflow-hidden"
                 >
                     <UserForm user={user} />
                 </motion.div>
@@ -90,7 +89,6 @@ const Dashboard = () => {
                     variants={variants}
                     initial={"hidden"}
                     animate={active === 1 ? "visible" : "hidden"}
-                    className="overflow-hidden"
                 >
                     История заказов
                 </motion.div>
@@ -99,7 +97,6 @@ const Dashboard = () => {
                     variants={variants}
                     initial={"hidden"}
                     animate={active === 2 ? "visible" : "hidden"}
-                    className="overflow-hidden"
                 >
                     Избранное
                 </motion.div>
@@ -108,7 +105,6 @@ const Dashboard = () => {
                     variants={variants}
                     initial={"hidden"}
                     animate={active === 3 ? "visible" : "hidden"}
-                    className="overflow-hidden"
                 >
                     Скидки и бонусы
                 </motion.div>

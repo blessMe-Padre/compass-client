@@ -5,6 +5,12 @@
     overflow-x: auto;
 }
 
+
+.form {
+    @include adaptiv-value("padding-bottom", 120, 40);
+    overflow: hidden;
+}
+
 .form_item {
     background-color: var(--super-light-gray);
     padding: 35px;

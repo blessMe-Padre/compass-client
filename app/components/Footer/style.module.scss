@@ -3,6 +3,8 @@
 .footer {
     padding: 50px 0;
 
+    background-color: var(--black2);
+
     @media (max-width: 480px) {
         padding: 20px 0;
     }
@@ -82,6 +84,7 @@
 }
 
 .social_adress a {
+    color: var(--white);
     @include adaptiv-value("font-size", 18, 16);
 
     @media (max-width: 480px) {

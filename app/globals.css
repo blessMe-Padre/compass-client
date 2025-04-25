@@ -1,7 +1,5 @@
 :root {
   --background: #ffffff;
-  --toggle-color: #1b1b1b;
-  --reverse-color: #ffffff;
   --blue: #007cc2;
   --black: #1b1b1b;
   --black2: #262626;
@@ -21,6 +19,10 @@
 
   /* animation function */
   --anim-function: 0.3s ease;
+
+  --toggle-color: #1b1b1b;
+  --toggle-color-gray: #6b6b6b;
+  --reverse-color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,6 +30,7 @@
     --background: #2e2e2e;
     --toggle-color: #ffffff;
     --reverse-color: #1b1b1b;
+    --toggle-color-gray: #ffffff;
   }
 }
 

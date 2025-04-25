@@ -1,10 +1,6 @@
-.block {
-    display: block;
-}
+@use '@/app/mixins' as *;
+// @include adaptiv-value("padding-top", 100, 40);
 
-.none {
-    display: none;
-}
 
 .tab_buttons_wrapper {
     padding: 35px 0;
@@ -16,13 +12,13 @@
 .tabs_btn {
     font-weight: 500;
     font-size: 20px;
-    color: var(--gray);
+    color: var(--toggle-color-gray);
     border: none;
     background-color: transparent;
     cursor: pointer;
 }
 
 .btn_active {
-    color: var(--black);
-    border-bottom: 2px solid #1b1b1b;
+    color: var(--toggle-color);
+    border-bottom: 2px solid var(--toggle-color);
 }
