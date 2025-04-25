@@ -10,15 +10,125 @@
     padding: 40px 0 0;
 }
 
+.form_item {
+    background-color: var(--super-light-gray);
+    padding: 35px;
+
+    @media (max-width: 768px) {
+        padding: 20px;
+    }
+}
+
 .form_wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 50px;
+    @include adaptiv-value("gap", 50, 20);
+    margin-bottom: 30px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .form_item_wrapper {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
     gap: 10px;
     margin-bottom: 20px;
+}
+
+.form_title {
+    font-weight: 500;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--black);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #c4c4c4;
+}
+
+.form_item_label {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    color: var(--gray);
+}
+
+.input {
+    width: 100%;
+    padding: 10px 20px;
+    color: var(--black);
+    background-color: var(--white);
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+
+    &::placeholder {
+        color: var(--gray);
+        font-weight: 400;
+        font-size: 16px;
+    }
+}
+
+.link {
+    display: block;
+    font-family: var(--font-family);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 18, 16);
+    border-radius: 6px;
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 15px 25px;
+    border: none;
+
+    width: 100%;
+    transition: background-color var(--anim-function);
+
+    &:hover {
+        background-color: var(--hover-blue);
+    }
+
+    cursor: pointer;
+}
+
+.error_text {
+    color: red;
+    padding: 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.success_text {
+    color: green;
+    padding: 20px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.error_input {
+    border-radius: 6px;
+    border: 1px solid red;
+}
+
+.input_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+
+    background-color: var(--white);
+}
+
+.edit_button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0 10px;
 }
