@@ -201,3 +201,16 @@
         fill: var(--toggle-color);
     }
 }
+
+.button_homeColor_1 {
+
+    svg {
+        stroke: var(--white);
+    }
+}
+
+.button_otherColor_1 {
+    svg {
+        stroke: var(--toggle-color);
+    }
+}
