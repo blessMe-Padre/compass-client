@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { AddToCartButton } from '../index';
 
+import Link from 'next/link';
+
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -19,6 +21,7 @@ function CardItem({ element }) {
         promoName,
         modern,
         imgs,
+        id
     } = element;
 
     return (
@@ -59,8 +62,10 @@ function CardItem({ element }) {
                     </div>
             </div>
 
-            <h3 className={styles.name}>{title}</h3>
 
+            <Link href={`products/${id}`} className={styles.name}>
+                {title}
+            </Link>
             <div className={styles.badges_container}>
                 {modern === true && (
                     <div className={styles.hit_badge}>

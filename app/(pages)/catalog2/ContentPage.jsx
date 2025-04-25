@@ -31,21 +31,21 @@ export default function ContentPage({ data }) {
     fetchData();
   }, []);
   
-   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await getAllProducts(`http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=${slug}&populate=*`);
-        setProducts(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //  useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const data = await getAllProducts();
+  //       setProducts(data);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
     return (
         <>  
