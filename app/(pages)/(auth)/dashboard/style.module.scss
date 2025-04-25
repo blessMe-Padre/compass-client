@@ -1,0 +1,28 @@
+.block {
+    display: block;
+}
+
+.none {
+    display: none;
+}
+
+.tab_buttons_wrapper {
+    padding: 35px 0;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.tabs_btn {
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--gray);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.btn_active {
+    color: var(--black);
+    border-bottom: 2px solid #1b1b1b;
+}

@@ -29,9 +29,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const imageList = data?.imgs;
     const domain = 'http://90.156.134.142:1337';
 
-    // console.log(imageList);
-
-
     useEffect(() => {
         const handleResize = () => {
             setDirection(window.innerWidth < 780 ? 'horizontal' : 'vertical');
