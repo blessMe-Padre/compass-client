@@ -117,11 +117,17 @@ export default function ContentPage({ data }) {
               </div>
           
                 <div className={styles.products_list}>
-                    {products?.map((el, idx) => (
-                      <div key={idx}>
-                        <CardItem element={el} />
-                      </div>
-                    ))}
+                  {products 
+                  
+                  ? products?.map((el, idx) => (
+                    <div key={idx}>
+                      <CardItem element={el} />
+                    </div>
+                  ))
+                
+                  : 'Нет ничего'
+                }
+                    
                 </div>  
             </div>
           </div>
