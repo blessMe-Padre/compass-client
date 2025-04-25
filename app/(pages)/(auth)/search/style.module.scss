@@ -1,0 +1,13 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("padding-bottom", 100, 40);
+
+.list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(326px, 1fr));
+
+    gap: 30px;
+
+    @include adaptiv-value("padding-top", 60, 30);
+    @include adaptiv-value("padding-bottom", 60, 30);
+
+}

@@ -1,9 +1,10 @@
 'use client'
 import Image from "next/image";
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react';
 import fetchData from '../../utils/fetchData';
 import styles from "./style.module.scss";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 
 const domain = 'http://90.156.134.142:1337';
@@ -14,6 +15,8 @@ export default function Search() {
     const [dataList, setData] = useState([]);
     const [isFocused, setIsFocused] = useState(false);
 
+    const router = useRouter();
+
     const debounceTimeout = useRef(null)
 
     const handleDelete = (e) => {
@@ -22,7 +25,21 @@ export default function Search() {
     }
 
     const handleChange = (e) => {
-        setInputValue(e.target.value)
+        setInputValue(e.target.value);
+    }
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (inputValue.trim() === '') return;
+        // Редирект
+        router.push(`/search?query=${encodeURIComponent(inputValue.trim())}`);
+    };
+
+    const handleKeyUp = (e) => {
+        if (e.which === 13) {
+            // Редирект
+            router.push(`/search?query=${encodeURIComponent(inputValue.trim())}`);
+        }
     }
 
     const highlightText = (text, highlight) => {
@@ -79,6 +96,7 @@ export default function Search() {
                             value={inputValue}
                             onChange={handleChange}
                             onFocus={() => setIsFocused(true)}
+                            onKeyUp={handleKeyUp}
                             onBlur={() => setTimeout(() => setIsFocused(false), 1000)} // задержка, чтобы кликнуть по элементу
                             className={styles.input}
                             placeholder='Поиск'
@@ -94,7 +112,7 @@ export default function Search() {
                             </svg>
                         </button>
 
-                        <button className={styles.submit} type="submit">
+                        <button className={styles.submit} type="submit" onClick={handleSearchSubmit}>
                             Найти
                         </button>
                     </div>
