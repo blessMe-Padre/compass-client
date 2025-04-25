@@ -100,46 +100,46 @@ export default function Search() {
                     </div>
 
                     {
-                        // isFocused && (
-                        <ul className={styles.list}>
-                            {/* {inputValue.trim() === '' && <li>Начните печатать</li>} */}
-                            {/* {loading && <img src='/download.png' className={styles.image} />} */}
-                            {/* {!loading && dataList.length === 0 && inputValue.trim() !== '' && ( */}
-                            {/* <li>Ничего не найдено</li> */}
-                            {/* )} */}
+                        isFocused && (
+                            <ul className={styles.list}>
+                                {inputValue.trim() === '' && <li>Начните печатать</li>}
+                                {loading && <img src='/download.png' className={styles.image} />}
+                                {!loading && dataList.length === 0 && inputValue.trim() !== '' && (
+                                    <li>Ничего не найдено</li>
+                                )}
 
-                            {
-                                !loading &&
-                                dataList.map((product, index) => {
-                                    console.log(product); // лог внутри map
-                                    return (
-                                        <li key={product.id || index} className={styles.item}>
-                                            <Link href={`/catalog/category/12/products/${product.id}`}
-                                                className={styles.list_item}
-                                            >
-                                                <Image
-                                                    src={`${domain}${product?.imgs[0]?.url}`}
-                                                    alt="logo"
-                                                    width={40}
-                                                    height={50}
-                                                    placeholder="blur"
-                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                />
-                                                <div>
+                                {
+                                    !loading &&
+                                    dataList.map((product, index) => {
+                                        console.log(product); // лог внутри map
+                                        return (
+                                            <li key={product.id || index} className={styles.item}>
+                                                <Link href={`/products/${product.id}`}
+                                                    className={styles.list_item}
+                                                >
+                                                    <Image
+                                                        src={`${domain}${product?.imgs[0]?.url}`}
+                                                        alt="logo"
+                                                        width={40}
+                                                        height={50}
+                                                        placeholder="blur"
+                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                    />
                                                     <div>
-                                                        <span className={styles.item_title}>{highlightText(product.title, inputValue)}</span>
-                                                        <span className={styles.item_atr}>({product.size})</span>
+                                                        <div>
+                                                            <span className={styles.item_title}>{highlightText(product.title, inputValue)}</span>
+                                                            <span className={styles.item_atr}>({product.size})</span>
+                                                        </div>
+                                                        <div>{product.price}</div>
                                                     </div>
-                                                    <div>{product.price}</div>
-                                                </div>
 
-                                            </Link>
-                                        </li>
-                                    );
-                                })
-                            }
-                        </ul>
-                        // )
+                                                </Link>
+                                            </li>
+                                        );
+                                    })
+                                }
+                            </ul>
+                        )
                     }
                 </div>
             </div>
