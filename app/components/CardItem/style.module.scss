@@ -24,6 +24,17 @@
     @media (max-width: 500px) {
       font-size: 15px;
     }
+
+    transition: all 0.3s ease-in-out;
+}
+
+.name:hover {
+    color: var(--orange);
+}
+
+
+.name:active {
+    color: var(--blue);
 }
 
 .price_underline {
