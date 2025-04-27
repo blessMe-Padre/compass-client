@@ -58,37 +58,7 @@
 .parent_cat h3:active { 
     color: var(--blue);
 }
-
-
-
-.parent_cat {
-    margin-bottom: 10px;
-    text-transform: capitalize;
-}
-
-.child_cat {
-    // display: none;
-    margin: 15px 0 0 15px;
-}
-
-
-.grandсhild_cat {
-    margin: 15px 0 0 40px;
-}
-
-
-/* Анимационные стили */
-.parent_cat h3, .child_cat h4 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
   
-  .arrow {
-    display: inline-block;
-    margin-left: 8px;
-    transition: transform 0.2s ease;
-  }
   
   .loading {
     display: flex;
@@ -97,20 +67,41 @@
     height: 200px;
   }
   
-  .empty {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-  }
-  
   .active {
-    color: var(--primary-color);
-    font-weight: bold;
-  }
-
-
-  .visible {
     display: block;
     opacity: 1;
     visibility: visible;
+  }
+
+  /* Базовые стили */
+.parent_cat, .child_item, .grandchild_item {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Активное состояние */
+.parent_cat.active,
+.child_item.active,
+.grandchild_item.active {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Стрелки */
+.arrow {
+  display: inline-block;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+/* Контейнеры вложенных категорий */
+.child_container,
+.grandchild_container {
+  overflow: hidden;
+}
+
+/* Анимация hover */
+.child_item:hover,
+.grandchild_item:hover {
+  transform: translateX(5px);
 }

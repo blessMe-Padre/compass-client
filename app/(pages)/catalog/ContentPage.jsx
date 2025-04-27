@@ -3,7 +3,7 @@ import { Breadcrumbs, CardItem } from '@/app/components';
 import { useEffect, useState } from 'react';
 import getAllCategories from '../../utils/getAllCategories';
 import getAllProducts from '@/app/utils/getAllProducts';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 import styles from './style.module.scss';
 
@@ -16,6 +16,7 @@ export default function ContentPage({ data }) {
     const [expandedCategories, setExpandedCategories] = useState([]);
 
     const [activeCategory, setActiveCategory] = useState([]);
+    const [activeCategoryId, setActiveCategoryId] = useState([]);
 
    useEffect(() => {
     const fetchData = async () => {
@@ -49,15 +50,21 @@ export default function ContentPage({ data }) {
     fetchData();
   }, []);
 
-  const handleCategoryClick = async (categorySlug, categoryName, categoryId) => {
+  const handleCategoryClick = (e, categorySlug, categoryId, categoryName ) => {
+    e.stopPropagation();
+
     setExpandedCategories(prev => ({
       ...prev,
-      [categoryId]: ![categoryId]
-    }))
+      [categoryId]: !prev[categoryId]
+    }));
 
-    console.log(expandedCategories);
-    
+ setActiveCategoryId(categoryId);
     fetchProducts(categorySlug);
+  }
+
+
+  const isCategoryActive = (categoryId) => {
+    return activeCategoryId === categoryId; 
   }
 
 
@@ -71,49 +78,6 @@ export default function ContentPage({ data }) {
         console.error('Произошла ошибка в получении товаров после нажатия на выбор категории')
     }
   }
-
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
-
-  const dropdownVariants = {
-    open: {
-      height: "auto",
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    },
-    closed: {
-      height: 0,
-      opacity: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const arrowVariants = {
-    open: { rotate: 90 },
-    closed: { rotate: 0 }
-  };
 
   return (
       <>  
@@ -130,63 +94,85 @@ export default function ContentPage({ data }) {
           <motion.div 
             initial='hidden'
             animate="visible"
-            variants={containerVariants}
             className={styles.catalog_wrapper}
           >
             <div className={styles.list_cat}>
-              {categories?.map((parentCategory) => (
-                <div key={parentCategory.id} className={styles.parent_cat}>
-                  {/* Родительская категория (уровень 1) */}
-                  <h3 
-                    onClick={() => handleCategoryClick(parentCategory.slug, parentCategory.id, parentCategory.name)}
-                    className={expandedCategories[parentCategory.id] ? styles.active : ''}  
+            {categories?.map((parentCategory) => (
+            <div 
+              key={parentCategory.id} 
+              className={`${styles.parent_cat} ${isCategoryActive(parentCategory.id) ? styles.active : ''}`}
+            >
+                <h3 
+                  onClick={(e) => handleCategoryClick(e, parentCategory.slug, parentCategory.id, parentCategory.name)}
+                >
+                  {parentCategory.name}
+                  {parentCategory.children?.length > 0 && (
+                    <motion.span
+                      className={styles.arrow}
+                      animate={{ rotate: expandedCategories[parentCategory.id] ? 90 : 0 }}
+                    >
+                      ▶
+                    </motion.span>
+                  )}
+                </h3>
+            
+                {parentCategory.children?.length > 0 && (
+                  <motion.div
+                    className={styles.child_container}
+                    initial={{ height: 0 }}
+                    animate={{ 
+                      height: expandedCategories[parentCategory.id] ? "auto" : 0 
+                    }}
+                    transition={{ duration: 0.3 }}
                   >
-                    {parentCategory.name}
-
-                    {parentCategory.children?.length > 0 && (
-                        <span className={styles.arrow}>
-                          {expandedCategories[parentCategory.id] ? '▼' : '▶'}
-                        </span>
-                    )}
-                  </h3>
-                  
-                  {/* Проверяем есть ли дочерние категории */}
-                  {parentCategory.children && parentCategory.children.length > 0 && (
                     <div className={styles.child_cat}>
-                      {/* Дочерние категории (уровень 2) */}
                       {parentCategory.children.map((childCategory) => (
-                        <div key={childCategory.id} className={styles.child_cat}>
-                          <h4>
-                            <p onClick={() => handleCategoryClick(childCategory.slug ?? 'undefied', childCategory.id, childCategory.name)}>
-                              {childCategory.name}
-                              {childCategory.children?.length > 0 && (
-                              <span className={styles.arrow}>
-                                {expandedCategories[childCategory.id] ? '▼' : '▶'}
-                              </span>
+                        <div 
+                          key={childCategory.id}
+                          className={`${styles.child_item} ${isCategoryActive(childCategory.id) ? styles.active : ''}`}
+                        >
+                          <h4 
+                            onClick={(e) => handleCategoryClick(e, childCategory.slug, childCategory.id, childCategory.name)}
+                          >
+                            {childCategory.name}
+                            {childCategory.children?.length > 0 && (
+                              <motion.span
+                                className={styles.arrow}
+                                animate={{ rotate: expandedCategories[childCategory.id] ? 90 : 0 }}
+                              >
+                                ▶
+                              </motion.span>
                             )}
-
-                            </p>
                           </h4>
                           
-                          {/* Проверяем есть ли подкатегории (уровень 3) */}
-                          {childCategory.children && childCategory.children.length > 0 && (
-                            <div className={`${styles.grandchild_cat} ${expandedCategories[childCategory.id] ? styles.visible : ''}`}>
-                              {childCategory.children.map((grandchildCategory) => (
-                                <div key={grandchildCategory.id} className={styles.grandсhild_cat}>
-                                  <p>
-                                    {/* <Link href={`/catalog/category/${grandchildCategory.slug ?? 'catalog'}`}>{grandchildCategory.name}</Link> */}
-                                    <p onClick={() => handleCategoryClick(grandchildCategory.slug ?? 'undefied', grandchildCategory.id, grandchildCategory.name)}>{grandchildCategory.name}</p>
+                          {childCategory.children?.length > 0 && (
+                            <motion.div
+                              className={styles.grandchild_container}
+                              initial={{ height: 0 }}
+                              animate={{ 
+                                height: expandedCategories[childCategory.id] ? "auto" : 0 
+                              }}
+                            >
+                              <div className={styles.grandchild_cat}>
+                                {childCategory.children.map((grandchildCategory) => (
+                                  <p
+                                    key={grandchildCategory.id}
+                                    className={`${styles.grandchild_item} ${isCategoryActive(grandchildCategory.id) ? styles.active : ''}`}
+                                    onClick={(e) => handleCategoryClick(e, grandchildCategory.slug, grandchildCategory.id, grandchildCategory.name)}
+                                  >
+                                    {grandchildCategory.name}
                                   </p>
-                                </div>
-                              ))}
-                            </div>
+                                ))}
+                              </div>
+                            </motion.div>
                           )}
                         </div>
                       ))}
                     </div>
-                  )}
-                </div>
-              ))}
+                  </motion.div>
+                )}
+              </div>
+            ))}
             </div>
         
             <motion.div
