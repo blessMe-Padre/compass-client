@@ -1,0 +1,53 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+
+    min-width: 350px;
+}
+
+.form_filter_wrapper_price {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+.form_filter_wrapper_select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-top: 1px solid var(--blue);
+    padding: 10px 0;
+
+}
+
+.form_filter_wrapper_select:last-child {
+    border-bottom: 1px solid var(--blue);
+}
+
+.wrapper_btns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form_btn_submit {
+    width: 200px;
+    text-transform: uppercase;
+    border: none;
+    background-color: var(--blue);
+    border-radius: 5px;
+    color: var(--white);
+    padding: 15px;
+
+    text-align: center;
+    font-weight: 500;
+}
+
+.form_reset {
+    text-decoration: underline;
+    color: var(--light-gray);
+}
