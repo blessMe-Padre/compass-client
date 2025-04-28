@@ -6,29 +6,11 @@
     @include adaptiv-value("padding-bottom", 120, 50);
 }
 
-.products_list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-
-    width: 0;
-    min-width: 100%;
-    position: relative;
-
-    
-    @media (max-width: 780px) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: 480px) {
-        grid-template-columns: repeat(1, 1fr);
-    }
-}
-
-
 .catalog_wrapper {
     display: grid;
     grid-template-columns: 20% 78%; 
+
+    margin: 0 0 30px 0;
     gap: 2%; 
     align-items: start; 
 
@@ -47,36 +29,65 @@
 }
 
 .parent_cat h3 {
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
     transition: all 0.3s ease-in-out;
+    padding: 20px 0;
+    border-top: 1px solid var(--light-gray);
 }
 
-.parent_cat h3:hover { 
-    color: var(--orange);
+
+.parent_cat:last-child {
+    border-bottom: 1px solid var(--light-gray);
+
 }
 
-.parent_cat h3:active { 
-    color: var(--blue);
+.parent_cat:first-child {
+    border-top: none;
 }
-  
-  
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-  }
-  
-  .active {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-  }
 
   /* Базовые стили */
 .parent_cat, .child_item, .grandchild_item {
   position: relative;
   transition: all 0.3s ease;
+}
+
+.grandchild_item, .child_item {
+  margin-left: 10px;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+
+}
+.catalog_options {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.catalog_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--toggle-color);
+
+  padding: 15px;
+  border: 1px solid var(--light-gray);
+}
+
+.child_item h4 {
+  color: var(--toggle-color);
+}
+
+.child_item > * {
+  font-weight: 400;
+  color: var(--light-gray);
+  margin-bottom: 10px;
+  margin-left: 5px;
 }
 
 /* Активное состояние */
@@ -89,6 +100,8 @@
 
 /* Стрелки */
 .arrow {
+  position: absolute;
+  right: 0;
   display: inline-block;
   margin-left: 8px;
   transition: transform 0.2s ease;
@@ -103,5 +116,10 @@
 /* Анимация hover */
 .child_item:hover,
 .grandchild_item:hover {
-  transform: translateX(5px);
+  color: var(--orange);
+}
+
+.child_item:active,
+.grandchild_item:active {
+  color: var(--blue);
 }

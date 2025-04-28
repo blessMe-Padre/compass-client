@@ -11,4 +11,7 @@ export { default as LinkButton } from './Buttons/LinkButton/LinkButton';
 
 export { default as ContentRenderer } from './ContentRenderer/ContentRenderer';
 export { default as AddToCartButton } from './Buttons/AddToCartButton/AddToCartButton';
+export { default as LoadMoreButton } from './Buttons/LoadMoreButton/LoadMoreButton';
 export { default as UserForm } from './UserForm/UserForm';
+
+export { default as ProductsList } from './ProductsList/ProductsList';
