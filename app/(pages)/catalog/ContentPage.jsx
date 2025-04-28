@@ -1,5 +1,5 @@
 'use client';
-import { Breadcrumbs, CardItem } from '@/app/components';
+import { Breadcrumbs, ProductsList, LoadMoreButton } from '@/app/components';
 import { useEffect, useState } from 'react';
 import getAllCategories from '../../utils/getAllCategories';
 import getAllProducts from '@/app/utils/getAllProducts';
@@ -9,47 +9,58 @@ import styles from './style.module.scss';
 import Link from 'next/link';
 
 export default function ContentPage({ data }) {
-    const [categories, setCategories] = useState([]);
-    const [categoryName, setCategoryName] = useState('Каталог');
-    const [products, setProducts] = useState([]);
-    const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [expandedCategories, setExpandedCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [currentSlug, setCurrentSlug] = useState(null);
 
-    const [activeCategory, setActiveCategory] = useState([]);
-    const [activeCategoryId, setActiveCategoryId] = useState([]);
+  const [categoryName, setCategoryName] = useState('Каталог');
+  const [products, setProducts] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [expandedCategories, setExpandedCategories] = useState([]);
 
-   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await getAllCategories();
-        setCategories(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [activeCategoryId, setActiveCategoryId] = useState([]);
+
+
+  // Для пагинации
+  const PAGE_SIZE = 6;
+  const [pageCount, setPageCount] = useState(1);
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllCategories();
+      setCategories(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchData();
   }, []);
   
-   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const data = await getAllProducts();
-        setProducts(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllProducts();
+      setProducts(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchData();
   }, []);
+
+
+  useEffect(() => {
+
+  }, [pageCount])
 
   const handleCategoryClick = (e, categorySlug, categoryId, categoryName ) => {
     e.stopPropagation();
@@ -59,10 +70,12 @@ export default function ContentPage({ data }) {
       [categoryId]: !prev[categoryId]
     }));
 
-     setCategoryName(categoryName)
+    setCurrentSlug(categorySlug);
+    // Сброс пагинации при выборе новой категории
+    setPageCount(1);
+    setCategoryName(categoryName)
 
-    setActiveCategoryId(categoryId,);
-      fetchProducts(categorySlug);
+    setActiveCategoryId(categoryId);
     }
 
 
@@ -70,17 +83,34 @@ export default function ContentPage({ data }) {
     return activeCategoryId === categoryId; 
   }
 
-
-  const fetchProducts = async ( slug ) => {
+ useEffect(() => {
+  const fetchProducts = async () => {
+    if (!currentSlug) return; 
+    
     setLoading(true);
     try {
-      const products = await getAllProducts(`http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=${slug}&populate=*`);
-      setProducts(products)
-     
+      const products = await getAllProducts(
+        `http://90.156.134.142:1337/api/products?` + 
+        `filters[categories][slug][$eq]=${currentSlug}&` +
+        `pagination[page]=${pageCount}&` +
+        `pagination[pageSize]=${PAGE_SIZE}&` + 
+        `populate=*`
+      );
+      setProducts(products);
     } catch (error) {
-        console.error('Произошла ошибка в получении товаров после нажатия на выбор категории')
+      console.error('Ошибка при загрузке товаров:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+    fetchProducts();
+  }, [currentSlug, pageCount]);
+  
+  const handleLoadMore = () => {
+    setPageCount(prev => prev + 1);
   }
+ 
 
   return (
       <>  
@@ -125,7 +155,7 @@ export default function ContentPage({ data }) {
                         animate={{ rotate: expandedCategories[parentCategory.id] ? 180 : 0 }}
                       >
                         <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M13 5L6.76 1L1 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                          <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       </motion.span>
                     )}
@@ -156,7 +186,7 @@ export default function ContentPage({ data }) {
                                   animate={{ rotate: expandedCategories[childCategory.id] ? 180 : 0 }}
                                 >
                                   <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 5L6.76 1L1 5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                                   </svg>
 
                                 </motion.span>
@@ -194,9 +224,8 @@ export default function ContentPage({ data }) {
               </div>
              </div>
               
-          <div>
+            <div>
               <div className={styles.catalog_options}>
-
                 <div>
                   Фильтры
                 </div>
@@ -207,33 +236,20 @@ export default function ContentPage({ data }) {
                   В наличии
                 </div>
               </div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={styles.products_list}
-                  >
-                      {products?.length > 0 ? (
-                        products.map((product) => (
-                          <motion.div 
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          key={product.id}> 
-                            <CardItem element={product} />
-                          </motion.div>
-                        ))
-                      ) : (
-                        <div className={styles.empty_state}>
-                          {isLoading ? (
-                            <div className={styles.loading_placeholder}>
-                              
-                            </div>
-                          ) : (
-                            'Товары не найдены'
-                          )}
-                        </div>
-                      )}                    
-                </motion.div>  
-              </div>
+              
+              <ProductsList products={products} isLoading={isLoading} />
+
+              {!isLoading && products.length > 0 && (
+                  <motion.div>
+                    <LoadMoreButton 
+                      text={'Показать еще'} 
+                      loading={isLoading} 
+                      onLoadMore={handleLoadMore}
+                    />
+                  </motion.div>
+                )
+              }
+            </div>
 
           </motion.div>
         </div>
