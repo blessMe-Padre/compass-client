@@ -23,10 +23,11 @@ export default function ContentPage({ data }) {
   const [expandedCategories, setExpandedCategories] = useState([]);
 
   const [activeCategoryId, setActiveCategoryId] = useState([]);
+  const [loadMoreHidden, setLoadMoreHidden] = useState(false);
 
 
   // Для пагинации
-  const PAGE_SIZE = 6;
+  const PAGE_SIZE = 3;
   const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
@@ -100,7 +101,18 @@ export default function ContentPage({ data }) {
         `pagination[pageSize]=${PAGE_SIZE}&` + 
         `populate=*`
       );
-      setProducts(products);
+
+      if (pageCount === 1) {
+        setProducts(products);
+        setLoadMoreHidden(products.length < PAGE_SIZE);
+      } else {
+        if (products.length === 0) {
+          setLoadMoreHidden(true);
+        } else {
+          setProducts(prev => [...prev, ...products]);
+          setLoadMoreHidden(products.length < PAGE_SIZE);
+        }
+      }
     } catch (error) {
       console.error('Ошибка при загрузке товаров:', error);
     } finally {
@@ -241,18 +253,21 @@ export default function ContentPage({ data }) {
                 </div>
               </div>
               
-              <ProductsList products={products} isLoading={isLoading} />
-
-              {!isLoading && products.length > 0 && (
-                  <motion.div>
-                    <LoadMoreButton 
-                      text={'Показать еще'} 
-                      loading={isLoading} 
-                      onLoadMore={handleLoadMore}
-                    />
-                  </motion.div>
-                )
-              }
+            <ProductsList products={products} isLoading={isLoading} />
+            
+              {!isLoading && products.length > 0 && !loadMoreHidden && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <LoadMoreButton 
+                    text={'Показать еще'} 
+                    loading={isLoading} 
+                    onLoadMore={handleLoadMore}
+                  />
+                </motion.div>
+              )}
             </div>
 
           </motion.div>
