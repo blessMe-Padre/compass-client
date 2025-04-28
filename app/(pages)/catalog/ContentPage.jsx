@@ -5,12 +5,16 @@ import getAllCategories from '../../utils/getAllCategories';
 import getAllProducts from '@/app/utils/getAllProducts';
 import { motion } from "framer-motion";
 
+import useCategorySlug from '@/app/store/categorySlug';
+
 import styles from './style.module.scss';
 import Link from 'next/link';
 
 export default function ContentPage({ data }) {
   const [categories, setCategories] = useState([]);
-  const [currentSlug, setCurrentSlug] = useState(null);
+  // const [currentSlug, setCurrentSlug] = useState(null);
+
+  const { currentSlug, setCurrentSlug } = useCategorySlug();
 
   const [categoryName, setCategoryName] = useState('Каталог');
   const [products, setProducts] = useState([]);
