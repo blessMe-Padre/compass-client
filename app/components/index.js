@@ -14,4 +14,7 @@ export { default as AddToCartButton } from './Buttons/AddToCartButton/AddToCartB
 export { default as LoadMoreButton } from './Buttons/LoadMoreButton/LoadMoreButton';
 export { default as UserForm } from './UserForm/UserForm';
 
+export { default as Popup } from './Popup/Popup';
+export { default as Forms } from './Forms/Forms';
+export { default as FilterForm } from './FilterForm/FilterForm'
 export { default as ProductsList } from './ProductsList/ProductsList';
