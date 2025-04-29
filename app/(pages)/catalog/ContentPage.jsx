@@ -26,51 +26,16 @@ export default function ContentPage({ data }) {
   const [loadMoreHidden, setLoadMoreHidden] = useState(false);
 
   const [checkboxStatus, setCheckboxStatus] = useState(false);
+  const [sortedFilters, setSortedFilters] = useState('');
 
 
   const [activePopup, setActivePopup] = useState(false); 
 
 
   // Для пагинации
-  const PAGE_SIZE = 3;
+  const PAGE_SIZE = 12;
   const [pageCount, setPageCount] = useState(1);
 
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const data = await getAllCategories();
-      setCategories(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-    fetchData();
-  }, []);
-  
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const data = await getAllProducts();
-      setProducts(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-    fetchData();
-  }, []);
-
-
-  useEffect(() => {
-
-  }, [pageCount])
 
   const handleCategoryClick = (e, categorySlug, categoryId, categoryName ) => {
     e.stopPropagation();
@@ -86,71 +51,119 @@ export default function ContentPage({ data }) {
     setCategoryName(categoryName)
 
     setActiveCategoryId(categoryId);
-    }
-
+  }
 
   const isCategoryActive = (categoryId) => {
     return activeCategoryId === categoryId; 
   }
 
- useEffect(() => {
-  const fetchProducts = async () => {
-    if (!currentSlug) return; 
-    
-    setLoading(true);
-    try {
-      const products = await getAllProducts(
-        `http://90.156.134.142:1337/api/products?` + 
-        `filters[categories][slug][$eq]=${currentSlug}&` +
-        `pagination[page]=${pageCount}&` +
-        `pagination[pageSize]=${PAGE_SIZE}&` + 
-        `populate=*`
-      );
-
-      if (pageCount === 1) {
-        setProducts(products);
-        setLoadMoreHidden(products.length < PAGE_SIZE);
-      } else {
-        if (products.length === 0) {
-          setLoadMoreHidden(true);
-        } else {
-          setProducts(prev => [...prev, ...products]);
-          setLoadMoreHidden(products.length < PAGE_SIZE);
-        }
-      }
-    } catch (error) {
-      console.error('Ошибка при загрузке товаров:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-    fetchProducts();
-  }, [currentSlug, pageCount]);
-  
   const handleLoadMore = () => {
     setPageCount(prev => prev + 1);
   }
  
   const handleCheckboxStatus = () => {
-    setCheckboxStatus(true)
-  }
+    checkboxStatus === true ? setCheckboxStatus(false) : setCheckboxStatus(true)
+  }  
+
+  const handleSelectSort = (e) => {
+    const value = e.target.value;
+    setSortedFilters(value);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllCategories();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllProducts();
+        setProducts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!currentSlug) return; 
+      
+      setLoading(true);
+      try {
+        const stockFilter = checkboxStatus ? 'filters[statusProduct][$eq]=stock&' : '';
+        // http://90.156.134.142:1337/api/products?pagination[page]=1&pagination[pageSize]=12&filters[statusProduct][$eq]=stock&populate=*
+        const slugFilter = currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : ''
+        const sortFilter = sortedFilters ? `sort=${sortedFilters}&` : '';
+
+        const apiUrl = [
+          'http://90.156.134.142:1337/api/products?',
+          slugFilter,
+          `pagination[page]=${pageCount}&`,
+          `pagination[pageSize]=${PAGE_SIZE}&`,
+          stockFilter,
+          sortFilter,
+          'populate=*'
+        ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
+
+        const products = await getAllProducts(apiUrl);
+
+        if (pageCount === 1) {
+          setProducts(products);
+          setLoadMoreHidden(products.length < PAGE_SIZE);
+        } else {
+          if (products.length === 0) {
+            setLoadMoreHidden(true);
+          } else {
+            setProducts(prev => [...prev, ...products]);
+            setLoadMoreHidden(products.length < PAGE_SIZE);
+          }
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке товаров:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [currentSlug, pageCount, checkboxStatus, sortedFilters]);
+  
+  
+
 
   return (
       <>  
         <div className='container'>
-          <Breadcrumbs
-              secondLabel="Каталог"
-          />
+            <Breadcrumbs
+                secondLabel="Каталог"
+            />
 
-          
-        <motion.h2
-          initial='hidden'
-          animate="visible"
-          className='page_title'
-        >
-            {categoryName}
-        </motion.h2>
+            
+          <motion.h2
+            initial='hidden'
+            animate="visible"
+            className='page_title'
+          >
+              {categoryName}
+          </motion.h2>
 
           <motion.div 
             initial='hidden'
@@ -246,7 +259,7 @@ export default function ContentPage({ data }) {
                 </div>
               ))}
               </div>
-             </div>
+            </div>
               
             <div>
               <div className={styles.catalog_options}>
@@ -259,7 +272,7 @@ export default function ContentPage({ data }) {
                 </div>
               
 
-               {/* 
+              {/* 
               
                   TODO: 
                     const [filterParams, setFilterParams] = useState([]);
@@ -267,21 +280,22 @@ export default function ContentPage({ data }) {
                     &order=opinion
                     &order=price-asc (недорогие)
                     &order=price-desс (самые дорогие)   
+
                     http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&sort=price:asc
                     http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&sort=price:desc
 
                 */}
                 <div className={styles.sort}>
                   Сортировка:
-                  <select>
-                    <option value="">рекомендуем</option>
-                    <option value="">Сначала дорогие</option>
-                    <option value="">Сначала дешевые</option>
+                  <select value={sortedFilters} onChange={handleSelectSort}>
+                    <option value="opinion">рекомендуем</option>
+                    <option value="price:desc">Сначала дорогие</option>
+                    <option value="price:asc">Сначала дешевые</option>
                   </select> 
                 </div>
 
               {/* 
-               TODO: 
+              TODO: 
                   Тут будет запрос сразу идти на endpoint с get параметров 
                   &stock=now (в наличии)
 
@@ -313,7 +327,7 @@ export default function ContentPage({ data }) {
             </div>
 
           </motion.div>
-      </div>
+        </div>
       
 
       <Popup activePopup={activePopup} setActivePopup={setActivePopup} />
