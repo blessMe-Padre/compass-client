@@ -28,9 +28,6 @@ export default function ContentPage({ data }) {
   const [checkboxStatus, setCheckboxStatus] = useState(false);
   const [optionsFilter, setOptionsFilter] = useState(false);
 
-  const [sortedFilter, setSortedFilter] = useState([]);
-  const [sortedFilterKey, setSortedFilterKey] = useState([]);
-
 
   const [activePopup, setActivePopup] = useState(false); 
 
@@ -103,17 +100,15 @@ export default function ContentPage({ data }) {
     
     setLoading(true);
     try {
-      const stockFilter  =  checkboxStatus ? 'filters[statusProduct][$eq]=stock&' : '';
-      const slugFilter   =  currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : '';
-      const sortedFilter =  sortedFilter !== undefined ? `&sort=${sortedFilter}:${sortedFilterKey}` : ''
-      
+      const stockFilter = checkboxStatus ? 'filters[statusProduct][$eq]=stock&' : '';
+      // http://90.156.134.142:1337/api/products?pagination[page]=1&pagination[pageSize]=12&filters[statusProduct][$eq]=stock&populate=*
+      const filterSlug = currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : ''
       const apiUrl = [
         'http://90.156.134.142:1337/api/products?',
-        slugFilter,
-        stockFilter,
-        sortedFilter,
+        filterSlug,
         `pagination[page]=${pageCount}&`,
         `pagination[pageSize]=${PAGE_SIZE}&`,
+        stockFilter,
         'populate=*'
       ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
 
