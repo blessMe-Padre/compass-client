@@ -330,7 +330,7 @@ export default function ContentPage({ data }) {
         </div>
       
 
-      <Popup activePopup={activePopup} setActivePopup={setActivePopup} />
+      <Popup activePopup={activePopup} setActivePopup={setActivePopup} data={products} />
       </>
   );
 }
