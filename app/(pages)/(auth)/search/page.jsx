@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import fetchData from '@/app/utils/fetchData';
@@ -10,6 +10,15 @@ import styles from './style.module.scss';
 const domain = 'http://90.156.134.142:1337';
 
 export default function SearchResultsPage() {
+    return (
+        <Suspense>
+            <SearchResultsContent />
+        </Suspense>
+    )
+}
+
+
+function SearchResultsContent() {
     const [dataList, setData] = useState([]);
     const searchParams = useSearchParams();
     const query = searchParams.get('query');
