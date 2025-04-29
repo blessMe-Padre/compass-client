@@ -25,6 +25,8 @@ export default function ContentPage({ data }) {
   const [activeCategoryId, setActiveCategoryId] = useState([]);
   const [loadMoreHidden, setLoadMoreHidden] = useState(false);
 
+  const [checkboxStatus, setCheckboxStatus] = useState(false);
+
 
   const [activePopup, setActivePopup] = useState(false); 
 
@@ -130,7 +132,9 @@ export default function ContentPage({ data }) {
     setPageCount(prev => prev + 1);
   }
  
-  console.log(activePopup);
+  const handleCheckboxStatus = () => {
+    setCheckboxStatus(true)
+  }
 
   return (
       <>  
@@ -254,20 +258,40 @@ export default function ContentPage({ data }) {
                     Фильтры
                 </div>
               
+
+               {/* 
+              
+                  TODO: 
+                    const [filterParams, setFilterParams] = useState([]);
+                    Тут будет запрос сразу идти на endpoint с get параметров
+                    &order=opinion
+                    &order=price-asc (недорогие)
+                    &order=price-desс (самые дорогие)   
+                    http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&sort=price:asc
+                    http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&sort=price:desc
+
+                */}
                 <div className={styles.sort}>
                   Сортировка:
                   <select>
                     <option value="">рекомендуем</option>
-                    <option value="">по цене (по возрастанию)</option>
-                    <option value="">по цене (по убыванию)</option>
-                    <option value="">по алфавиту (А-Я)</option>
-                    <option value="">по алфавиту (Я-А)</option>
+                    <option value="">Сначала дорогие</option>
+                    <option value="">Сначала дешевые</option>
                   </select> 
                 </div>
 
-              <div className={styles.stock}>
-                  <input type="checkbox" name="" id="" />
-                  <label htmlFor="">В наличии</label>
+              {/* 
+               TODO: 
+                  Тут будет запрос сразу идти на endpoint с get параметров 
+                  &stock=now (в наличии)
+
+                  http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&filters[statusProduct][$eq]=stock&populate=*
+                  
+              */}
+
+              <div className={styles.stock} onClick={() => handleCheckboxStatus()}>
+                  <input type="checkbox" name="checkboxStatus" id="checkboxStatus" />
+                  <label htmlFor="checkboxStatus">В наличии</label>
                 </div>
               </div>
               
