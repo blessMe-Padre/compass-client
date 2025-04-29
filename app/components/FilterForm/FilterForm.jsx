@@ -3,9 +3,17 @@
 import { useState } from 'react';
 import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
+import useFilterStore from '@/app/store/filterStore';
 
 export default function FilterForm({ data }) {    
+    const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
+
+    const arrPrice = data.map(el => parseInt(el?.price) || [])
+
+    const maxPrice = parseInt(Math.max.apply(null, arrPrice));
+    const minPrice = parseInt(Math.min.apply(null, arrPrice));
+
 
     const attributes = data
         .flatMap(el => el?.attributes || []) // "Расплющиваем" массивы, изначально map возвращает [[]] - что неудобно (flatMap убирает пустые массивы)
@@ -24,6 +32,8 @@ export default function FilterForm({ data }) {
         values: Array.from(values)
     }));
 
+    // console.log(selectedFilters)
+    console.log(filters)
 
     /** TODO: 
      * 
@@ -31,37 +41,60 @@ export default function FilterForm({ data }) {
      * 
      * ориентироваться на dns
      * можно выбрать много пунктов, пункты будут приходить
-     * из атрибутов, при нажатии на Применить будет 1 запрос
+     * из атрибутов, при нажатии на Применить будеsт 1 запрос
      * N
      * тут можно формировать filters_options и конкатенацией вставлять в запрос собирая все данные
      * http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&filters[statusProduct][$eq]=stock&filters[size][$eq]=56-58&populate=*
      * https://http://90.156.134.142/api/products/filters/?q=5070 rtx&category=17a89aab16404e77&order=new&stock=now-today-tomorrow-later-out_of_stock&f[4rw]=1cst&f[9z]=2n4
      * https://www.dns-shop.ru/catalog/search/filters/?q=5070 rtx&category=17a89aab16404e77&order=new&stock=now-today-tomorrow-later-out_of_stock&f[4rw]=1cst&f[9z]=2n4
     */
-    
 
     const handleFilterChange = (filterName, value) => {
-        setSelectedFilters(prev => ({
-            ...prev,
-            [filterName]: value || null
+        setFilters(({
+            ...filters,
+            [filterName]: value
         }))
     }
+
+    const handlePriceChange = (type, value) => {
+        setFilters({
+            ...filters,
+        price: {
+            ...filters.price,
+            [type]: Number(value) || null
+        }
+        });
+    };
+    
     return (
         <form className={styles.form}>
-            <div className={styles.form_filter_wrapper_price}>
+            {/* <div className={styles.form_filter_wrapper_price}>
                 <label>Цена</label>
                 <input type='range'></input>
-            </div>
+            </div> */}
 
             <div className={styles.form_filter_wrapper_select}>
                 <div>
-                    <label htmlFor="">От</label>
-                    <input placeholder='0'/>
+                    <label>От</label>
+                    <input 
+                    type="number" 
+                    name="priceFrom"
+                    value={filters.price?.from || ''}
+                    onChange={(e) => handlePriceChange('from', e.target.value)}
+                    placeholder={minPrice}
+                    min={0}
+                    />
                 </div>
-
                 <div>
-                    <label htmlFor="">До</label>
-                    <input placeholder='0'/>
+                    <label>До</label>
+                    <input 
+                    type="number" 
+                    name="priceTo"
+                    value={filters.price?.to || ''}
+                    onChange={(e) => handlePriceChange('to', e.target.value)}
+                    placeholder={maxPrice}
+                    min={0}
+                    />
                 </div>
             </div>
 

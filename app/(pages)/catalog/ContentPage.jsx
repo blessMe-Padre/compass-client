@@ -9,6 +9,7 @@ import useCategorySlug from '@/app/store/categorySlug';
 
 import styles from './style.module.scss';
 import Link from 'next/link';
+import useFilterStore from '@/app/store/filterStore';
 
 export default function ContentPage({ data }) {
   const [categories, setCategories] = useState([]);
@@ -27,6 +28,8 @@ export default function ContentPage({ data }) {
 
   const [checkboxStatus, setCheckboxStatus] = useState(false);
   const [sortedFilters, setSortedFilters] = useState('');
+
+  const { filters } = useFilterStore();
 
 
   const [activePopup, setActivePopup] = useState(false); 
@@ -70,6 +73,32 @@ export default function ContentPage({ data }) {
     setSortedFilters(value);
   };
 
+
+  const buildStrapiFilters = (filters) => {
+    const params = [];
+
+    if (filters.price) {
+      if (filters.price.from) {
+        params.push(`filters[price][$gte]=${filters.price.from}`);
+      }
+      if (filters.price.to) {
+        params.push(`filters[price][$lte]=${filters.price.to}`);
+      }
+    }
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (key !== 'price' && value) {
+        params.push(
+          `filters[attributes][name][$eq]=${encodeURIComponent(key)}` +
+          `&filters[attributes][value][$eq]=${encodeURIComponent(value)}&`
+        )
+      }
+    });
+
+    return params.join('&');
+
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -112,6 +141,7 @@ export default function ContentPage({ data }) {
         // http://90.156.134.142:1337/api/products?pagination[page]=1&pagination[pageSize]=12&filters[statusProduct][$eq]=stock&populate=*
         const slugFilter = currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : ''
         const sortFilter = sortedFilters ? `sort=${sortedFilters}&` : '';
+        const optionsFilter = buildStrapiFilters(filters);
 
         const apiUrl = [
           'http://90.156.134.142:1337/api/products?',
@@ -120,6 +150,7 @@ export default function ContentPage({ data }) {
           `pagination[pageSize]=${PAGE_SIZE}&`,
           stockFilter,
           sortFilter,
+          optionsFilter,
           'populate=*'
         ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
 
@@ -144,7 +175,7 @@ export default function ContentPage({ data }) {
     };
 
     fetchProducts();
-  }, [currentSlug, pageCount, checkboxStatus, sortedFilters]);
+  }, [currentSlug, pageCount, checkboxStatus, sortedFilters, filters]);
   
   
 
