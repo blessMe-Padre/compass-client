@@ -2,6 +2,16 @@ import styles from './style.module.scss';
 
 
 export default function FilterForm() {
+
+    /** TODO: ориентироваться на dns
+     * можно выбрать много пунктов, пункты будут приходить
+     * из атрибутов, при нажатии на Применить будет 1 запрос
+     * 
+     * тут можно формировать filters_options и конкатенацией вставлять в запрос собирая все данные
+     * http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&filters[statusProduct][$eq]=stock&filters[size][$eq]=56-58&populate=*
+     * https://http://90.156.134.142/api/products/filters/?q=5070 rtx&category=17a89aab16404e77&order=new&stock=now-today-tomorrow-later-out_of_stock&f[4rw]=1cst&f[9z]=2n4
+     * https://www.dns-shop.ru/catalog/search/filters/?q=5070 rtx&category=17a89aab16404e77&order=new&stock=now-today-tomorrow-later-out_of_stock&f[4rw]=1cst&f[9z]=2n4
+    */
     return (
         <form className={styles.form}>
             <div className={styles.form_filter_wrapper_price}>
