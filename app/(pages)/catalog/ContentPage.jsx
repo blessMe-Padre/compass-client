@@ -26,13 +26,17 @@ export default function ContentPage({ data }) {
   const [loadMoreHidden, setLoadMoreHidden] = useState(false);
 
   const [checkboxStatus, setCheckboxStatus] = useState(false);
+  const [optionsFilter, setOptionsFilter] = useState(false);
+
+  const [sortedFilter, setSortedFilter] = useState([]);
+  const [sortedFilterKey, setSortedFilterKey] = useState([]);
 
 
   const [activePopup, setActivePopup] = useState(false); 
 
 
   // Для пагинации
-  const PAGE_SIZE = 3;
+  const PAGE_SIZE = 12;
   const [pageCount, setPageCount] = useState(1);
 
   useEffect(() => {
@@ -99,13 +103,21 @@ export default function ContentPage({ data }) {
     
     setLoading(true);
     try {
-      const products = await getAllProducts(
-        `http://90.156.134.142:1337/api/products?` + 
-        `filters[categories][slug][$eq]=${currentSlug}&` +
-        `pagination[page]=${pageCount}&` +
-        `pagination[pageSize]=${PAGE_SIZE}&` + 
-        `populate=*`
-      );
+      const stockFilter  =  checkboxStatus ? 'filters[statusProduct][$eq]=stock&' : '';
+      const slugFilter   =  currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : '';
+      const sortedFilter =  sortedFilter !== undefined ? `&sort=${sortedFilter}:${sortedFilterKey}` : ''
+      
+      const apiUrl = [
+        'http://90.156.134.142:1337/api/products?',
+        slugFilter,
+        stockFilter,
+        sortedFilter,
+        `pagination[page]=${pageCount}&`,
+        `pagination[pageSize]=${PAGE_SIZE}&`,
+        'populate=*'
+      ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
+
+      const products = await getAllProducts(apiUrl);
 
       if (pageCount === 1) {
         setProducts(products);
@@ -126,15 +138,15 @@ export default function ContentPage({ data }) {
   };
 
     fetchProducts();
-  }, [currentSlug, pageCount]);
+  }, [currentSlug, pageCount, checkboxStatus]);
   
   const handleLoadMore = () => {
     setPageCount(prev => prev + 1);
   }
  
   const handleCheckboxStatus = () => {
-    setCheckboxStatus(true)
-  }
+    checkboxStatus === true ? setCheckboxStatus(false) : setCheckboxStatus(true)
+  }  
 
   return (
       <>  
@@ -267,6 +279,7 @@ export default function ContentPage({ data }) {
                     &order=opinion
                     &order=price-asc (недорогие)
                     &order=price-desс (самые дорогие)   
+
                     http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&sort=price:asc
                     http://90.156.134.142:1337/api/products?filters[categories][slug][$eq]=letniy_i_zimniy_assortiment&sort=price:desc
 
