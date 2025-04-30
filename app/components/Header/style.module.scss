@@ -229,13 +229,144 @@
 .mini_cart {
     position: absolute;
     top: 30px;
+    right: 0;
     background-color: var(--toggle-color);
     color: var(--reverse-color);
-    width: 100%;
-    min-width: 250px;
+    width: max-content;
+    // min-width: 500px;
     // height: auto;
 
     padding: 20px;
 
     border-radius: 10px;
+
+    box-shadow: #0000001A;
+}
+
+
+.mini_cart_item {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    background-color: var(--super-light-gray);
+    
+    padding: 10px;
+
+    margin-bottom: 30px;
+
+    border-bottom: 1px solid var(--light-gray);
+}
+
+
+.item_img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--light-gray);
+}
+
+.item_info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.btns_amount {
+    padding: 10px 7.5px;
+    border: 1px solid var(--light-gray);
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+    
+    gap: 30px;
+}
+
+
+
+
+.item_sku, .item_size, .item_height {
+    font-weight: 400;
+    color: var(--light-gray)
+}
+
+.item_title {
+    font-weight: 700;
+    color: var(--black);
+}
+
+.item_info {
+    display: flex;
+}
+
+.item_btns {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.btns_delete {
+    display: flex; 
+    width: 10px;
+    height: 10px;
+    padding: 10px;
+    background-color: var(--gray);
+    border-radius: 50%;
+}
+
+.btn_link_cart {
+    width: 188px;
+    padding: 14px;
+    border: 1px solid var(--black);
+    border-radius: 10px;
+    color: var(--toggle-color);
+    background-color: var(--reverse-color);
+}
+
+.btn_link_checkout {
+    width: 188px;
+    padding: 14px;
+    border-radius: 10px;
+    color: var(--white);
+    background-color: var(--blue);
+}
+
+.btn_link_wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.total_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+
+}
+
+.total_sum {
+    display: flex;
+    gap: 30px;
+
+}
+
+.btn_minus, .btn_plus {
+    height: 20px;
+    border-radius: 10px;
+    width: 20px;
+}
+
+.total_p {
+    color: var(--light-gray);
+}
+
+.total_price {
+    color: var(--black);
+    font-weight: 700;
+}
+
+
+.more_about_delivery {
+    margin-top: 40px;
+    color: var(--light-gray);
 }
