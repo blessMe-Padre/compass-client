@@ -5,11 +5,18 @@ import useCartStore from "@/app/store/cartStore";
 
 const AddToCartButton = ({ href = '/', text, item }) => {
     const addToCart = useCartStore(state => state.addToCart);
+
+    console.log(item)
     
      const handleClick = () => {
         addToCart({
             id: item.id,
-            name: item.name,
+            mainImg: item?.imgs[0]?.url,
+            sku: item.sku,
+            size: item.size,
+            title: item.title,
+            height: item.height,
+            priceSale: item.priceSale,
             price: item.price,
             // quantity: 1,
         });
