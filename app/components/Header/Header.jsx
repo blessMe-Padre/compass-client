@@ -293,6 +293,7 @@ const Header = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [opened, setOpened] = useState(false);
     const [searchOpened, setSearchOpened] = useState(false);
+    const [modalMiniCartOpened, setModalMiniCartOpened] = useState(false)
 
     // разные цвета header для страниц
     const pathname = usePathname();
@@ -302,20 +303,7 @@ const Header = () => {
     const [activeSubmenuLvl1, setActiveSubmenuLvl1] = useState(null);
     const [hoveredSubmenuItem, setHoveredSubmenuItem] = useState(null);
 
-    const { cartData } = useCartStore();
-
-    useEffect(() => {
-        const checkIsMobile = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        checkIsMobile(); // запустить после монтирования
-        window.addEventListener('resize', checkIsMobile);
-
-        return () => {
-            window.removeEventListener('resize', checkIsMobile);
-        };
-    }, []);
+    const { cartItems  } = useCartStore();
 
     const menuClick = (e) => {
         document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
@@ -334,6 +322,46 @@ const Header = () => {
             nextUl.classList.add(styles.submenu_active);
         }
     }
+
+    const returnToPrev = () => {
+        setHoveredSubmenuItem(null);
+    };
+
+    const closeMobileCatalogMenu = () => {
+        setHoveredSubmenuItem(null);
+        setActiveSubmenuLvl1(null);
+        document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
+            ul.classList.remove(styles.submenu_active);
+        });
+    };
+
+    const handleClickMiniCart = () => {
+        modalMiniCartOpened === true ? setModalMiniCartOpened(false) : setModalMiniCartOpened(true)
+    }
+
+    // Работа с поиском
+    const variants = {
+        visible: {
+            opacity: 1,
+            height: "auto",
+            visibility: 'visible',
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+            },
+        },
+        hidden: {
+            opacity: 0,
+            height: 0,
+            visibility: 'hidden',
+        },
+    };
+
+    const menuRef = useRef(null);
+    const buttonRef = useRef(null);
+    const submenuRef = useRef(null);
+    const modalMiniCartRef = useRef(null);
+
 
     useEffect(() => {
         if (isMobile) return;
@@ -356,38 +384,19 @@ const Header = () => {
         };
     }, [isMobile]);
 
-    const returnToPrev = () => {
-        setHoveredSubmenuItem(null);
-    };
+    useEffect(() => {
+        const checkIsMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
 
-    const closeMobileCatalogMenu = () => {
-        setHoveredSubmenuItem(null);
-        setActiveSubmenuLvl1(null);
-        document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
-            ul.classList.remove(styles.submenu_active);
-        });
-    };
+        checkIsMobile(); // запустить после монтирования
+        window.addEventListener('resize', checkIsMobile);
 
-    // Работа с поиском
-    const variants = {
-        visible: {
-            opacity: 1,
-            height: "auto",
-            visibility: 'visible',
-            transition: {
-                when: "beforeChildren",
-                staggerChildren: 0.1,
-            },
-        },
-        hidden: {
-            opacity: 0,
-            height: 0,
-            visibility: 'hidden',
-        },
-    };
-    const menuRef = useRef(null);
-    const buttonRef = useRef(null);
-    const submenuRef = useRef(null);
+        return () => {
+            window.removeEventListener('resize', checkIsMobile);
+        };
+    }, []);
+
 
     // закрываем поиск при клике вне попапа
     useEffect(() => {
@@ -413,6 +422,29 @@ const Header = () => {
             document.removeEventListener("sliderClick", handleSliderClick);
         };
     }, [searchOpened]);
+
+    const handleClickOutside = (e) => {
+        if (
+        modalMiniCartRef.current && 
+        !modalMiniCartRef.current.contains(e.target) &&
+        // Дополнительная проверка, если есть кнопка открытия
+        !e.target.closest('.cart-btn') 
+        ) {
+        setModalMiniCartOpened(false);
+        }
+    };
+
+    useEffect(() => {
+        if (modalMiniCartOpened) {
+        document.addEventListener('mousedown', handleClickOutside);
+        } else {
+        document.removeEventListener('mousedown', handleClickOutside);
+        }
+        
+        return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [modalMiniCartOpened]);
 
     return (
         <header className={`
@@ -557,20 +589,53 @@ const Header = () => {
                             </svg>
                         </Link>
 
-                        <button
-                            className={`${styles.button} ${isHome ? styles.button_homeColor : styles.button_otherColor} relative`}
-                            title='Корзина'
-                        >
-                            <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M7.5623 7.58089H6.17845C5.71744 7.58091 5.27356 7.75559 4.93619 8.06977C4.59882 8.38395 4.39302 8.81428 4.36022 9.27412L3.46751 21.7741C3.4497 22.0238 3.4835 22.2745 3.56681 22.5105C3.65012 22.7465 3.78114 22.9629 3.95172 23.1461C4.1223 23.3293 4.32878 23.4754 4.55829 23.5753C4.7878 23.6752 5.03543 23.7267 5.28574 23.7267H19.7149C19.9652 23.7266 20.2127 23.6749 20.4422 23.575C20.6716 23.475 20.878 23.3289 21.0486 23.1458C21.2191 22.9626 21.3501 22.7463 21.4335 22.5103C21.5169 22.2744 21.5508 22.0238 21.5331 21.7741L20.6404 9.27412C20.6076 8.81428 20.4018 8.38395 20.0645 8.06977C19.7271 7.75559 19.2832 7.58091 18.8222 7.58089H17.4482V7.32048C17.4482 6.00821 16.9269 4.74968 15.999 3.82177C15.0711 2.89386 13.8126 2.37256 12.5003 2.37256C9.86751 2.37256 7.43418 4.46943 7.55241 7.32048L7.5623 7.58089ZM17.4482 9.14339V13.0496C17.4482 13.2568 17.3659 13.4556 17.2194 13.6021C17.0729 13.7486 16.8742 13.8309 16.667 13.8309C16.4598 13.8309 16.2611 13.7486 16.1146 13.6021C15.9681 13.4556 15.8857 13.2568 15.8857 13.0496V9.14339H9.11491V13.0496C9.11491 13.2568 9.0326 13.4556 8.88608 13.6021C8.73957 13.7486 8.54086 13.8309 8.33366 13.8309C8.12646 13.8309 7.92774 13.7486 7.78123 13.6021C7.63472 13.4556 7.55241 13.2568 7.55241 13.0496C7.55241 13.0496 7.62011 11.2241 7.59772 9.14339H6.17845C6.11269 9.14348 6.0494 9.16845 6.00129 9.21328C5.95318 9.2581 5.92381 9.31947 5.91907 9.38506L5.02584 21.8851C5.02327 21.9208 5.02808 21.9566 5.03997 21.9904C5.05187 22.0241 5.07059 22.0551 5.09498 22.0813C5.11937 22.1075 5.14889 22.1283 5.18172 22.1426C5.21454 22.1569 5.24995 22.1642 5.28574 22.1642H19.7149C19.7507 22.1641 19.786 22.1566 19.8187 22.1423C19.8515 22.128 19.881 22.1071 19.9053 22.0809C19.9297 22.0548 19.9484 22.0239 19.9604 21.9902C19.9723 21.9565 19.9772 21.9207 19.9748 21.8851L19.0816 9.38506C19.0768 9.31947 19.0475 9.2581 18.9994 9.21328C18.9512 9.16845 18.888 9.14348 18.8222 9.14339H17.4482ZM15.8857 7.58089V7.32048C15.8857 6.42261 15.5291 5.56151 14.8942 4.92662C14.2593 4.29174 13.3982 3.93506 12.5003 3.93506C11.6025 3.93506 10.7414 4.29174 10.1065 4.92662C9.47158 5.56151 9.11491 6.42261 9.11491 7.32048V7.58089H15.8857Z" />
-                            </svg>
+                        
+                        <div className='relative'>
+                            <button
+                                className={`${styles.button} ${isHome ? styles.button_homeColor : styles.button_otherColor} cart-btn relative`}
+                                title='Корзина'
+                                onClick={handleClickMiniCart}
+                                >
+                                <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M7.5623 7.58089H6.17845C5.71744 7.58091 5.27356 7.75559 4.93619 8.06977C4.59882 8.38395 4.39302 8.81428 4.36022 9.27412L3.46751 21.7741C3.4497 22.0238 3.4835 22.2745 3.56681 22.5105C3.65012 22.7465 3.78114 22.9629 3.95172 23.1461C4.1223 23.3293 4.32878 23.4754 4.55829 23.5753C4.7878 23.6752 5.03543 23.7267 5.28574 23.7267H19.7149C19.9652 23.7266 20.2127 23.6749 20.4422 23.575C20.6716 23.475 20.878 23.3289 21.0486 23.1458C21.2191 22.9626 21.3501 22.7463 21.4335 22.5103C21.5169 22.2744 21.5508 22.0238 21.5331 21.7741L20.6404 9.27412C20.6076 8.81428 20.4018 8.38395 20.0645 8.06977C19.7271 7.75559 19.2832 7.58091 18.8222 7.58089H17.4482V7.32048C17.4482 6.00821 16.9269 4.74968 15.999 3.82177C15.0711 2.89386 13.8126 2.37256 12.5003 2.37256C9.86751 2.37256 7.43418 4.46943 7.55241 7.32048L7.5623 7.58089ZM17.4482 9.14339V13.0496C17.4482 13.2568 17.3659 13.4556 17.2194 13.6021C17.0729 13.7486 16.8742 13.8309 16.667 13.8309C16.4598 13.8309 16.2611 13.7486 16.1146 13.6021C15.9681 13.4556 15.8857 13.2568 15.8857 13.0496V9.14339H9.11491V13.0496C9.11491 13.2568 9.0326 13.4556 8.88608 13.6021C8.73957 13.7486 8.54086 13.8309 8.33366 13.8309C8.12646 13.8309 7.92774 13.7486 7.78123 13.6021C7.63472 13.4556 7.55241 13.2568 7.55241 13.0496C7.55241 13.0496 7.62011 11.2241 7.59772 9.14339H6.17845C6.11269 9.14348 6.0494 9.16845 6.00129 9.21328C5.95318 9.2581 5.92381 9.31947 5.91907 9.38506L5.02584 21.8851C5.02327 21.9208 5.02808 21.9566 5.03997 21.9904C5.05187 22.0241 5.07059 22.0551 5.09498 22.0813C5.11937 22.1075 5.14889 22.1283 5.18172 22.1426C5.21454 22.1569 5.24995 22.1642 5.28574 22.1642H19.7149C19.7507 22.1641 19.786 22.1566 19.8187 22.1423C19.8515 22.128 19.881 22.1071 19.9053 22.0809C19.9297 22.0548 19.9484 22.0239 19.9604 21.9902C19.9723 21.9565 19.9772 21.9207 19.9748 21.8851L19.0816 9.38506C19.0768 9.31947 19.0475 9.2581 18.9994 9.21328C18.9512 9.16845 18.888 9.14348 18.8222 9.14339H17.4482ZM15.8857 7.58089V7.32048C15.8857 6.42261 15.5291 5.56151 14.8942 4.92662C14.2593 4.29174 13.3982 3.93506 12.5003 3.93506C11.6025 3.93506 10.7414 4.29174 10.1065 4.92662C9.47158 5.56151 9.11491 6.42261 9.11491 7.32048V7.58089H15.8857Z" />
+                                </svg>
 
-                            {cartData.length === 0 && (
-                                <div className={styles.cartAmount}>
-                                    {cartData.length}
-                                </div>
+                                {cartItems.length > 0 && (
+                                    <div className={styles.cartAmount}>
+                                        {cartItems.length}
+                                    </div>
+                                )}
+                            </button>
+
+                            
+                            {console.log(cartItems)}
+                            {modalMiniCartOpened && (
+                                <motion.div
+                                    ref={modalMiniCartRef}
+                                    variants={variants}
+                                    className={styles.mini_cart}>
+                                    {cartItems.length > 0
+                                        ? (
+                                            <div>
+                                                {cartItems.map((el) => (
+                                                    <>
+                                                        <p>{el.name}</p>
+                                                        <p>{el.price}</p>
+
+                                                        Перейти в <Link href={'/cart'}>корзину</Link>
+                                                        Перейти в <Link href={'/checkout'}>оформление заказа</Link>
+                                                    </>
+                                                ))}
+                                            </div>
+                                        )
+                                        : 'В вашей корзине пусто'
+                                    }
+                                </motion.div>
                             )}
-                        </button>
+                        </div>
+
+
+                        
 
                         <Link
                             title='Личный кабинет'

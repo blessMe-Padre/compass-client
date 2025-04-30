@@ -225,3 +225,17 @@
   text-align: right;
   right: -6px;
 }
+
+.mini_cart {
+    position: absolute;
+    top: 30px;
+    background-color: var(--toggle-color);
+    color: var(--reverse-color);
+    width: 100%;
+    min-width: 250px;
+    // height: auto;
+
+    padding: 20px;
+
+    border-radius: 10px;
+}

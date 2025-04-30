@@ -1,5 +1,5 @@
 'use client';
-import { Breadcrumbs, ProductsList, LoadMoreButton, Popup } from '@/app/components';
+import { Breadcrumbs, ProductsList, LoadMoreButton, Popup, Notification } from '@/app/components';
 import { useEffect, useState } from 'react';
 import getAllCategories from '../../utils/getAllCategories';
 import getAllProducts from '@/app/utils/getAllProducts';
@@ -10,6 +10,7 @@ import useCategorySlug from '@/app/store/categorySlug';
 import styles from './style.module.scss';
 import Link from 'next/link';
 import useFilterStore from '@/app/store/filterStore';
+import useCartStore from '@/app/store/cartStore';
 
 export default function ContentPage({ data }) {
   const [categories, setCategories] = useState([]);
@@ -30,7 +31,10 @@ export default function ContentPage({ data }) {
   const [sortedFilters, setSortedFilters] = useState('');
   const [sendingForm, setSendingForm] = useState(false)
 
+  const [notificationActive, setNotificationActive] = useState(false);
+
   const { filters } = useFilterStore();
+  const { cartItems } = useCartStore();
 
   const [activePopup, setActivePopup] = useState(false); 
 
@@ -101,6 +105,10 @@ export default function ContentPage({ data }) {
     return params.join('&');
 
   }
+
+  useEffect(() => {
+    setNotificationActive(true)
+  }, [cartItems])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -365,6 +373,7 @@ export default function ContentPage({ data }) {
       
 
       <Popup activePopup={activePopup} setActivePopup={setActivePopup} data={products} handleChange={handleSubmitForm} statusForm={sendingForm} />
+      <Notification text={`Вы успешно добавили товар в корзину`} active={notificationActive} setActive={setNotificationActive} />
       </>
   );
 }

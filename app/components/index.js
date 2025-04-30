@@ -18,3 +18,5 @@ export { default as Popup } from './Popup/Popup';
 export { default as Forms } from './Forms/Forms';
 export { default as FilterForm } from './FilterForm/FilterForm'
 export { default as ProductsList } from './ProductsList/ProductsList';
+
+export { default as Notification } from './Notification/Notification';
