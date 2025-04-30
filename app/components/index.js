@@ -20,3 +20,4 @@ export { default as FilterForm } from './FilterForm/FilterForm'
 export { default as ProductsList } from './ProductsList/ProductsList';
 
 export { default as Notification } from './Notification/Notification';
+export { default as CartItem } from './CartItem/CartItem';
