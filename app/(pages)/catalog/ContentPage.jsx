@@ -28,17 +28,20 @@ export default function ContentPage({ data }) {
 
   const [checkboxStatus, setCheckboxStatus] = useState(false);
   const [sortedFilters, setSortedFilters] = useState('');
+  const [sendingForm, setSendingForm] = useState(false)
 
   const { filters } = useFilterStore();
 
-
   const [activePopup, setActivePopup] = useState(false); 
-
 
   // Для пагинации
   const PAGE_SIZE = 12;
   const [pageCount, setPageCount] = useState(1);
 
+
+  const handleSubmitForm = () => {
+    sendingForm === true ? setSendingForm(false) : setCheckboxStatus(setSendingForm)
+  }
 
   const handleCategoryClick = (e, categorySlug, categoryId, categoryName ) => {
     e.stopPropagation();
@@ -361,7 +364,7 @@ export default function ContentPage({ data }) {
         </div>
       
 
-      <Popup activePopup={activePopup} setActivePopup={setActivePopup} data={products} />
+      <Popup activePopup={activePopup} setActivePopup={setActivePopup} data={products} handleChange={handleSubmitForm} statusForm={sendingForm} />
       </>
   );
 }
