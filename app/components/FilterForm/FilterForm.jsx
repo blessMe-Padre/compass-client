@@ -61,7 +61,7 @@ export default function FilterForm({ data, handleChange, statusForm}) {
             ...filters,
         price: {
             ...filters.price,
-            [type]: Number(value) || null
+            [type]: Number(value) || 0
         }
         });
     };
@@ -77,23 +77,23 @@ export default function FilterForm({ data, handleChange, statusForm}) {
                 <div>
                     <label>От</label>
                     <input 
-                    type="number" 
-                    name="priceFrom"
-                    value={filters.price?.from || ''}
-                    onChange={(e) => handlePriceChange('from', e.target.value)}
-                    placeholder={minPrice}
-                    min={0}
+                        type="number" 
+                        name="priceFrom"
+                        value={filters.price?.from || ''}
+                        onChange={(e) => handlePriceChange('from', e.target.value)}
+                        // placeholder={minPrice !== NaN ? minPrice : 0 }
+                        min={0}
                     />
                 </div>
                 <div>
                     <label>До</label>
                     <input 
-                    type="number" 
-                    name="priceTo"
-                    value={filters.price?.to || ''}
-                    onChange={(e) => handlePriceChange('to', e.target.value)}
-                    placeholder={maxPrice}
-                    min={0}
+                        type="number" 
+                        name="priceTo"
+                        value={filters.price?.to || ''}
+                        onChange={(e) => handlePriceChange('to', e.target.value)}
+                        // placeholder={maxPrice !== NaN ? maxPrice : 0 }
+                        max={0}
                     />
                 </div>
             </div>
