@@ -618,8 +618,8 @@ const Header = () => {
                                     {cartItems.length > 0
                                         ? (
                                             <div>
-                                                {cartItems.map((el) => (
-                                                    <div key={el.id} className={styles.mini_cart_item}>
+                                                {cartItems.map((el, idx) => (
+                                                    <div key={idx} className={styles.mini_cart_item}>
                                                         <div className={styles.img_wrapper}>
                                                             {el.mainImg ? (
                                                                 <Image 
