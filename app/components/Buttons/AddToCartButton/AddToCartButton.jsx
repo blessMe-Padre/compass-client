@@ -1,13 +1,28 @@
 import Image from "next/image";
 import styles from './style.module.scss';
 import Link from "next/link";
+import useCartStore from "@/app/store/cartStore";
 
-const AddToCartButton = ({ href = '/', text }) => {
+const AddToCartButton = ({ href = '/', text, item }) => {
+    const addToCart = useCartStore(state => state.addToCart);
+    
+     const handleClick = () => {
+        addToCart({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            // quantity: 1,
+        });
+    };
+
+    console
+
     return (
         <>
 
             <button
                 className={styles.btn}
+                onClick={handleClick}
             >
                 <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clipPath="url(#clip0_2026_3376)">

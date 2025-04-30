@@ -98,7 +98,7 @@ function CardItem({ element }) {
             </div>
             
             <div className={styles.btn_wrapper}>
-                <AddToCartButton text={'В корзину'} />
+                <AddToCartButton item={element} text={'В корзину'} />
             </div>
         </div>
     );

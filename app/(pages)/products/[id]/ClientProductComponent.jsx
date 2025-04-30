@@ -172,7 +172,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
-                        <AddToCartButton text={'В корзину'} />
+                        <AddToCartButton item={data} text={'В корзину'} />
                     </div>
                 </div>
 
