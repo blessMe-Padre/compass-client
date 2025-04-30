@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
 
-export default function FilterForm({ data }) {    
+export default function FilterForm({ data, handleChange, statusForm}) {    
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
 

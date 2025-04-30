@@ -2,7 +2,7 @@ import Form from '../';
 import { FilterForm } from '../'
 import styles from './style.module.css';
 
-export default function Popup({ activePopup, setActivePopup, data }) {
+export default function Popup({ activePopup, setActivePopup, data, handleChange, statusForm }) {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Escape' || event.key === 'Esc') {
@@ -43,7 +43,7 @@ export default function Popup({ activePopup, setActivePopup, data }) {
                     /> */}
 
                   
-                    <FilterForm data={data} />
+                    <FilterForm data={data} handleChange={handleChange} statusForm={statusForm} />
                 
                 </div>
             </div>

@@ -135,6 +135,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             </Swiper>
                         </div>
                     </div>
+
                     <div className={styles.description}>
                         <p className={styles.article}>{data?.sku}</p>
                         <ul className={styles.list}>
@@ -190,8 +191,18 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 <div
                     className={`${active === 0 ? `${styles.block}` : `${styles.none}`}`}
                 >
-                    <div className={styles.descriptions_wrapper}>
-                        {data?.description}
+                
+                    <div className={styles.wrapper_attr}>
+                        {data.attributes.map((el, id) => 
+                            <div key={id} className="flex gap-5">
+                                <p>{el.name}</p>
+                                <p>{el.value}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description}}>
+                      
                     </div>
                 </div>
                 <div
