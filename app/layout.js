@@ -1,6 +1,6 @@
 import { Ubuntu, Jost } from "next/font/google";
 import "./globals.css";
-import { Footer, Header } from "./components";
+import { Footer, Header, Notification } from "./components";
 
 const ubuntu = Ubuntu({
   variable: "--font-family",
@@ -25,6 +25,7 @@ export default function RootLayout({ children }) {
       <body className={`${ubuntu.variable} ${jost.variable} relative`}>
         <Header />
         {children}
+        <Notification />
         <Footer />
       </body>
     </html>

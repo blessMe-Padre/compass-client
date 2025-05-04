@@ -13,6 +13,9 @@ export default function FilterForm({ data, handleChange, statusForm}) {
 
     const maxPrice = parseInt(Math.max.apply(null, arrPrice));
     const minPrice = parseInt(Math.min.apply(null, arrPrice));
+    
+
+    // TODO: 04.05.2025 - нужно доделать фильтрацию - по кнопке грузится форма, сейчас через useEffect
 
 
     const attributes = data

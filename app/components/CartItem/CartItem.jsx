@@ -8,9 +8,13 @@ export default function CartItem({ idx, el}) {
 
     const { removeFromCart } = useCartStore();
 
+    {console.log('fsdfasf',el)}
+
     return (
         <div key={idx} className={styles.cart_item}>
             <div className={styles.img_wrapper}>
+
+                {console.log(el)}
                 {el.mainImg ? (
                     <Image 
                         src={`${domain}${el.mainImg}`}
@@ -45,7 +49,7 @@ export default function CartItem({ idx, el}) {
             <div className={styles.item_btns}>
                 <div className={styles.btns_amount}>
                     <button className={styles.btn_minus}>-</button>
-                    <p>3</p>
+                    <p>{el?.quantity}</p>
                     <button className={styles.btn_plus}>+</button>
                 </div>
 

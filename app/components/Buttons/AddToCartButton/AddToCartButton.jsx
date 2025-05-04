@@ -18,7 +18,7 @@ const AddToCartButton = ({ href = '/', text, item }) => {
             height: item.height,
             priceSale: item.priceSale,
             price: item.price,
-            // quantity: 1,
+            quantity: item.amount !== 0 || item.amount !== null ? 1 : 0,
         });
     };
 
