@@ -10,7 +10,7 @@ import useCartStore from '@/app/store/cartStore';
 
 const domain = 'http://90.156.134.142:1337'
 
-import { MenuButton, PageMenu, Search, CartItem } from './../index';
+import { MenuButton, PageMenu, Search, MiniCart } from './../index';
 
 const catalogLinks = [
     {
@@ -582,7 +582,7 @@ const Header = () => {
                         </button>
 
                         <Link
-                            href={'#'}
+                            href={'/wishlist'}
                             className={`${styles.button} ${isHome ? styles.button_homeColor : styles.button_otherColor}`}
                             title='Избранное'
                         >
@@ -617,28 +617,7 @@ const Header = () => {
                                     className={styles.mini_cart}>
                                     {cartItems.length > 0
                                         ? (
-                                            <div>
-                                                {cartItems.map((el, idx) => (
-                                                    <CartItem key={idx} el={el} idx={idx} />
-                                                ))}
-                                                
-                                                <div className={styles.total_info}>
-                                                    <div className={styles.total_sum}>
-                                                        <p className={styles.total_p}>Итого:</p>
-                                                        <p className={styles.total_price}></p>
-                                                    </div>
-
-                                                    <div className={styles.btn_link_wrapper}>
-
-                                                        <Link href={'/cart'} className={styles.btn_link_cart}>Перейти в  корзину</Link>
-                                                        <Link href={'/checkout'} className={styles.btn_link_checkout}> Оформить заказ</Link>
-                                                    </div>
-                                                </div>
-
-                                                <div className={styles.more_about_delivery}>
-                                                    <Link href={'/delivery'}>Подробнее о доставке</Link>
-                                                </div>
-                                            </div>
+                                           <MiniCart cartItems={cartItems} />
                                         )
                                         : 'В вашей корзине пусто'
                                     }

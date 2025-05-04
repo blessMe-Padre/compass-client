@@ -40,7 +40,7 @@ export default function Notification({ text }) {
             transition={{ duration: 0.3 }}
         >
         <div className={styles.modalContent}>
-            {text}
+            {message}
             <motion.div
                 className={styles.progressBar}
                 initial={{ width: 0 }}

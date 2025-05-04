@@ -6,23 +6,20 @@ import useCartStore from "@/app/store/cartStore";
 const AddToCartButton = ({ href = '/', text, item }) => {
     const addToCart = useCartStore(state => state.addToCart);
 
-    console.log(item)
-    
      const handleClick = () => {
         addToCart({
-            id: item.id,
-            mainImg: item?.imgs[0]?.url,
-            sku: item.sku,
-            size: item.size,
-            title: item.title,
-            height: item.height,
-            priceSale: item.priceSale,
-            price: item.price,
-            // quantity: 1,
+            id: item.id ?? '55',
+            mainImg: item?.imgs[0]?.url ?? '',
+            sku: item.sku ?? '',
+            size: item.size ?? '',
+            title: item.title ?? '',
+            height: item.height ?? '',
+            priceSales: item.priceSales ?? '',
+            price: item.price ?? '',
+            quantity: item.amount !== 0 || item.amount !== null ? 1 : 0,
         });
     };
 
-    console
 
     return (
         <>
