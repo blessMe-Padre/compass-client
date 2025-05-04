@@ -16,7 +16,7 @@ const AddToCartButton = ({ href = '/', text, item }) => {
             size: item.size,
             title: item.title,
             height: item.height,
-            priceSale: item.priceSale,
+            priceSales: item.priceSales,
             price: item.price,
             quantity: item.amount !== 0 || item.amount !== null ? 1 : 0,
         });

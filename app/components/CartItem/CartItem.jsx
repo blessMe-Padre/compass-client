@@ -8,7 +8,11 @@ export default function CartItem({ idx, el}) {
 
     const { removeFromCart } = useCartStore();
 
-    {console.log('fsdfasf',el)}
+    {console.log('fsdfasf!',el)}
+
+    const price = el?.priceSales !== null || el?.priceSales !== 0 ? el?.priceSales : el?.price;
+    const quantity = el?.quantity !== null ? el?.quantity : 1;
+    const totalSumItem = price * quantity;
 
     return (
         <div key={idx} className={styles.cart_item}>
@@ -48,14 +52,14 @@ export default function CartItem({ idx, el}) {
 
             <div className={styles.item_btns}>
                 <div className={styles.btns_amount}>
-                    <button className={styles.btn_minus}>-</button>
+                    <button className={styles.btn_minus} onClick={(e) => el?.quantity - 1}>-</button>
                     <p>{el?.quantity}</p>
-                    <button className={styles.btn_plus}>+</button>
+                    <button className={styles.btn_plus} onClick={(e) => el?.quantity + 1}>+</button>
                 </div>
 
                 <div className={styles.wrapper_price}>
                     <p className={styles.item_price}>{el.price}</p>
-                    <p className={styles.item_price_sale}>{el.priceSale}</p>
+                    <p className={styles.item_price_sale}>{el.priceSales}</p>
                 </div>
             </div>
 
