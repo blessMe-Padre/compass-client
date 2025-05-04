@@ -6,9 +6,19 @@ const domain = 'http://90.156.134.142:1337';
 
 export default function CartItem({ idx, el}) {
 
-    const { removeFromCart } = useCartStore();
+    const { removeFromCart, increaseQuantity, decreaseQuantity } = useCartStore();
 
-    {console.log('fsdfasf!',el)}
+    const handleIncrease = () => {
+        increaseQuantity(el.id)
+    }
+  
+    const handleDecrease = () => {
+        if (el.quantity <= 1) {
+            removeFromCart(el.id);
+        } else {
+            decreaseQuantity(el.id);
+        }
+    }
 
     const price = el?.priceSales !== null || el?.priceSales !== 0 ? el?.priceSales : el?.price;
     const quantity = el?.quantity !== null ? el?.quantity : 1;
@@ -17,8 +27,6 @@ export default function CartItem({ idx, el}) {
     return (
         <div key={idx} className={styles.cart_item}>
             <div className={styles.img_wrapper}>
-
-                {console.log(el)}
                 {el.mainImg ? (
                     <Image 
                         src={`${domain}${el.mainImg}`}
@@ -52,9 +60,9 @@ export default function CartItem({ idx, el}) {
 
             <div className={styles.item_btns}>
                 <div className={styles.btns_amount}>
-                    <button className={styles.btn_minus} onClick={(e) => el?.quantity - 1}>-</button>
+                    <button className={styles.btn_minus} onClick={handleDecrease}>-</button>
                     <p>{el?.quantity}</p>
-                    <button className={styles.btn_plus} onClick={(e) => el?.quantity + 1}>+</button>
+                    <button className={styles.btn_plus} onClick={handleIncrease}>+</button>
                 </div>
 
                 <div className={styles.wrapper_price}>

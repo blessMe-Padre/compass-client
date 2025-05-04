@@ -3,7 +3,10 @@ import styles from './style.module.scss';
 import { CartItem } from "..";
 import Link from "next/link";
 
+import useCartStore from "@/app/store/cartStore";
+
 export default function MiniCart({ cartItems }) {
+
 
     const totalSum = cartItems.reduce((sum, item) => {
         const price = item?.priceSales ?? item?.price;
@@ -14,6 +17,7 @@ export default function MiniCart({ cartItems }) {
     const formatPrice = (price) => {
         return new Intl.NumberFormat('ru-RU').format(price);
     };
+
 
     return (
          <div>
