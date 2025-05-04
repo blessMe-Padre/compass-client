@@ -582,7 +582,7 @@ const Header = () => {
                         </button>
 
                         <Link
-                            href={'#'}
+                            href={'/wishlist'}
                             className={`${styles.button} ${isHome ? styles.button_homeColor : styles.button_otherColor}`}
                             title='Избранное'
                         >

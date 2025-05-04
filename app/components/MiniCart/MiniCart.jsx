@@ -15,13 +15,12 @@ export default function MiniCart({ cartItems }) {
         return new Intl.NumberFormat('ru-RU').format(price);
     };
 
-   
-    console.log('totalSum',totalSum)
-
     return (
          <div>
             {cartItems.map((el, idx) => (
-                <CartItem key={idx} el={el} idx={idx} />
+                el !== null && (
+                    <CartItem key={idx} el={el} idx={idx} />
+                )
             ))}
             
             <div className={styles.total_info}>

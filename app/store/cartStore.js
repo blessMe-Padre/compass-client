@@ -7,17 +7,49 @@ const useCartStore = create(
       cartItems: [],
       lastAction: null,
 
-      addToCart: (item) => 
-        set((state) => ({
-          cartItems: [...state.cartItems, item],
-          lastAction: 'add'
-        })),
+
+      // не будем добавлять новый товар если он уже есть. 
+      addToCart: (product) => 
+        set((state) => {
+          if (!product || !product.id) return state;
+
+          const existingItem = state.cartItems.find(item => item && item.id === product.id);
+
+          if (existingItem) {
+            return {
+              cartItems: state.cartItems.map(item => {
+                return item && item.id === product.id
+                  ? { ...item, quantity: (item.quantity || 0) + 1 }
+                  : item;
+              }), 
+              lastAction: 'add'
+            };
+          }
+
+          return {
+            cartItems: [
+              ...state.cartItems, 
+              { 
+                ...product, 
+                quantity: product.quantity || 1 
+              }
+            ],
+            lastAction: 'add'
+          };
+      }),
 
       removeFromCart: (itemId) =>
-        set((state) => ({
-          cartItems: state.cartItems.filter(item => item.id !== itemId),
-          lastAction: 'remove'
-        })),
+        set((state) => {
+          if (!itemId) return state;
+          
+          return {
+            cartItems: state.cartItems.filter(item => {
+              if (!item) return false;
+              return item.id !== itemId;
+            }),
+            lastAction: 'remove'
+          };
+        }),
 
       clearCart: () => set({
         cartItems: [],
