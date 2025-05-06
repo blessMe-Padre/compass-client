@@ -15,6 +15,10 @@
     }
 
     border-bottom: 1px solid var(--light-gray);
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+    }
 }
 
 .cart_wrapper {

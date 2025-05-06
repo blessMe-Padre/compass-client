@@ -12,7 +12,7 @@ export default async function page() {
     
     return (
         <>
-           <ContentPage  />
+           <ContentPage />
         </>
     )
 }

@@ -7,7 +7,6 @@ import useCartStore from "@/app/store/cartStore";
 
 export default function MiniCart({ cartItems }) {
 
-
     const totalSum = cartItems.reduce((sum, item) => {
         const price = item?.priceSales ?? item?.price;
         const quantity = item?.quantity ?? 1;

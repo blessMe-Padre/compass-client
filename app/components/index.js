@@ -22,6 +22,7 @@ export { default as ContentRenderer } from './ContentRenderer/ContentRenderer';
 export { default as Forms } from './Forms/Forms';
 export { default as UserForm } from './UserForm/UserForm';
 export { default as FilterForm } from './FilterForm/FilterForm'
+export { default as FormsCheckout } from './FormsCheckout/FormsCheckout';
 
 export { default as ProductsList } from './ProductsList/ProductsList';
 
@@ -32,3 +33,7 @@ export { default as CartItem } from './CartItem/CartItem';
 
 export { default as Notification } from './Notification/Notification';
 export { default as Popup } from './Popup/Popup';
+
+// микро компоненты
+// чекбоксы, input, btn
+export { default as PromocodComponent } from './PromocodComponent/PromocodComponent';
