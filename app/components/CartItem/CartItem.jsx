@@ -26,7 +26,7 @@ export default function CartItem({ idx, el, location}) {
     const totalSumItem = price * quantity;
 
     return (
-        <div key={idx} className={`${styles.cart_item} ${location === 'cartPage' ? `${styles.pageCart}` : ''}`}>
+        <div key={idx} className={`${styles.cart_item} ${location === 'cartPage' ? `${styles.cartPage}` : ''}`}>
             <div className={styles.img_wrapper}>
                 {el.mainImg ? (
                     <Image 

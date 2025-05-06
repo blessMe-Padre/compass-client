@@ -21,6 +21,16 @@
     }
 }
 
+
+.info_inner div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.info_inner div p {
+    margin-bottom: 30px;
+}
+
 .cart_info {
     height: 100%;
     width: 40%;

@@ -1,0 +1,79 @@
+@use '@/app/mixins' as *;
+
+.promocod_wrapper {
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+.promocod {
+    position: relative;
+    display: flex;
+    width: 100%;
+  
+    input {
+        font-size: 18px;
+        background-color: transparent;
+        padding: 15px 25px;
+        color: var(--light-gray);
+        border-radius: 6px;
+        border: 1px solid var(--light-gray);
+        width: 100%;
+        transition: all 0.3s ease;
+        outline: none;
+
+
+        // применится при фокусе к label
+        &:focus + label { 
+            transform: translateY(-200%) translateX(-10%);
+            font-size: 12px;
+            background-color: var(--blue);
+            padding: 5px;
+            color: var(--white);
+            // opacity: 0;
+        }
+    }
+  
+    label {
+      position: absolute;
+      top: 15px;
+      left: 25px;
+      color: #ACACAC;
+      font-size: 18px;
+      transition: transform 0.3s ease, font-size 0.3s ease, opacity 0.3s ease; 
+      pointer-events: none; 
+    }
+  }
+  
+
+.btn_promo {
+    cursor: pointer;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    height: 100%;
+    width: 120px;
+
+    background-color: var(--blue);
+    color: var(--white);
+    font-weight: 700;
+    text-transform: uppercase;
+
+    padding: 10px 10px;
+    
+    border-radius: 6px;
+    border: none;
+
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: var(--light-gray);
+        color: var(--black);
+    }
+
+    &:active {
+        background-color: var(--orange);
+        color: var(--white);
+    }
+}

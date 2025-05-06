@@ -32,3 +32,7 @@ export { default as CartItem } from './CartItem/CartItem';
 
 export { default as Notification } from './Notification/Notification';
 export { default as Popup } from './Popup/Popup';
+
+// микро компоненты
+// чекбоксы, input, btn
+export { default as PromocodComponent } from './PromocodComponent/PromocodComponent';

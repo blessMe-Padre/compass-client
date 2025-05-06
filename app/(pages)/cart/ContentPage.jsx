@@ -1,5 +1,5 @@
 'use client';
-import { Breadcrumbs, CartItem, ContentRenderer, LinkButton } from '@/app/components';
+import { Breadcrumbs, CartItem, ContentRenderer, LinkButton, PromocodComponent } from '@/app/components';
 import Image from 'next/image';
 import styles from './style.module.scss';
 
@@ -54,9 +54,8 @@ export default function ContentPage() {
                                             <p>1</p>
                                         </div>
                                     </div>
-                                    <div className={styles.promocod}>
-                                        Введите промокод
-                                    </div>
+
+                                    <PromocodComponent />
                                 </div>
                             </>
 
