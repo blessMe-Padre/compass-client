@@ -22,6 +22,7 @@ export { default as ContentRenderer } from './ContentRenderer/ContentRenderer';
 export { default as Forms } from './Forms/Forms';
 export { default as UserForm } from './UserForm/UserForm';
 export { default as FilterForm } from './FilterForm/FilterForm'
+export { default as FormsCheckout } from './FormsCheckout/FormsCheckout';
 
 export { default as ProductsList } from './ProductsList/ProductsList';
 

@@ -1,0 +1,79 @@
+@use '@/app/mixins' as *;
+
+.form_content {
+    max-width: 530px;
+}
+
+.input_wrapper {
+    box-sizing: border-box;
+    width: 100%;
+}
+  
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    width: 100%;
+  
+    input {
+        font-size: 18px;
+        background-color: transparent;
+        padding: 15px 25px;
+        color: var(--light-gray);
+        border-radius: 6px;
+        border: 1px solid var(--light-gray);
+        width: 100%;
+        transition: all 0.3s ease;
+        outline: none;
+
+
+        // применится при фокусе к placeholder
+        &:focus + ::placeholder { 
+            transform: translateY(-200%) translateX(-10%);
+            font-size: 12px;
+            background-color: var(--blue);
+            padding: 5px;
+            color: var(--white);
+            // opacity: 0;
+        }
+    }
+  
+    ::placeholder {
+      position: absolute;
+      top: 15px;
+      left: 25px;
+      color: #ACACAC;
+      font-size: 18px;
+      transition: transform 0.3s ease, font-size 0.3s ease, opacity 0.3s ease; 
+      pointer-events: none; 
+    }
+  }
+
+.delivery {
+    box-sizing: border-box;
+    width: 100%;
+
+    input {
+        font-size: 18px;
+        background-color: transparent;
+        padding: 15px 25px;
+        color: var(--light-gray);
+        border-radius: 6px;
+        border: 1px solid var(--light-gray);
+        width: 100%;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    ::placeholder {
+        position: absolute;
+        top: 15px;
+        left: 25px;
+        color: #ACACAC;
+        font-size: 18px;
+        transition: transform 0.3s ease, font-size 0.3s ease, opacity 0.3s ease; 
+        pointer-events: none; 
+      }
+}
