@@ -11,7 +11,10 @@
 }
 
 .cart_item_wrapper {
-    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 50%;
 
     @media (max-width: 800px) {
         width: 100%;
@@ -19,6 +22,7 @@
 }
 
 .cart_info {
+    height: 100%;
     width: 40%;
     padding: 40px;
     color: var(--gray);
@@ -27,4 +31,23 @@
     @media (max-width: 800px) {
         width: 100%;
     }
+}
+
+
+.btn_reset {
+    cursor: pointer;
+    margin-top: 20px;
+    color: var(--gray);
+    text-decoration: underline;
+
+    border: none;
+    background-color: transparent;
+
+    &:hover {
+      color: var(--blue);  
+    }
+    
+    &:active {
+        color: var(--yellow);  
+    } 
 }

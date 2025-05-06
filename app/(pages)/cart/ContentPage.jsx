@@ -1,5 +1,5 @@
 'use client';
-import { Breadcrumbs, CartItem, ContentRenderer } from '@/app/components';
+import { Breadcrumbs, CartItem, ContentRenderer, LinkButton } from '@/app/components';
 import Image from 'next/image';
 import styles from './style.module.scss';
 
@@ -9,7 +9,14 @@ import useCartStore from "@/app/store/cartStore";
 
 export default function ContentPage() {
 
-    const { cartItems } = useCartStore();
+    const { cartItems, clearCart } = useCartStore();
+    
+    const handleClick = () => {
+        const confirmation = confirm('Вы хотите очистить корзину?');
+        if (confirmation === true) {
+            clearCart();
+        }
+    };
 
     return (
         <section>
@@ -22,25 +29,13 @@ export default function ContentPage() {
                             <>
                                 <div className={styles.cart_item_wrapper}>
                                     {cartItems.map((el, idx) => (
-                                        <CartItem el={el} idx={idx} key={idx} />
+                                        <CartItem el={el} idx={idx} key={idx} location={'cartPage'} />
                                     ))}
-                                    
-                                    {/* <div className={styles.total_info}>
-                                        <div className={styles.total_sum}>
-                                            <p className={styles.total_p}>Итого:</p>
-                                            <p className={styles.total_price}></p>
-                                        </div>
 
-                                        <div className={styles.btn_link_wrapper}>
-
-                                            <Link href={'/cart'} className={styles.btn_link_cart}>Перейти в  корзину</Link>
-                                            <Link href={'/checkout'} className={styles.btn_link_checkout}> Оформить заказ</Link>
-                                        </div>
+                                    <div>
+                                        <button 
+                                        onClick={() => handleClick()} className={styles.btn_reset}>Очистить корзину</button>
                                     </div>
-
-                                    <div className={styles.more_about_delivery}>
-                                        <Link href={'/delivery'}>Подробнее о доставке</Link>
-                                    </div> */}
                                 </div>
                                 
 
@@ -68,8 +63,9 @@ export default function ContentPage() {
                         )
                         : (
                             <div>
-                                <p>Здесь еще ничего нет. Выберите товары в каталоге</p>
-                                <Link href={'/catalog'}>Перейти в каталог</Link>
+                                <p style={{ fontWeight: 'bold', marginBottom: '5px'}}>Здесь еще ничего нет. </p>
+                                <p style={{ marginBottom: '10px'}}>Выберите товары в каталоге</p>
+                                <LinkButton text={'Перейти в каталог'} href='/catalog' />
                             </div>
                             )
                         }

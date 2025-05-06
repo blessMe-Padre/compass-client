@@ -23,7 +23,7 @@ export default function MiniCart({ cartItems }) {
          <div>
             {cartItems.map((el, idx) => (
                 el !== null && (
-                    <CartItem key={idx} el={el} idx={idx} />
+                    <CartItem key={idx} el={el} idx={idx} location={'miniCart'} />
                 )
             ))}
             

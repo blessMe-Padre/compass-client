@@ -1,10 +1,11 @@
 import styles from './style.module.scss';
 import Image from 'next/image';
 import useCartStore from '@/app/store/cartStore';
+import Link from 'next/link';
 
 const domain = 'http://90.156.134.142:1337';
 
-export default function CartItem({ idx, el}) {
+export default function CartItem({ idx, el, location}) {
 
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCartStore();
 
@@ -25,7 +26,7 @@ export default function CartItem({ idx, el}) {
     const totalSumItem = price * quantity;
 
     return (
-        <div key={idx} className={styles.cart_item}>
+        <div key={idx} className={`${styles.cart_item} ${location === 'cartPage' ? `${styles.pageCart}` : ''}`}>
             <div className={styles.img_wrapper}>
                 {el.mainImg ? (
                     <Image 
@@ -53,21 +54,21 @@ export default function CartItem({ idx, el}) {
 
             <div className={styles.item_info}>
                 <p className={styles.item_sku}>{el.sku}</p>
-                <p className={styles.item_title}>{el.title}</p>
+                <Link className={styles.item_title} href={`/products/${el?.id}`}>{el.title}</Link>
                 <p className={styles.item_size}>Размер: {el.size}</p>
                 <p className={styles.item_height}>Рост: {el.height}</p>
             </div>
 
-            <div className={styles.item_btns}>
+            <div className={`${styles.item_btns} ${location === 'cartPage' ? `${styles.cartPage}` : ''} `}>
                 <div className={styles.btns_amount}>
                     <button className={styles.btn_minus} onClick={handleDecrease}>-</button>
-                    <p>{el?.quantity}</p>
+                    <p className={styles.quantity}>{el?.quantity}</p>
                     <button className={styles.btn_plus} onClick={handleIncrease}>+</button>
                 </div>
 
                 <div className={styles.wrapper_price}>
-                    <p className={styles.item_price}>{el.price}</p>
-                    <p className={styles.item_price_sale}>{el.priceSales}</p>
+                    <p className={styles.item_price_sale}>{el.priceSales} / шт.</p>
+                    <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price}</p>
                 </div>
             </div>
 
