@@ -7,8 +7,31 @@ const useCartStore = create(
       cartItems: [],
       lastAction: null,
 
+      increaseQuantity: (itemId) => 
+        set((state) => ({
+          cartItems: state.cartItems.map(item => 
+            item?.id === itemId
+            ? { ...item, quantity: (item.quantity || 0) + 1}
+            : item
+          )
+        })),
 
-      // не будем добавлять новый товар если он уже есть. 
+      decreaseQuantity: (itemId) =>
+        set((state) => ({
+          cartItems: state.cartItems.map(item => {
+            if (!item || item.id !== itemId) return item;
+            const newQuantity = Math.max(1, (item.quantity || 1) - 1)
+            return { ...item, quantity: newQuantity}
+          })
+        })),
+
+        removeIfZero: (itemId) =>
+          set((state) => ({
+            cartItems: state.cartItems.filter(item => 
+              item?.id !== itemId || (item.quantity || 0) > 0
+            )
+        })),
+
       addToCart: (product) => 
         set((state) => {
           if (!product || !product.id) return state;
