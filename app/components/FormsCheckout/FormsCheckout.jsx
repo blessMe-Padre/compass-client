@@ -5,6 +5,7 @@ import styles from './style.module.scss'
 import { useForm, useWatch } from 'react-hook-form';
 import useCartStore from '@/app/store/cartStore';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
+import { LinkButton } from '..';
 
 const url = 'http://90.156.134.142:1337/api/zakazies'
 
@@ -43,6 +44,7 @@ export default function FormsCheckout({ type }) {
     const [sending, isSending] = useState(false);
 
     const { totalSum } = useCartTotals();
+    const { clearCart } = useCartStore();
 
     const { register, handleSubmit, formState: { errors }, control,  reset } = useForm();
 
@@ -58,10 +60,31 @@ export default function FormsCheckout({ type }) {
         { id: 'pay2', label: 'СБП' },
         { id: 'pay3', label: 'Оплата наличными при получении' }
     ]
- 
+
+    const arrAddress = [
+        { id: 'arrAddress1', label: 'Город, улица и дом*', name: 'fullAddress' },
+        { id: 'arrAddress2', label: 'Подъезд*', name: 'entrance' },
+        { id: 'arrAddress3', label: 'Код на двери', name: 'floor' },
+        { id: 'arrAddress4', label: 'Этаж*', name: 'code' },
+        { id: 'arrAddress5', label: 'Квартира*', name: 'apartment' }
+    ]
+    
     const name = useWatch({ control, name: 'name' });
     const phone = useWatch({ control, name: 'tel' });
     const email = useWatch({ control, name: 'email' });
+
+ 
+    const fullAddress = useWatch({ control, name: 'fullAddress' });
+    const entrance = useWatch({ control, name: 'entrance' });
+    const floor = useWatch({ control, name: 'floor' });
+    const code = useWatch({ control, name: 'code' });
+    const apartment = useWatch({ control, name: 'apartment' });
+
+    const deliveryMethodsWithFields = [
+        'Доставка СДЭК',
+        'Доставка почтой',
+        'Курьер по Владивостоку'
+    ];
 
     const currentUser = {
         id: 1,
@@ -69,6 +92,8 @@ export default function FormsCheckout({ type }) {
         email: 'test@mail.ru',
         phone: '89620000000'
     }
+
+    console.log(deliveryMethodsWithFields.includes(deliveryMethod))
 
     useEffect(() => {
         // Тут будет заполнение настоящими данных из useWatch() при указании names
@@ -81,41 +106,48 @@ export default function FormsCheckout({ type }) {
      * сделать динамическое получение данных из полей
      * 
      */
-    const onSubmit = async () => {
-        let formData = {};
 
-        formData = {
-            orderNumber: `TEST-1`,
-            orderText: "Тестовый заказ",
+    const onSubmit = async () => {
+        // Собираем данные доставки только если нужно
+        const deliveryData = deliveryMethodsWithFields.includes(deliveryMethod) 
+            ? [
+                {
+                    "fullAddress": fullAddress,
+                    "entrance": entrance,
+                    "floor": floor,
+                    "code": code,
+                    "apartment": apartment
+                }
+            ]
+            : null;
+
+        const formData = {
+            orderNumber: `Заказ №${crypto.randomUUID()}`,
+            orderText: "Заказ",
             dateOrder: "2024-01-15",
             dateDelivery: "2024-01-20",
-            address: "ул. Тестовая, 123",
             
-            // Если будет авторизован, то будет связь, иначе - нет
-            customers: {
-                connect: null ?? currentUser?.id
-            },
-
-            // Ссылки на товары
-            orderItems: {
-                connect: cartItems.map((item) => item.id)
-            },
-
-            // Статус заказа
+            // Связи
+            customers: currentUser?.id ? { connect: [currentUser.id] } : null,
+            orderItems: { connect: cartItems.map(item => ({ id: item.id })) },
+            
+            // Данные доставки (добавляем только если есть)
+            ...(deliveryData && { address: deliveryData }),
+            
+            // Статус и цены
             orderStatus: "pending",
-
-            // Стоимость заказа с доставкой
-            priceOrder: `${totalSum}` ?? null,
-            priceDelivery: '500' ?? null,
+            priceOrder: `${totalSum}` || "0",
+            priceDelivery: `${deliveryData}` ? "500" : "0",
             
-            // Выбранные способы доставки оплаты
-            deliveryMethod: deliveryMethod.label ?? 'Самовывоз',
-            paymentMethod: paymentMethod.label ?? 'Наличные',
-
-            phone: phone,
-            name: name,
-            email: email
-        }
+            // Методы оплаты и доставки
+            deliveryMethod: deliveryMethod || 'Самовывоз',
+            paymentMethod: paymentMethod || 'Оплата наличными при получении',
+            
+            // Контактные данные
+            phone,
+            name,
+            email
+        };
 
         isSending(true);
     
@@ -125,6 +157,7 @@ export default function FormsCheckout({ type }) {
                 setIsSuccess(true);
                 setError(undefined);
                 reset();
+                clearCart();
             } else {
                 setError(data?.error?.message || 'Что-то пошло не так');
                 console.error('Статус ошибки:', response.status, data);
@@ -138,157 +171,198 @@ export default function FormsCheckout({ type }) {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <h3>Контактные данные</h3>
-            <div className={styles.form_content}>
-                {type === 'physical' 
-                    ?
-                        <>             
-                            <div className={styles.input_wrapper}>
-                                <div className={styles.wrapper}>
-                                    <label htmlFor="name">ФИО получателя*</label>
-                                    <input 
-                                        type='text'
-                                        id='name' 
-                                        alt='name' 
-                                        placeholder='ФИО получателя*' 
-                                        className={`${errors.name ? styles.errors : ''}`}
-                                        {...register('name', { required: {value: true, message: 'Введите name'}})}
-                                        error={errors.name}
-                                    />
-                                </div>
-                            </div>
+        (cartItems.length > 0
+            ?
+                <form onSubmit={handleSubmit(onSubmit)}>
+                        <h3>Контактные данные</h3>
+                        <div className={styles.form_content}>
+                            {type === 'physical' 
+                                ?
+                                    <>             
+                                        <div className={styles.input_wrapper}>
+                                            <div className={styles.wrapper}>
+                                                <label htmlFor="name">ФИО получателя*</label>
+                                                <input 
+                                                    type='text'
+                                                    id='name' 
+                                                    alt='name' 
+                                                    placeholder='ФИО получателя*' 
+                                                    className={`${errors.name ? styles.errors : ''}`}
+                                                    {...register('name', { required: {value: true, message: 'Введите name'}})}
+                                                    error={errors.name}
+                                                />
+                                            </div>
+                                        </div>
 
-                            <div className={styles.input_wrapper}>
-                                <div className={styles.wrapper}>
-                                    <label htmlFor="tel">Телефон контактного лица*</label>
-                                    <input 
-                                        type='tel' 
-                                        id='tel' 
-                                        alt='tel' 
-                                        placeholder='Телефон' 
-                                        className={`${errors.name ? styles.errors : ''}`}
-                                        {...register('tel', { required: {value: true, message: 'Введите tel'}})}
-                                        error={errors.name}
-                                    />
-                                </div>
-                            </div>
-                        
-                            <div className={styles.input_wrapper}>
-                                <div className={styles.wrapper}>
-                                    <label htmlFor="tel">Электронная почта</label>
-                                    <input 
-                                        type='text' 
-                                        id='email' 
-                                        alt='email' 
-                                        placeholder='Электронная почта' 
-                                        className={`${errors.name ? styles.errors : ''}`}
-                                        {...register('email', { required: {value: true, message: 'Введите email'}})}
-                                        error={errors.name}
-                                    />
-                                </div>
-                            </div>
+                                        <div className={styles.input_wrapper}>
+                                            <div className={styles.wrapper}>
+                                                <label htmlFor="tel">Телефон контактного лица*</label>
+                                                <input 
+                                                    type='tel' 
+                                                    id='tel' 
+                                                    alt='tel' 
+                                                    placeholder='Телефон' 
+                                                    className={`${errors.name ? styles.errors : ''}`}
+                                                    {...register('tel', { required: {value: true, message: 'Введите tel'}})}
+                                                    error={errors.name}
+                                                />
+                                            </div>
+                                        </div>
+                                    
+                                        <div className={styles.input_wrapper}>
+                                            <div className={styles.wrapper}>
+                                                <label htmlFor="tel">Электронная почта</label>
+                                                <input 
+                                                    type='text' 
+                                                    id='email' 
+                                                    alt='email' 
+                                                    placeholder='Электронная почта' 
+                                                    className={`${errors.name ? styles.errors : ''}`}
+                                                    {...register('email', { required: {value: true, message: 'Введите email'}})}
+                                                    error={errors.name}
+                                                />
+                                            </div>
+                                        </div>
 
-                            <div className={styles.input_wrapper}>
-                                <div className={styles.wrapper}>
-                                    <label htmlFor="inn">ИНН*</label>
-                                    <input 
-                                        type='text' 
-                                        id='inn' 
-                                        alt='inn' 
-                                        placeholder='ИНН' 
-                                        className={`${errors.name ? styles.errors : ''}`}
-                                        {...register('inn', { required: {value: true, message: 'Введите inn'}})}
-                                        error={errors.name}
-                                    />
-                                </div>
-                            </div>
-                        </>  
-                        
-                    :
-                        <>        
-                             <div className={styles.input_wrapper}>
-                                <div className={styles.wrapper}>
-                                    <label htmlFor="name">Название организации*</label>
-                                    <input type='text' id='name' alt='name' placeholder='Название' />
-                                </div>
-                            </div>
-                        </>
-                }
+                                        <div className={styles.input_wrapper}>
+                                            <div className={styles.wrapper}>
+                                                <label htmlFor="inn">ИНН*</label>
+                                                <input 
+                                                    type='text' 
+                                                    id='inn' 
+                                                    alt='inn' 
+                                                    placeholder='ИНН' 
+                                                    className={`${errors.name ? styles.errors : ''}`}
+                                                    {...register('inn', { required: {value: true, message: 'Введите inn'}})}
+                                                    error={errors.name}
+                                                />
+                                            </div>
+                                        </div>
+                                    </>  
+                                    
+                                :
+                                    <>        
+                                        <div className={styles.input_wrapper}>
+                                            <div className={styles.wrapper}>
+                                                <label htmlFor="name">Название организации*</label>
+                                                <input type='text' id='name' alt='name' placeholder='Название' />
+                                            </div>
+                                        </div>
+                                    </>
+                            }
 
-                <div className={styles.delivery}>
-                    <h3>Способ доставки</h3>
-                    <div className={styles.delivery_wrapper}>
+                            <div className={styles.delivery}>
+                                <h3>Способ доставки</h3>
+                                <div className={styles.delivery_wrapper}>
 
-                        {arrDeliveryMethod.map((method) => (
-                            <div
-                            key={method.id}
-                            className={styles.payment_wrapper}
-                            >
-                                <input 
-                                    type="radio" 
-                                    id={method.id} 
-                                    name="delivery" 
-                                    checked={deliveryMethod === method.id}
-                                    onChange={() => setDeliveryMethod(method.id)}
-                                    className={styles.delivery_input}
-                                    />
-                                <label 
-                                    htmlFor={method.id}
-                                    className={`${styles.delivery_label} ${deliveryMethod === method.id ? styles.active : ''}`}
-                                    >
-                                    {method.label}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
-
-                    
-                </div>
-                <p className={styles.delivery_address}>
-                    г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
-                </p>
-
-                <div className={styles.payment}>
-                    <h3>Способ оплаты</h3>
-                    <div className={styles.payment_wrapper}>
-                        {arrPaymentMethod.map((method) => (
-                            <div
-                            key={method.id}
-                            className={styles.payment_wrapper}
-                            >
-                                    <input 
-                                        type="radio" 
-                                        id={method.id} 
-                                        name="payment" 
-                                        checked={paymentMethod === method.id}
-                                        onChange={() => setPaymentMethod(method.id)}
-                                        className={styles.payment_input}
-                                        />
-                                    <label 
-                                        htmlFor={method.id}
-                                        className={`${styles.payment_label} ${paymentMethod === method.id ? styles.active : ''}`}
+                                    {arrDeliveryMethod.map((method) => (
+                                        <div
+                                        key={method.id}
+                                        className={styles.payment_wrapper}
                                         >
-                                        {method.label}
-                                    </label>
+                                            <input 
+                                                type="radio" 
+                                                id={method.id} 
+                                                name="delivery" 
+                                                checked={deliveryMethod === method.label}
+                                                onChange={() => setDeliveryMethod(method.label)}
+                                                className={styles.delivery_input}
+                                                />
+                                            <label 
+                                                htmlFor={method.id}
+                                                className={`${styles.delivery_label} ${deliveryMethod === method.id ? styles.active : ''}`}
+                                                >
+                                                {method.label}
+                                            </label>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                    </div>
-                </div>
-
-                <div className={styles.comment}>
-                    <h3>Комментарий к заказу</h3>
-                    <div className={styles.comment_wrapper}>
-                        <p>
-                            Введите комментарий
-                        </p>
                         
-                        <textarea name="" id=""></textarea>
-                    </div>
+                                {deliveryMethodsWithFields.includes(deliveryMethod) && (
+                                    <div className={styles.address}>
+                                        <h3>Адрес доставки</h3>
+
+                                        {arrAddress.map((address, idx) => (
+                                            <div
+                                                key={idx}
+                                                className={styles.input_wrapper}
+                                            >
+                                                <div className={styles.wrapper}>
+                                                    
+                                                    <label 
+                                                        htmlFor={address.id}
+                                                        className={`${styles.address_label}`}
+                                                        >
+                                                        {address.label}
+                                                    </label>
+                                                    <input 
+                                                        type="text" 
+                                                        id={address.id} 
+                                                        name={address.name} 
+                                                        className={styles.address_input}
+                                                        {...register(`${address.name}`)}
+                                                        />
+                                                </div>
+                                            </div>
+                                    ))}
+                                    </div>
+                                )}
+                                
+                            </div>
+                            <p className={styles.delivery_address}>
+                                г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
+                            </p>
+
+                            <div className={styles.payment}>
+                                <h3>Способ оплаты</h3>
+                                <div className={styles.payment_wrapper}>
+                                    {arrPaymentMethod.map((method) => (
+                                        <div
+                                        key={method.id}
+                                        className={styles.payment_wrapper}
+                                        >
+                                            <div className={styles.wrapper}>
+                                                <input 
+                                                    type="radio" 
+                                                    id={method.id} 
+                                                    name="payment" 
+                                                    checked={paymentMethod === method.label}
+                                                    onChange={() => setPaymentMethod(method.label)}
+                                                    className={styles.payment_input}
+                                                    />
+                                                <label 
+                                                    htmlFor={method.id}
+                                                    className={`${styles.payment_label} ${paymentMethod === method.id ? styles.active : ''}`}
+                                                    >
+                                                    {method.label}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className={styles.comment}>
+                                <h3>Комментарий к заказу</h3>
+                                <div className={styles.comment_wrapper}>
+                                    <p>
+                                        Введите комментарий
+                                    </p>
+                                    
+                                    <textarea name="" id=""></textarea>
+                                </div>
+                            </div>
+                            <button>Отрпавить</button>
+                        </div> 
+                
+                </form>
+            
+            :
+                <div>
+                    Ваша корзина пуста
+                    <LinkButton text={'В каталог'} href='/catalog'/>
                 </div>
-                <button>Отрпавить</button>
-            </div> 
-        
-        </form>
+        )
+      
     )
 }
