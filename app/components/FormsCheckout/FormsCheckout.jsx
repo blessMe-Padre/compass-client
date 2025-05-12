@@ -1,13 +1,42 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styles from './style.module.scss'
+import { useForm, useWatch } from 'react-hook-form';
+
+const url = 'http://90.156.134.142:1337/api/zakazies'
+
+export async function sendOrderService(orderData) {
+   try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderData),
+        });
+
+       const data = await response.json();
+       console.log(data)
+
+        return { response, data };
+    } catch (error) {
+        console.error("sendOrder Service Error:", error);
+        throw error;
+    }
+}
 
 export default function FormsCheckout({ type }) {
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
+    const [formValues, setFormValues] = useState({})
 
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState();
+    const [sending, isSending] = useState(false);
+
+    const { register, handleSubmit, formState: { errors }, control,  reset } = useForm();
 
     const arrDeliveryMethod = [
         { id: 'delivery1', label: 'Самовывоз' },
@@ -22,8 +51,56 @@ export default function FormsCheckout({ type }) {
         { id: 'pay3', label: 'Оплата наличными при получении' }
     ]
 
+
+    
+    const name = useWatch({ control, name: 'name' });
+    const phone = useWatch({ control, name: 'tel' });
+
+
+
+    useEffect(() => {
+        // Тут будет заполнение настоящими данных из useWatch() при указании names
+    }, [])
+
+    const onSubmit = async () => {
+        let formData = {};
+
+        formData = {
+            orderNumber: '1',
+            orderText: '1',
+            dateOrder: '12.05.2025',
+            dateDelivery: '13.05.2025',
+            address: 'VDK',
+            orderStatus: 'prepare',
+            priceDelivery: '1000',
+            orderItems: '',
+            phone: phone,
+            name: name
+        }
+
+        console.log('formData', formData)
+        isSending(true);
+    
+        try {
+            const { response, data } = await sendOrderService(formData);
+            if (response.ok) {
+                setIsSuccess(true);
+                setError(undefined);
+                reset();
+            } else {
+                setError(data?.error?.message || 'Что-то пошло не так');
+                console.error('Статус ошибки:', response.status, data);
+            }
+        } catch (err) {
+            setError('Ошибка запроса, попробуйте позже');
+            console.error('Fetch error:', err);
+        } finally {
+            isSending(false);
+        }
+    };
+
     return (
-        <form action="">
+        <form onSubmit={handleSubmit(onSubmit)}>
             <h3>Контактные данные</h3>
             <div className={styles.form_content}>
                 {type === 'physical' 
@@ -32,25 +109,48 @@ export default function FormsCheckout({ type }) {
                             <div className={styles.input_wrapper}>
                                 <div className={styles.wrapper}>
                                     <label htmlFor="name">ФИО получателя*</label>
-                                    <input type='text' id='name' alt='name' placeholder='ФИО получателя*' />
+                                    <input 
+                                        type='text'
+                                        id='name' 
+                                        alt='name' 
+                                        placeholder='ФИО получателя*' 
+                                        className={`${errors.name ? styles.errors : ''}`}
+                                        {...register('name', { required: {value: true, message: 'Введите name'}})}
+                                        error={errors.name}
+                                    />
                                 </div>
                             </div>
 
                             <div className={styles.input_wrapper}>
                                 <div className={styles.wrapper}>
                                     <label htmlFor="tel">Телефон контактного лица*</label>
-                                    <input type='tel' id='tel' alt='tel' placeholder='Телефон' />
+                                    <input 
+                                        type='tel' 
+                                        id='tel' 
+                                        alt='tel' 
+                                        placeholder='Телефон' 
+                                        className={`${errors.name ? styles.errors : ''}`}
+                                        {...register('tel', { required: {value: true, message: 'Введите tel'}})}
+                                        error={errors.name}
+                                    />
                                 </div>
                             </div>
 
                             <div className={styles.input_wrapper}>
                                 <div className={styles.wrapper}>
                                     <label htmlFor="inn">ИНН*</label>
-                                    <input type='text' id='inn' alt='inn' placeholder='ИНН' />
+                                    <input 
+                                        type='text' 
+                                        id='inn' 
+                                        alt='inn' 
+                                        placeholder='ИНН' 
+                                        className={`${errors.name ? styles.errors : ''}`}
+                                        {...register('inn', { required: {value: true, message: 'Введите inn'}})}
+                                        error={errors.name}
+                                    />
                                 </div>
                             </div>
-                        </>
-                            
+                        </>  
                         
                     :
                         <>        
@@ -75,14 +175,14 @@ export default function FormsCheckout({ type }) {
                                 <input 
                                     type="radio" 
                                     id={method.id} 
-                                    name="payment" 
-                                    checked={paymentMethod === method.id}
-                                    onChange={() => setPaymentMethod(method.id)}
-                                    className={styles.payment_input}
+                                    name="delivery" 
+                                    checked={deliveryMethod === method.id}
+                                    onChange={() => setDeliveryMethod(method.id)}
+                                    className={styles.delivery_input}
                                     />
                                 <label 
                                     htmlFor={method.id}
-                                    className={`${styles.payment_label} ${paymentMethod === method.id ? styles.active : ''}`}
+                                    className={`${styles.delivery_label} ${deliveryMethod === method.id ? styles.active : ''}`}
                                     >
                                     {method.label}
                                 </label>
@@ -90,11 +190,11 @@ export default function FormsCheckout({ type }) {
                         ))}
                     </div>
 
-                       
-                    </div>
-                    <p className={styles.delivery_address}>
-                        г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
-                    </p>
+                    
+                </div>
+                <p className={styles.delivery_address}>
+                    г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
+                </p>
 
                 <div className={styles.payment}>
                     <h3>Способ оплаты</h3>
@@ -133,7 +233,7 @@ export default function FormsCheckout({ type }) {
                         <textarea name="" id=""></textarea>
                     </div>
                 </div>
-                
+                <button>Отрпавить</button>
             </div> 
         
         </form>
