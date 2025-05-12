@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import styles from './style.module.scss';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FormsCheckout } from '@/app/components';
+import { FormsCheckout, CartInfo } from '@/app/components';
 
 
 export default function ContentPage() {
 
     const [activeTab, setActiveTab] = useState('physical');
+
 
     const tabVariants = {
         hidden: { opacity: 0, y: 10 },
@@ -29,68 +30,72 @@ export default function ContentPage() {
             <div className='container'>
                 <h2 className='page_title'>Оформление заказа</h2>
 
-                <div className={styles.checkout_wrapper}>
-                    <div className={styles.tabs_btn_wrapper}>
-                        <label 
-                            htmlFor='physical' 
-                            className={`${styles.tab_btn} ${activeTab === 'physical' ? styles.active : ''}`}
-                        >
-                        <input 
-                            id='physical' 
-                            name='clientType' 
-                            type='radio' 
-                            checked={activeTab === 'physical'}
-                            onChange={() => setActiveTab('physical')}
-                            className={styles.radio_input}
-                        />
-                            Физ.лицо
-                        </label>
+                <div className={styles.wrapper}>
+                    <div className={styles.checkout_wrapper}>
+                        <div className={styles.tabs_btn_wrapper}>
+                            <label 
+                                htmlFor='physical' 
+                                className={`${styles.tab_btn} ${activeTab === 'physical' ? styles.active : ''}`}
+                            >
+                            <input 
+                                id='physical' 
+                                name='clientType' 
+                                type='radio' 
+                                checked={activeTab === 'physical'}
+                                onChange={() => setActiveTab('physical')}
+                                className={styles.radio_input}
+                            />
+                                Физ.лицо
+                            </label>
 
-                        <label 
-                            htmlFor='legal' 
-                            className={`${styles.tab_btn} ${activeTab === 'legal' ? styles.active : ''}`}
-                        >
-                        <input 
-                            id='legal' 
-                            name='clientType' 
-                            type='radio' 
-                            checked={activeTab === 'legal'}
-                            onChange={() => setActiveTab('legal')}
-                            className={styles.radio_input}
-                        />
-                            Юр.лицо
-                        </label>
+                            <label 
+                                htmlFor='legal' 
+                                className={`${styles.tab_btn} ${activeTab === 'legal' ? styles.active : ''}`}
+                            >
+                            <input 
+                                id='legal' 
+                                name='clientType' 
+                                type='radio' 
+                                checked={activeTab === 'legal'}
+                                onChange={() => setActiveTab('legal')}
+                                className={styles.radio_input}
+                            />
+                                Юр.лицо
+                            </label>
+                        </div>
+
+                        <div className={styles.tab_content}>
+                            <AnimatePresence mode='wait'>
+                                {activeTab === 'physical' && (
+                                <motion.div
+                                    key="physical"
+                                    variants={tabVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="exit"
+                                    className={styles.physical_tab}
+                                >
+                                    <FormsCheckout type={'physical'} />
+                                </motion.div>
+                                )}
+                                
+                                {activeTab === 'legal' && (
+                                <motion.div
+                                    key="legal"
+                                    variants={tabVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="exit"
+                                    className={styles.legal_tab}
+                                >
+                                    <FormsCheckout type={'legal'} />
+                                </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
 
-                    <div className={styles.tab_content}>
-                        <AnimatePresence mode='wait'>
-                            {activeTab === 'physical' && (
-                            <motion.div
-                                key="physical"
-                                variants={tabVariants}
-                                initial="hidden"
-                                animate="visible"
-                                exit="exit"
-                                className={styles.physical_tab}
-                            >
-                                <FormsCheckout type={'physical'} />
-                            </motion.div>
-                            )}
-                            
-                            {activeTab === 'legal' && (
-                            <motion.div
-                                key="legal"
-                                variants={tabVariants}
-                                initial="hidden"
-                                animate="visible"
-                                exit="exit"
-                                className={styles.legal_tab}
-                            >
-                                <FormsCheckout type={'legal'} />
-                            </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
+                    <CartInfo />
                 </div>
             </div>
         </section>
