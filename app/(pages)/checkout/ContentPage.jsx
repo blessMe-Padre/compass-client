@@ -9,7 +9,6 @@ export default function ContentPage() {
 
     const [activeTab, setActiveTab] = useState('physical');
 
-
     const tabVariants = {
         hidden: { opacity: 0, y: 10 },
         visible: { 
@@ -23,7 +22,6 @@ export default function ContentPage() {
           transition: { duration: 0.2, ease: "easeIn" }
         }
     }; 
-
 
     return (
         <section>
