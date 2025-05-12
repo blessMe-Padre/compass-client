@@ -7,7 +7,8 @@ const AddToCartButton = ({ href = '/', text, item }) => {
     const addToCart = useCartStore(state => state.addToCart);
 
      const handleClick = () => {
-        addToCart({
+         addToCart({
+            
             id: item.id ?? '55',
             mainImg: item?.imgs[0]?.url ?? '',
             sku: item.sku ?? '',
