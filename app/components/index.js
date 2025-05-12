@@ -37,3 +37,4 @@ export { default as Popup } from './Popup/Popup';
 // микро компоненты
 // чекбоксы, input, btn
 export { default as PromocodComponent } from './PromocodComponent/PromocodComponent';
+export { default as CartInfo } from './CartInfo/CartInfo';
