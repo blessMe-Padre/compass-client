@@ -7,17 +7,20 @@ import { useForm, useWatch } from 'react-hook-form';
 const url = 'http://90.156.134.142:1337/api/zakazies'
 
 export async function sendOrderService(orderData) {
+    console.log('orderData', orderData)
    try {
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(orderData),
+           body: JSON.stringify({ data: { ...orderData } }),
         });
+       
+       console.log(response)
 
        const data = await response.json();
-       console.log(data)
+       console.log('data', data)
 
         return { response, data };
     } catch (error) {
@@ -66,14 +69,19 @@ export default function FormsCheckout({ type }) {
         let formData = {};
 
         formData = {
-            orderNumber: '1',
-            orderText: '1',
-            dateOrder: '12.05.2025',
-            dateDelivery: '13.05.2025',
-            address: 'VDK',
-            orderStatus: 'prepare',
-            priceDelivery: '1000',
-            orderItems: '',
+            orderNumber: "TEST-001",
+            orderText: "Тестовый заказ",
+            dateOrder: "2024-01-15",
+            dateDelivery: "2024-01-20",
+            address: "ул. Тестовая, 123",
+            customers: {
+            connect: [1] 
+            },
+            orderItems: {
+                connect: [49, 51]
+            },
+            orderStatus: "pending",
+            priceDelivery: '500',
             phone: phone,
             name: name
         }
