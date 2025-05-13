@@ -5,13 +5,16 @@ import styles from './style.module.scss'
 import { useForm, useWatch } from 'react-hook-form';
 import useCartStore from '@/app/store/cartStore';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
-import { LinkButton } from '..';
 import { motion } from 'framer-motion';
-import { info } from 'sass';
 
-import { forwardRef, useImperativeHandle } from 'react';
+import { useImperativeHandle } from 'react';
+import { format } from 'date-fns';
 
 const url = 'http://90.156.134.142:1337/api/zakazies'
+
+export function getCurrentDate() {
+  return format(new Date(), 'yyyy-MM-dd');
+}
 
 export async function sendOrderService(orderData) {
     console.log('orderData', orderData)
@@ -171,12 +174,12 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
         const formData = {
             orderNumber: `Заказ №${crypto.randomUUID()}`,
             orderText: orderText,
-            dateOrder: "2024-01-15",
-            dateDelivery: "2024-01-20",
+            dateOrder: getCurrentDate(),
+            dateDelivery: getCurrentDate() + 10,
             
             // Связи
             customers: currentUser?.id ? { connect: [currentUser.id] } : null,
-            orderItems: { connect: cartItems.map(item => ({ id: item.id })) },
+            orderItems: { connect: [cartItems.map(item => ({ documentId	: item.documentId	 }))] },
             
             // Данные доставки (добавляем только если есть)
             ...(deliveryData && { address: deliveryData }),

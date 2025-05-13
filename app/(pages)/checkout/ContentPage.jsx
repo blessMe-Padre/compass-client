@@ -33,12 +33,16 @@ export default function ContentPage() {
     return (
         <section>
             <div className='container'>
-                <h2 className='page_title'>Оформление заказа</h2>
+                <h2 className='page_title'>{isSubmitSuccessful ? <span>Спасибо!</span> : <span>Оформление </span>}</h2>
 
                 <div className={styles.wrapper}>
                     {
                         isSubmitSuccessful
-                            ? "Ваш заказ № оформлен, ожидайте смс о готовности"
+                            ?
+                            <div>
+                                <p>Ваш заказ № <span style={{ fontWeight: 700 }}> тестовый номер</span> оформлен, ожидайте смс о готовности</p>
+                                <LinkButton href='/dashboard' text={'Просмотреть заказ'}/>
+                            </div>
                             : (
                                 <>
                                     {
