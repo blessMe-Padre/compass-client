@@ -6,7 +6,6 @@ import Link from 'next/link';
 const domain = 'http://90.156.134.142:1337';
 
 export default function CartItem({ idx, el, location}) {
-
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCartStore();
 
     const handleIncrease = () => {
@@ -20,10 +19,10 @@ export default function CartItem({ idx, el, location}) {
             decreaseQuantity(el.id);
         }
     }
+    
 
     const price = el?.priceSales !== null || el?.priceSales !== 0 ? el?.priceSales : el?.price;
     const quantity = el?.quantity !== null ? el?.quantity : 1;
-    const totalSumItem = price * quantity;
 
     return (
         <div key={idx} className={`${styles.cart_item} ${location === 'cartPage' ? `${styles.cartPage}` : ''}`}>
@@ -48,10 +47,12 @@ export default function CartItem({ idx, el, location}) {
                             placeholder="blur"
                             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                         />
-                    )
+                    )  
                 }
             </div>
+            
 
+         
             <div className={styles.item_info}>
                 <p className={styles.item_sku}>{el.sku}</p>
                 <Link className={styles.item_title} href={`/products/${el?.id}`}>{el.title}</Link>
