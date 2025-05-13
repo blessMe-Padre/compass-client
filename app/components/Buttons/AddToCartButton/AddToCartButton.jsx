@@ -8,8 +8,8 @@ const AddToCartButton = ({ href = '/', text, item }) => {
 
      const handleClick = () => {
          addToCart({
-            
             id: item.id ?? '55',
+            documentId: item?.documentId ?? '',	
             mainImg: item?.imgs[0]?.url ?? '',
             sku: item.sku ?? '',
             size: item.size ?? '',
