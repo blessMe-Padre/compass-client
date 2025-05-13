@@ -4,11 +4,15 @@ import styles from './style.module.scss';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormsCheckout, CartInfo } from '@/app/components';
 
+import { useRef } from 'react';
+
 
 export default function ContentPage() {
 
     const [activeTab, setActiveTab] = useState('physical');
 
+    const formRef = useRef();
+    
     const tabVariants = {
         hidden: { opacity: 0, y: 10 },
         visible: { 
@@ -73,7 +77,7 @@ export default function ContentPage() {
                                     exit="exit"
                                     className={styles.physical_tab}
                                 >
-                                    <FormsCheckout type={'physical'} />
+                                    <FormsCheckout ref={formRef} type={'physical'} />
                                 </motion.div>
                                 )}
                                 
@@ -86,14 +90,14 @@ export default function ContentPage() {
                                     exit="exit"
                                     className={styles.legal_tab}
                                 >
-                                    <FormsCheckout type={'legal'} />
+                                    <FormsCheckout ref={formRef} type={'legal'} />
                                 </motion.div>
                                 )}
                             </AnimatePresence>
                         </div>
                     </div>
 
-                    <CartInfo />
+                    <CartInfo forSubmit={true} onSubmit={() => formRef.current?.submit()} />
                 </div>
             </div>
         </section>

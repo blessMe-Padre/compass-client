@@ -6,6 +6,10 @@ import { useForm, useWatch } from 'react-hook-form';
 import useCartStore from '@/app/store/cartStore';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
 import { LinkButton } from '..';
+import { motion } from 'framer-motion';
+import { info } from 'sass';
+
+import { forwardRef, useImperativeHandle } from 'react';
 
 const url = 'http://90.156.134.142:1337/api/zakazies'
 
@@ -32,7 +36,7 @@ export async function sendOrderService(orderData) {
     }
 }
 
-export default function FormsCheckout({ type }) {
+export default function FormsCheckout({ type, ref }) {
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -72,13 +76,18 @@ export default function FormsCheckout({ type }) {
     const name = useWatch({ control, name: 'name' });
     const phone = useWatch({ control, name: 'tel' });
     const email = useWatch({ control, name: 'email' });
+    const inn = useWatch({ control, name: 'inn' }); 
 
+    const nameOrganization = useWatch({ control, name: 'nameOrganization' });
  
     const fullAddress = useWatch({ control, name: 'fullAddress' });
     const entrance = useWatch({ control, name: 'entrance' });
     const floor = useWatch({ control, name: 'floor' });
     const code = useWatch({ control, name: 'code' });
     const apartment = useWatch({ control, name: 'apartment' });
+
+
+    const orderText = useWatch({ control, name: 'orderText'})
 
     const deliveryMethodsWithFields = [
         'Доставка СДЭК',
@@ -95,9 +104,29 @@ export default function FormsCheckout({ type }) {
 
     console.log(deliveryMethodsWithFields.includes(deliveryMethod))
 
+    const addressVariants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { 
+          opacity: 1, 
+          y: 0,
+          transition: { duration: 0.3, ease: "easeOut" }
+        },
+        exit: { 
+          opacity: 0, 
+          y: -10,
+          transition: { duration: 0.2, ease: "easeIn" }
+        }
+    }; 
+
     useEffect(() => {
         // Тут будет заполнение настоящими данных из useWatch() при указании names
     }, [])
+
+    useImperativeHandle(ref, () => ({
+        submit: () => {
+            handleSubmit(onSubmit)();
+        }
+    }))
 
     /**
      * 
@@ -112,18 +141,38 @@ export default function FormsCheckout({ type }) {
         const deliveryData = deliveryMethodsWithFields.includes(deliveryMethod) 
             ? [
                 {
-                    "fullAddress": fullAddress,
-                    "entrance": entrance,
-                    "floor": floor,
-                    "code": code,
-                    "apartment": apartment
+                        "fullAddress": fullAddress,
+                        "entrance": entrance,
+                        "floor": floor,
+                        "code": code,
+                        "apartment": apartment
                 }
-            ]
+                ]
             : null;
-
+        
+        // Тут проверка статуса покупателя
+        const dataCustomer = type === 'physical'
+            ?
+               [{   
+                    statusCustomer: type,
+                    infoCustomerPhysical: {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        inn: inn,                            
+                    }
+                }]
+            :
+               [{   
+                    statusCustomer: type,
+                    infoCustomerLegal: {
+                        nameOrganization: nameOrganization
+                    }
+                }]
+        
         const formData = {
             orderNumber: `Заказ №${crypto.randomUUID()}`,
-            orderText: "Заказ",
+            orderText: orderText,
             dateOrder: "2024-01-15",
             dateDelivery: "2024-01-20",
             
@@ -144,9 +193,7 @@ export default function FormsCheckout({ type }) {
             paymentMethod: paymentMethod || 'Оплата наличными при получении',
             
             // Контактные данные
-            phone,
-            name,
-            email
+            dataCustomer: dataCustomer
         };
 
         isSending(true);
@@ -245,7 +292,15 @@ export default function FormsCheckout({ type }) {
                                         <div className={styles.input_wrapper}>
                                             <div className={styles.wrapper}>
                                                 <label htmlFor="name">Название организации*</label>
-                                                <input type='text' id='name' alt='name' placeholder='Название' />
+                                                <input
+                                                    type='text'
+                                                    id='nameOrganization'
+                                                    alt='nameOrganization'
+                                                    placeholder='Название организации'
+                                                    className={`${errors.name ? styles.errors : ''}`}
+                                                    {...register('nameOrganization', { required: {value: true, message: 'Введите nameOrganization'}})}
+                                                    
+                                                />
                                             </div>
                                         </div>
                                     </>
@@ -283,7 +338,8 @@ export default function FormsCheckout({ type }) {
                                         <h3>Адрес доставки</h3>
 
                                         {arrAddress.map((address, idx) => (
-                                            <div
+                                            <motion.div
+                                                variants={addressVariants}
                                                 key={idx}
                                                 className={styles.input_wrapper}
                                             >
@@ -300,10 +356,11 @@ export default function FormsCheckout({ type }) {
                                                         id={address.id} 
                                                         name={address.name} 
                                                         className={styles.address_input}
+                                                        placeholder={address.label}
                                                         {...register(`${address.name}`)}
                                                         />
                                                 </div>
-                                            </div>
+                                            </motion.div>
                                     ))}
                                     </div>
                                 )}
@@ -349,10 +406,9 @@ export default function FormsCheckout({ type }) {
                                         Введите комментарий
                                     </p>
                                     
-                                    <textarea name="" id=""></textarea>
+                                    <textarea name="" id="" {...register('orderText')}></textarea>
                                 </div>
                             </div>
-                            <button>Отрпавить</button>
                         </div> 
                 
                 </form>

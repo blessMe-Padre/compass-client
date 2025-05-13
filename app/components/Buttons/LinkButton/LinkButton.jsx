@@ -7,6 +7,7 @@ const LinkButton = ({ href = '/', text, ...props }) => {
 
     return (
         <Link
+        
             className={`${styles.link} ${style === 'noBg' ? `${styles.noBg}` : ''}`}
             href={href}>
             {text}

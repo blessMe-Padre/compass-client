@@ -26,7 +26,7 @@
   
     input {
         font-size: 18px;
-        background-color: transparent;
+        background-color: var(--super-light-gray);
         padding: 15px 25px;
         color: var(--light-gray);
         border-radius: 6px;
@@ -37,13 +37,12 @@
 
 
         // применится при фокусе к placeholder
-        &:focus + ::placeholder { 
-            transform: translateY(-200%) translateX(-10%);
+        &:focus::placeholder { 
+            transform: translateY(-200%) translateX(-100%);
             font-size: 12px;
-            background-color: var(--blue);
             padding: 5px;
             color: var(--white);
-            // opacity: 0;
+            opacity: 0;
         }
     }
   
