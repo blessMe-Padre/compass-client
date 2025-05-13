@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useCartTotals } from '@/app/hooks/useCartTotals'
 
-export default function CartInfo() {
+export default function CartInfo({ onSubmit, forSubmit }) {
     const [promocodSales, setPromocodSales] = useState(10)
 
     const { totalQuantity, totalSum } = useCartTotals();
@@ -46,7 +46,9 @@ export default function CartInfo() {
                 </div>
 
                 <div className={styles.btn_nav}>
-                    <LinkButton href={'/checkout'} text={'Оформить заказ'} />
+                    {
+                        forSubmit === true ? <button onClick={onSubmit}>Отправить заказ</button> : <LinkButton href={'/checkout'} text={'Оформить заказ'} />
+                    }
                     <LinkButton href={'/catalog'} text={'Продолжить покупки'} style={'noBg'} />
                 </div>
             </div>

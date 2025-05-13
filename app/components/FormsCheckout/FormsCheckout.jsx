@@ -9,6 +9,8 @@ import { LinkButton } from '..';
 import { motion } from 'framer-motion';
 import { info } from 'sass';
 
+import { forwardRef, useImperativeHandle } from 'react';
+
 const url = 'http://90.156.134.142:1337/api/zakazies'
 
 export async function sendOrderService(orderData) {
@@ -34,7 +36,7 @@ export async function sendOrderService(orderData) {
     }
 }
 
-export default function FormsCheckout({ type }) {
+export default function FormsCheckout({ type, ref }) {
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -84,6 +86,9 @@ export default function FormsCheckout({ type }) {
     const code = useWatch({ control, name: 'code' });
     const apartment = useWatch({ control, name: 'apartment' });
 
+
+    const orderText = useWatch({ control, name: 'orderText'})
+
     const deliveryMethodsWithFields = [
         'Доставка СДЭК',
         'Доставка почтой',
@@ -116,6 +121,12 @@ export default function FormsCheckout({ type }) {
     useEffect(() => {
         // Тут будет заполнение настоящими данных из useWatch() при указании names
     }, [])
+
+    useImperativeHandle(ref, () => ({
+        submit: () => {
+            handleSubmit(onSubmit)();
+        }
+    }))
 
     /**
      * 
@@ -161,7 +172,7 @@ export default function FormsCheckout({ type }) {
         
         const formData = {
             orderNumber: `Заказ №${crypto.randomUUID()}`,
-            orderText: "Заказ",
+            orderText: orderText,
             dateOrder: "2024-01-15",
             dateDelivery: "2024-01-20",
             
@@ -395,10 +406,9 @@ export default function FormsCheckout({ type }) {
                                         Введите комментарий
                                     </p>
                                     
-                                    <textarea name="" id=""></textarea>
+                                    <textarea name="" id="" {...register('orderText')}></textarea>
                                 </div>
                             </div>
-                            <button>Отрпавить</button>
                         </div> 
                 
                 </form>
