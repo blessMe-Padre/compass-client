@@ -94,6 +94,8 @@ const UserForm = ({ user }) => {
         const formData = new FormData(event.target);
         const formDataObj = Object.fromEntries(formData.entries());
 
+        console.log(formDataObj);
+
         try {
             setPending(true);
             const response = await updateUserDateService(
@@ -102,7 +104,7 @@ const UserForm = ({ user }) => {
                 url
             );
 
-            console.log('Данные обновлены:', response, formData);
+            // console.log('Данные обновлены:', response, formData);
             setSuccess(true);
             setPending(false);
 
