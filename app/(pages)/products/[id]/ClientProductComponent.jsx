@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
+import fetchData from "@/app/utils/fetchData";
 import { AddToCartButton, Counter, TableSize } from "@/app/components";
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
@@ -19,6 +20,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
+    const [productsWithSameName, setProductsWithSameName] = useState([]);
     const openTab = e => setActive(+e.target.dataset.index);
 
     // расчет стоимости товара и его вариантов
@@ -56,6 +58,47 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
         return { total, totalSales };
     };
+
+    useEffect(() => {
+        const getProductWithSameName = async (name) => {
+            try {
+                const url = `${domain}/api/products?filters[title][$eq]=${encodeURIComponent(`${name}`)}&populate=*`;
+                const result = await fetchData(url);
+                setProductsWithSameName(result?.data)
+                return result;
+            } catch (err) {
+                console.error(err)
+            }
+        }
+
+        getProductWithSameName(data?.title); 
+    
+    }, [])
+
+    console.log(productsWithSameName);
+
+    const productsData = productsWithSameName.map(product => ({
+            id: product.id?.value || product.id,
+            size: product.size?.value || product.size,
+            height: product.height?.value || product.height,
+            amount: product.amount,
+            price: product.price,
+            status: product.statusProduct
+    }));
+    
+    console.log('productsData', productsData);
+       {/* 
+            
+            TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
+            получать у них все атрибуты 
+            выводить их в сокращенном формате количество 
+            по нажатию на кнопку формировать массив с продуктами
+            и добавлять его в корзину, он будет парситься в конкретный продукт конкретный Item 
+            корзины, тогда не надо будет менять логику отрпавки формы и так далее
+
+
+        */}
+
 
     const { total, totalSales } = calculateTotal();
 
@@ -144,28 +187,31 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 <div className={styles.list_header_text}>Рост:</div>
                                 <div className={styles.list_header_text}>Кол-во:</div>
                             </li>
+                           
                             {
-                                sameProducts.map((item, index) => {
-                                    return (
-                                        <li className={styles.list_item} key={index}>
-                                            <div className={styles.size}>{item.size}</div>
-                                            <div className={styles.height}>{item.height}</div>
-                                            <div className={styles.qty}>
-                                                <Counter
-                                                    onChange={(newCount) => {
-                                                        setQuantities(prev => ({
-                                                            ...prev,
-                                                            [index]: newCount
-                                                        }));
-                                                    }}
+                                productsData.map((item) => (
+                                    <li className={styles.list_item} id={item.id}>
+                                        <div className={styles.size}>
+                                            {item.size}
+                                        </div>
+                                        
+                                        <div className={styles.size}>
+                                            {item.amount ?? 0} 
+                                        </div>
 
-                                                    documentId={item.documentId}
-                                                />
-                                            </div>
-                                        </li>
-                                    )
-                                })
+                                        <div className={styles.height}>
+                                            {item.height}
+                                        </div>
+                                        <div className={styles.height}>    
+                                            {item.price}
+                                        </div>
+                                        <div className={styles.height}>    
+                                            {item.status}
+                                        </div>
+                                    </li>
+                                ))
                             }
+                            
                         </ul>
 
                         <div className={styles.total}>
