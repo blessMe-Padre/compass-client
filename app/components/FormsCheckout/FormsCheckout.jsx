@@ -36,14 +36,12 @@ export async function sendOrderService(orderData) {
     }
 }
 
-export default function FormsCheckout({ type, ref }) {
+export default function FormsCheckout({ type, ref, setSubmitted }) {
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
-    const [formValues, setFormValues] = useState({})
 
-    const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState();
     const [sending, isSending] = useState(false);
 
@@ -201,7 +199,7 @@ export default function FormsCheckout({ type, ref }) {
         try {
             const { response, data } = await sendOrderService(formData);
             if (response.ok) {
-                setIsSuccess(true);
+                setSubmitted(true);
                 setError(undefined);
                 reset();
                 clearCart();
@@ -218,207 +216,197 @@ export default function FormsCheckout({ type, ref }) {
     };
 
     return (
-        (cartItems.length > 0
-            ?
-                <form onSubmit={handleSubmit(onSubmit)}>
-                        <h3>Контактные данные</h3>
-                        <div className={styles.form_content}>
-                            {type === 'physical' 
-                                ?
-                                    <>             
-                                        <div className={styles.input_wrapper}>
-                                            <div className={styles.wrapper}>
-                                                <label htmlFor="name">ФИО получателя*</label>
-                                                <input 
-                                                    type='text'
-                                                    id='name' 
-                                                    alt='name' 
-                                                    placeholder='ФИО получателя*' 
-                                                    className={`${errors.name ? styles.errors : ''}`}
-                                                    {...register('name', { required: {value: true, message: 'Введите name'}})}
-                                                    error={errors.name}
-                                                />
-                                            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                    <h3>Контактные данные</h3>
+                    <div className={styles.form_content}>
+                        {type === 'physical' 
+                            ?
+                                <>             
+                                    <div className={styles.input_wrapper}>
+                                        <div className={styles.wrapper}>
+                                            <label htmlFor="name">ФИО получателя*</label>
+                                            <input 
+                                                type='text'
+                                                id='name' 
+                                                alt='name' 
+                                                placeholder='ФИО получателя*' 
+                                                className={`${errors.name ? styles.errors : ''}`}
+                                                {...register('name', { required: {value: true, message: 'Введите name'}})}
+                                                error={errors.name}
+                                            />
                                         </div>
+                                    </div>
 
-                                        <div className={styles.input_wrapper}>
-                                            <div className={styles.wrapper}>
-                                                <label htmlFor="tel">Телефон контактного лица*</label>
-                                                <input 
-                                                    type='tel' 
-                                                    id='tel' 
-                                                    alt='tel' 
-                                                    placeholder='Телефон' 
-                                                    className={`${errors.name ? styles.errors : ''}`}
-                                                    {...register('tel', { required: {value: true, message: 'Введите tel'}})}
-                                                    error={errors.name}
-                                                />
-                                            </div>
+                                    <div className={styles.input_wrapper}>
+                                        <div className={styles.wrapper}>
+                                            <label htmlFor="tel">Телефон контактного лица*</label>
+                                            <input 
+                                                type='tel' 
+                                                id='tel' 
+                                                alt='tel' 
+                                                placeholder='Телефон' 
+                                                className={`${errors.name ? styles.errors : ''}`}
+                                                {...register('tel', { required: {value: true, message: 'Введите tel'}})}
+                                                error={errors.name}
+                                            />
                                         </div>
-                                    
-                                        <div className={styles.input_wrapper}>
-                                            <div className={styles.wrapper}>
-                                                <label htmlFor="tel">Электронная почта</label>
-                                                <input 
-                                                    type='text' 
-                                                    id='email' 
-                                                    alt='email' 
-                                                    placeholder='Электронная почта' 
-                                                    className={`${errors.name ? styles.errors : ''}`}
-                                                    {...register('email', { required: {value: true, message: 'Введите email'}})}
-                                                    error={errors.name}
-                                                />
-                                            </div>
+                                    </div>
+                                
+                                    <div className={styles.input_wrapper}>
+                                        <div className={styles.wrapper}>
+                                            <label htmlFor="tel">Электронная почта</label>
+                                            <input 
+                                                type='text' 
+                                                id='email' 
+                                                alt='email' 
+                                                placeholder='Электронная почта' 
+                                                className={`${errors.name ? styles.errors : ''}`}
+                                                {...register('email', { required: {value: true, message: 'Введите email'}})}
+                                                error={errors.name}
+                                            />
                                         </div>
+                                    </div>
 
-                                        <div className={styles.input_wrapper}>
-                                            <div className={styles.wrapper}>
-                                                <label htmlFor="inn">ИНН*</label>
-                                                <input 
-                                                    type='text' 
-                                                    id='inn' 
-                                                    alt='inn' 
-                                                    placeholder='ИНН' 
-                                                    className={`${errors.name ? styles.errors : ''}`}
-                                                    {...register('inn', { required: {value: true, message: 'Введите inn'}})}
-                                                    error={errors.name}
-                                                />
-                                            </div>
+                                    <div className={styles.input_wrapper}>
+                                        <div className={styles.wrapper}>
+                                            <label htmlFor="inn">ИНН*</label>
+                                            <input 
+                                                type='text' 
+                                                id='inn' 
+                                                alt='inn' 
+                                                placeholder='ИНН' 
+                                                className={`${errors.name ? styles.errors : ''}`}
+                                                {...register('inn', { required: {value: true, message: 'Введите inn'}})}
+                                                error={errors.name}
+                                            />
                                         </div>
-                                    </>  
-                                    
-                                :
-                                    <>        
-                                        <div className={styles.input_wrapper}>
-                                            <div className={styles.wrapper}>
-                                                <label htmlFor="name">Название организации*</label>
-                                                <input
-                                                    type='text'
-                                                    id='nameOrganization'
-                                                    alt='nameOrganization'
-                                                    placeholder='Название организации'
-                                                    className={`${errors.name ? styles.errors : ''}`}
-                                                    {...register('nameOrganization', { required: {value: true, message: 'Введите nameOrganization'}})}
-                                                    
-                                                />
-                                            </div>
+                                    </div>
+                                </>  
+                                
+                            :
+                                <>        
+                                    <div className={styles.input_wrapper}>
+                                        <div className={styles.wrapper}>
+                                            <label htmlFor="name">Название организации*</label>
+                                            <input
+                                                type='text'
+                                                id='nameOrganization'
+                                                alt='nameOrganization'
+                                                placeholder='Название организации'
+                                                className={`${errors.name ? styles.errors : ''}`}
+                                                {...register('nameOrganization', { required: {value: true, message: 'Введите nameOrganization'}})}
+                                                
+                                            />
                                         </div>
-                                    </>
-                            }
+                                    </div>
+                                </>
+                        }
 
-                            <div className={styles.delivery}>
-                                <h3>Способ доставки</h3>
-                                <div className={styles.delivery_wrapper}>
+                        <div className={styles.delivery}>
+                            <h3>Способ доставки</h3>
+                            <div className={styles.delivery_wrapper}>
 
-                                    {arrDeliveryMethod.map((method) => (
-                                        <div
-                                        key={method.id}
-                                        className={styles.payment_wrapper}
+                                {arrDeliveryMethod.map((method) => (
+                                    <div
+                                    key={method.id}
+                                    className={styles.payment_wrapper}
+                                    >
+                                        <input 
+                                            type="radio" 
+                                            id={method.id} 
+                                            name="delivery" 
+                                            checked={deliveryMethod === method.label}
+                                            onChange={() => setDeliveryMethod(method.label)}
+                                            className={styles.delivery_input}
+                                            />
+                                        <label 
+                                            htmlFor={method.id}
+                                            className={`${styles.delivery_label} ${deliveryMethod === method.id ? styles.active : ''}`}
+                                            >
+                                            {method.label}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                    
+                            {deliveryMethodsWithFields.includes(deliveryMethod) && (
+                                <div className={styles.address}>
+                                    <h3>Адрес доставки</h3>
+
+                                    {arrAddress.map((address, idx) => (
+                                        <motion.div
+                                            variants={addressVariants}
+                                            key={idx}
+                                            className={styles.input_wrapper}
                                         >
+                                            <div className={styles.wrapper}>
+                                                
+                                                <label 
+                                                    htmlFor={address.id}
+                                                    className={`${styles.address_label}`}
+                                                    >
+                                                    {address.label}
+                                                </label>
+                                                <input 
+                                                    type="text" 
+                                                    id={address.id} 
+                                                    name={address.name} 
+                                                    className={styles.address_input}
+                                                    placeholder={address.label}
+                                                    {...register(`${address.name}`)}
+                                                    />
+                                            </div>
+                                        </motion.div>
+                                ))}
+                                </div>
+                            )}
+                            
+                        </div>
+                        <p className={styles.delivery_address}>
+                            г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
+                        </p>
+
+                        <div className={styles.payment}>
+                            <h3>Способ оплаты</h3>
+                            <div className={styles.payment_wrapper}>
+                                {arrPaymentMethod.map((method) => (
+                                    <div
+                                    key={method.id}
+                                    className={styles.payment_wrapper}
+                                    >
+                                        <div className={styles.wrapper}>
                                             <input 
                                                 type="radio" 
                                                 id={method.id} 
-                                                name="delivery" 
-                                                checked={deliveryMethod === method.label}
-                                                onChange={() => setDeliveryMethod(method.label)}
-                                                className={styles.delivery_input}
+                                                name="payment" 
+                                                checked={paymentMethod === method.label}
+                                                onChange={() => setPaymentMethod(method.label)}
+                                                className={styles.payment_input}
                                                 />
                                             <label 
                                                 htmlFor={method.id}
-                                                className={`${styles.delivery_label} ${deliveryMethod === method.id ? styles.active : ''}`}
+                                                className={`${styles.payment_label} ${paymentMethod === method.id ? styles.active : ''}`}
                                                 >
                                                 {method.label}
                                             </label>
                                         </div>
-                                    ))}
-                                </div>
-                        
-                                {deliveryMethodsWithFields.includes(deliveryMethod) && (
-                                    <div className={styles.address}>
-                                        <h3>Адрес доставки</h3>
-
-                                        {arrAddress.map((address, idx) => (
-                                            <motion.div
-                                                variants={addressVariants}
-                                                key={idx}
-                                                className={styles.input_wrapper}
-                                            >
-                                                <div className={styles.wrapper}>
-                                                    
-                                                    <label 
-                                                        htmlFor={address.id}
-                                                        className={`${styles.address_label}`}
-                                                        >
-                                                        {address.label}
-                                                    </label>
-                                                    <input 
-                                                        type="text" 
-                                                        id={address.id} 
-                                                        name={address.name} 
-                                                        className={styles.address_input}
-                                                        placeholder={address.label}
-                                                        {...register(`${address.name}`)}
-                                                        />
-                                                </div>
-                                            </motion.div>
-                                    ))}
                                     </div>
-                                )}
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className={styles.comment}>
+                            <h3>Комментарий к заказу</h3>
+                            <div className={styles.comment_wrapper}>
+                                <p>
+                                    Введите комментарий
+                                </p>
                                 
+                                <textarea name="" id="" {...register('orderText')}></textarea>
                             </div>
-                            <p className={styles.delivery_address}>
-                                г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
-                            </p>
-
-                            <div className={styles.payment}>
-                                <h3>Способ оплаты</h3>
-                                <div className={styles.payment_wrapper}>
-                                    {arrPaymentMethod.map((method) => (
-                                        <div
-                                        key={method.id}
-                                        className={styles.payment_wrapper}
-                                        >
-                                            <div className={styles.wrapper}>
-                                                <input 
-                                                    type="radio" 
-                                                    id={method.id} 
-                                                    name="payment" 
-                                                    checked={paymentMethod === method.label}
-                                                    onChange={() => setPaymentMethod(method.label)}
-                                                    className={styles.payment_input}
-                                                    />
-                                                <label 
-                                                    htmlFor={method.id}
-                                                    className={`${styles.payment_label} ${paymentMethod === method.id ? styles.active : ''}`}
-                                                    >
-                                                    {method.label}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className={styles.comment}>
-                                <h3>Комментарий к заказу</h3>
-                                <div className={styles.comment_wrapper}>
-                                    <p>
-                                        Введите комментарий
-                                    </p>
-                                    
-                                    <textarea name="" id="" {...register('orderText')}></textarea>
-                                </div>
-                            </div>
-                        </div> 
-                
-                </form>
+                        </div>
+                    </div> 
             
-            :
-                <div>
-                    Ваша корзина пуста
-                    <LinkButton text={'В каталог'} href='/catalog'/>
-                </div>
-        )
-      
+            </form>  
     )
 }

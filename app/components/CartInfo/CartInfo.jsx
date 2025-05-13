@@ -47,7 +47,7 @@ export default function CartInfo({ onSubmit, forSubmit }) {
 
                 <div className={styles.btn_nav}>
                     {
-                        forSubmit === true ? <button onClick={onSubmit}>Отправить заказ</button> : <LinkButton href={'/checkout'} text={'Оформить заказ'} />
+                        forSubmit === true ? <LinkButton onClick={onSubmit} forClick={true} href={'/checkout'} text={'Оформить заказ'} /> : <LinkButton href={'/checkout'} text={'Оформить заказ'} />
                     }
                     <LinkButton href={'/catalog'} text={'Продолжить покупки'} style={'noBg'} />
                 </div>
