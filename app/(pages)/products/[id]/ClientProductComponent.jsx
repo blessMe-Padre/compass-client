@@ -59,24 +59,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         return { total, totalSales };
     };
 
-    useEffect(() => {
-        const getProductWithSameName = async (name) => {
-            try {
-                const url = `${domain}/api/products?filters[title][$eq]=${encodeURIComponent(`${name}`)}&populate=*`;
-                const result = await fetchData(url);
-                setProductsWithSameName(result?.data)
-                return result;
-            } catch (err) {
-                console.error(err)
-            }
-        }
-
-        getProductWithSameName(data?.title); 
-    
-    }, [])
-
-    console.log(productsWithSameName);
-
     const productsData = productsWithSameName.map(product => ({
             id: product.id?.value || product.id,
             size: product.size?.value || product.size,
@@ -187,30 +169,31 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 <div className={styles.list_header_text}>Рост:</div>
                                 <div className={styles.list_header_text}>Кол-во:</div>
                             </li>
-                           
-                            {
-                                productsData.map((item) => (
-                                    <li className={styles.list_item} id={item.id}>
-                                        <div className={styles.size}>
-                                            {item.size}
-                                        </div>
-                                        
-                                        <div className={styles.size}>
-                                            {item.amount ?? 0} 
-                                        </div>
 
-                                        <div className={styles.height}>
-                                            {item.height}
-                                        </div>
-                                        <div className={styles.height}>    
-                                            {item.price}
-                                        </div>
-                                        <div className={styles.height}>    
-                                            {item.status}
-                                        </div>
-                                    </li>
-                                ))
+                            {
+                                sameProducts.map((item, index) => {
+                                    return (
+                                        <li className={styles.list_item} key={index}>
+                                            <div className={styles.size}>{item.size}</div>
+                                            <div className={styles.height}>{item.height}</div>
+                                            <div className={styles.qty}>
+                                                <Counter
+                                                    onChange={(newCount) => {
+                                                        setQuantities(prev => ({
+                                                            ...prev,
+                                                            [index]: newCount
+                                                        }));
+                                                    }}
+
+                                                    documentId={item.documentId}
+                                                />
+                                            </div>
+                                        </li>
+                                    )
+                                })
                             }
+                           
+                         
                             
                         </ul>
 
