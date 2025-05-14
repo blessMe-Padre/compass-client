@@ -98,7 +98,13 @@ function CardItem({ element }) {
             </div>
             
             <div className={styles.btn_wrapper}>
-                <AddToCartButton item={element} text={'В корзину'} />
+                {element.statusProduct === 'order' || element.price === 0 && element.priceSales === 0 ? (
+                    <button>Данный товар нельзя добавить в корзину</button>
+                )
+                    : <AddToCartButton item={element} text={'В корзину'} />
+                }
+
+              
             </div>
         </div>
     );

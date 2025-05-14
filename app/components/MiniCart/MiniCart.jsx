@@ -29,7 +29,7 @@ export default function MiniCart({ cartItems }) {
             <div className={styles.total_info}>
                 <div className={styles.total_sum}>
                     <p className={styles.total_p}>Итого:</p>
-                    <p className={styles.total_price}>{formatPrice(totalSum)}</p>
+                    <p className={styles.total_price}>{Number(formatPrice(totalSum).replace(/\s/g, ''))}</p>
                 </div>
 
                 <div className={styles.btn_link_wrapper}>
