@@ -89,11 +89,11 @@ function CardItem({ element }) {
             <div className={styles.price_container}>
                 {priceSales ? (
                     <>
-                        <p className={styles.item_sale_price}>{priceSales.toLocaleString('ru-Ru')} Р / шт.</p>
+                        <p className={styles.item_sale_price}>{priceSales?.toLocaleString('ru-Ru')} Р / шт.</p>
                         <p className={`${styles.item_sale_price} ${styles.price_underline}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
                     </>
                 ) : (
-                    <p className={styles.price}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
+                    <p className={styles.price}>{price?.toLocaleString('ru-Ru')} Р / шт.</p>
                 )}
             </div>
             
