@@ -60,16 +60,16 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     };
 
     const productsData = productsWithSameName.map(product => ({
-            id: product.id?.value || product.id,
-            size: product.size?.value || product.size,
-            height: product.height?.value || product.height,
-            amount: product.amount,
-            price: product.price,
-            status: product.statusProduct
+        id: product.id?.value || product.id,
+        size: product.size?.value || product.size,
+        height: product.height?.value || product.height,
+        amount: product.amount,
+        price: product.price,
+        status: product.statusProduct
     }));
-    
+
     console.log('productsData', productsData);
-       {/* 
+    {/* 
             
             TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
             получать у них все атрибуты 
@@ -192,9 +192,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     )
                                 })
                             }
-                           
-                         
-                            
+
+
+
                         </ul>
 
                         <div className={styles.total}>
@@ -220,9 +220,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 <div
                     className={`${active === 0 ? `${styles.block}` : `${styles.none}`}`}
                 >
-                
+
                     <div className={styles.wrapper_attr}>
-                        {data.attributes.map((el, id) => 
+                        {data.attributes.map((el, id) =>
                             <div key={id} className="flex gap-5">
                                 <p>{el.name}</p>
                                 <p>{el.value}</p>
@@ -230,8 +230,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         )}
                     </div>
 
-                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description}}>
-                      
+                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description }}>
+
                     </div>
                 </div>
                 <div

@@ -5,54 +5,63 @@
 import { useEffect, useState } from 'react';
 import getProductByDocumentId from '@/app/utils/getProductByDocumentId';
 
+import { CartItem } from '@/app/components';
+
 import styles from './style.module.scss';
 
 const OrdersList = ({ orders = [] }) => {
-    const [products, setProducts] = useState([]);
-    console.log('products', products);
-    console.log('orders', orders);
+    const [productsByOrderId, setProductsByOrderId] = useState({});
+
+    console.log(orders);
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const allProductIds = [];
+                const newProductsByOrder = {};
 
-                orders.forEach(order => {
+                for (const order of orders) {
+                    const productIds = [];
+
                     order.orderData?.forEach(data => {
                         data.quantity?.forEach(item => {
-                            if (item.id) {
-                                allProductIds.push(item.id);
-                            }
+                            productIds.push(item.id);
                         });
                     });
-                });
 
+                    const loadedProducts = await Promise.all(
+                        productIds.map(id => getProductByDocumentId(id))
+                    );
 
-                const loadedProducts = await Promise.all(
-                    allProductIds.map(id => getProductByDocumentId(id))
-                );
-                setProducts(loadedProducts);
+                    newProductsByOrder[order.id] = loadedProducts;
+                }
+
+                setProductsByOrderId(newProductsByOrder); // только один вызов setState
 
             } catch (error) {
                 console.error('Произошла ошибка при загрузке товаров', error);
             }
         };
 
-        loadData();
+        if (orders.length > 0) {
+            loadData();
+        }
     }, [orders]);
-
 
     return (
         <ul className={styles.list}>
-            {orders.map((el, idx) => (
-                <li className={styles.item} key={idx}>
-                    <h3>Заказ номер {el?.id}</h3>
+            {orders.map(order => (
+                <li key={order.id}>
+                    <h3>Заказ номер {order.id}</h3>
                     <p>Ожидаемая дата доставки: 23 декабря</p>
-                    <p>{el?.deliveryMethod}</p>
+                    <p>{order.deliveryMethod}</p>
 
-                    {/* <CartItem el={el} idx={idx} key={idx} location={'cartPage'} /> */}
+                    {(productsByOrderId[order.id] || []).map(product => (
+                        <CartItem key={product.id} el={product} location="cartPage" />
+                    ))}
                 </li>
             ))}
+
+
         </ul>
     )
 }

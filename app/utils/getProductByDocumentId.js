@@ -1,4 +1,4 @@
-const getProductById = async (id) => {
+const getProductByDocumentId = async (id) => {
     try {
         const res = await fetch(`http://90.156.134.142:1337/api/products/?filters[documentId][$eq]=${id}&populate=*`);
         if (!res.ok) {
@@ -12,4 +12,4 @@ const getProductById = async (id) => {
     }
 };
 
-export default getProductById;
+export default getProductByDocumentId;
