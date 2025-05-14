@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import getUserById from '@/app/utils/getUserById';
-import { UserForm } from '@/app/components';
+import { Preloader, UserForm } from '@/app/components';
 import { motion } from "framer-motion";
 
 import styles from './style.module.scss';
@@ -91,6 +91,7 @@ const Dashboard = () => {
                     animate={active === 1 ? "visible" : "hidden"}
                 >
                     История заказов
+                    222
                 </motion.div>
                 <motion.div
                     layout

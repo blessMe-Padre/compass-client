@@ -5,6 +5,7 @@ import fetchData from '../../utils/fetchData';
 import styles from "./style.module.scss";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { Preloader } from '@/app/components';
 
 
 const domain = 'http://90.156.134.142:1337';
@@ -121,7 +122,7 @@ export default function Search() {
                         isFocused && (
                             <ul className={styles.list}>
                                 {inputValue.trim() === '' && <li>Начните печатать</li>}
-                                {loading && <img src='/download.png' className={styles.image} />}
+                                {loading && <Preloader width={20} height={20} />}
                                 {!loading && dataList.length === 0 && inputValue.trim() !== '' && (
                                     <li>Ничего не найдено</li>
                                 )}

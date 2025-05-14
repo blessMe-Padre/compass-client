@@ -38,3 +38,4 @@ export { default as Popup } from './Popup/Popup';
 // чекбоксы, input, btn
 export { default as PromocodComponent } from './PromocodComponent/PromocodComponent';
 export { default as CartInfo } from './CartInfo/CartInfo';
+export { default as Preloader } from './Preloader/Preloader';
