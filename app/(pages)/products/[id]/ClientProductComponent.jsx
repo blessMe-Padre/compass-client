@@ -41,8 +41,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     }, []);
 
     const calculateTotal = () => {
-        let total = Number(data.price.replace(/\s/g, ''));
-        let totalSales = Number(data.priceSales.replace(/\s/g, ''));
+        let total = Number(0);
+        let totalSales = Number(0);
 
         sameProducts.forEach((item, index) => {
             const priceSales = Number(item?.priceSales.replace(/\s/g, ''));
@@ -71,6 +71,12 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
 
     const { total, totalSales } = calculateTotal();
+
+
+    const updatedItems = sameProducts.map((item, idx) => ({
+        ...item,
+        amount: quantities[idx] || 0
+    }))
 
     return (
         <section className={styles.section}>
@@ -165,24 +171,29 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                             <div className={styles.size}>{item.size}</div>
                                             <div className={styles.height}>{item.height}</div>
                                             <div className={styles.qty}>
-                                                <Counter
-                                                    onChange={(newCount) => {
-                                                        setQuantities(prev => ({
-                                                            ...prev,
-                                                            [index]: newCount
-                                                        }));
-                                                    }}
-
-                                                    documentId={item.documentId}
-                                                />
+                                            <Counter
+                                                onChange={(newCount) => {
+                                                setQuantities(prev => ({
+                                                    ...prev,
+                                                    [index]: newCount
+                                                }));
+                                                }}
+                                                value={quantities[index] || 0} 
+                                                documentId={item.documentId}
+                                            />
                                             </div>
                                             <div className={styles.price}>{item.price ? item.price : item.status}</div>
                                         </li>
                                     )
                                 })
                             }
+                            {
+                                console.log('quantities', quantities)
+                            }
 
-                         
+                            {sameProducts.map((item, idx) => {
+                                item.amount = quantities[idx]
+                            })}
                             
                         </ul>
 
@@ -190,11 +201,14 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
+                 
                         <AddToCartButton 
                             many 
-                            items={sameProducts} 
+                            items={updatedItems.filter(i => i.amount > 0)} 
                             text={'Добавить в корзину'}
+                            afterCounter
                         />
+                    
                     </div>
                 </div>
 
