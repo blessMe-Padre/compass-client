@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 
-import { useRef, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Thumbs } from 'swiper/modules';
 
@@ -10,7 +10,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import fetchData from "@/app/utils/fetchData";
 import { AddToCartButton, Counter, TableSize } from "@/app/components";
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
@@ -20,7 +19,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
-    const [productsWithSameName, setProductsWithSameName] = useState([]);
     const openTab = e => setActive(+e.target.dataset.index);
 
     // расчет стоимости товара и его вариантов
@@ -43,12 +41,12 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     }, []);
 
     const calculateTotal = () => {
-        let total = Number(data.price.replace(/\s/g, ''));
-        let totalSales = Number(data.priceSales.replace(/\s/g, ''));
+        let total = Number(0);
+        let totalSales = Number(0);
 
         sameProducts.forEach((item, index) => {
-            const priceSales = Number(item?.priceSales.replace(/\s/g, ''));
-            const price = Number(item?.price?.replace(/\s/g, ''));
+            const priceSales = Number(item.priceSales);
+            const price = Number(item.price);
 
             const quantity = quantities[index] || 0;
             total += quantity * price;
@@ -59,16 +57,19 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         return { total, totalSales };
     };
 
-    const productsData = productsWithSameName.map(product => ({
-        id: product.id?.value || product.id,
-        size: product.size?.value || product.size,
-        height: product.height?.value || product.height,
-        amount: product.amount,
-        price: product.price,
-        status: product.statusProduct
-    }));
+    {/* 
+        
+        TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
+        получать у них все атрибуты 
+        выводить их в сокращенном формате количество 
+        по нажатию на кнопку формировать массив с продуктами
+        и добавлять его в корзину, он будет парситься в конкретный продукт конкретный Item 
+        корзины, тогда не надо будет менять логику отрпавки формы и так далее
 
-    console.log('productsData', productsData);
+
+    */}
+
+   
     {/* 
             
             TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
@@ -82,7 +83,20 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         */}
 
 
+
     const { total, totalSales } = calculateTotal();
+
+
+    const updatedItems = sameProducts.map((item, idx) => ({
+        ...item,
+        amount: quantities[idx] || 0
+    }))
+
+    const statusProductRussian = updatedItems?.map(item => 
+        item.statusProduct == 'order' ? 'Под заказ' : 'В наличии'
+    );
+
+    console.log(statusProductRussian)
 
     return (
         <section className={styles.section}>
@@ -168,32 +182,53 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 <div className={styles.list_header_text}>Размер:</div>
                                 <div className={styles.list_header_text}>Рост:</div>
                                 <div className={styles.list_header_text}>Кол-во:</div>
+                                <div className={styles.list_header_text}>Цена:</div>
                             </li>
 
                             {
                                 sameProducts.map((item, index) => {
+                                    console.log(item)
                                     return (
                                         <li className={styles.list_item} key={index}>
-                                            <div className={styles.size}>{item.size}</div>
-                                            <div className={styles.height}>{item.height}</div>
+                                            <div className={`${styles.size} ${item.price === 0 ? `${styles.disabled}` : ""}`}>{item.size}</div>
+                                            <div className={`${styles.height} ${item.price === 0 ? `${styles.disabled}` : ""}`}>{item.height}</div>
                                             <div className={styles.qty}>
                                                 <Counter
+                                                    disabled={item.price === 0 ? true : ''}
                                                     onChange={(newCount) => {
-                                                        setQuantities(prev => ({
-                                                            ...prev,
-                                                            [index]: newCount
-                                                        }));
+                                                    setQuantities(prev => ({
+                                                        ...prev,
+                                                        [index]: newCount
+                                                    }));
                                                     }}
-
+                                                    value={quantities[index] || 0} 
                                                     documentId={item.documentId}
-                                                />
+                                            />
+                                            </div>
+                                            <div className={styles.price}>{item.price !== 0 ? <div> {item.price.toLocaleString('ru-RU')}  ₽</div> :
+                                                <div className='flex'>
+                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="14" height="14" rx="7" fill="#F79410"/>
+                                                        <path d="M7.38094 5.45031C7.38094 6.01031 7.36094 6.52031 7.32094 6.98031C7.28094 7.43365 7.23094 7.88698 7.17094 8.34031H6.59094C6.53094 7.88698 6.48094 7.43365 6.44094 6.98031C6.40094 6.52031 6.38094 6.01031 6.38094 5.45031V3.57031H7.38094V5.45031ZM7.55094 9.96031C7.55094 10.1403 7.49094 10.297 7.37094 10.4303C7.25094 10.5636 7.0876 10.6303 6.88094 10.6303C6.67427 10.6303 6.51094 10.5636 6.39094 10.4303C6.27094 10.297 6.21094 10.1403 6.21094 9.96031C6.21094 9.78031 6.27094 9.62365 6.39094 9.49031C6.51094 9.35698 6.67427 9.29031 6.88094 9.29031C7.0876 9.29031 7.25094 9.35698 7.37094 9.49031C7.49094 9.62365 7.55094 9.78031 7.55094 9.96031Z" fill="white"/>
+                                                    </svg>
+
+                                                    {statusProductRussian[index]}
+                                                </div>
+                                            }
                                             </div>
                                         </li>
                                     )
                                 })
                             }
 
+                            {
+                                console.log('quantities', quantities)
+                            }
 
+                            {sameProducts.map((item, idx) => {
+                                item.amount = quantities[idx]
+                            })}
+                            
 
                         </ul>
 
@@ -201,7 +236,14 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
-                        <AddToCartButton item={data} text={'В корзину'} />
+                 
+                        <AddToCartButton 
+                            many 
+                            items={updatedItems.filter(i => i.amount > 0)} 
+                            text={'Добавить в корзину'}
+                            afterCounter
+                        />
+                    
                     </div>
                 </div>
 

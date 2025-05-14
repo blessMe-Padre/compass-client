@@ -60,6 +60,40 @@ const useCartStore = create(
             lastAction: 'add'
           };
       }),
+      
+      addManyToCart: (products) => {
+        if (!Array.isArray(products)) return;
+
+          set((state) => {
+            const updatedItems = [...state.cartItems];
+
+            products.forEach((product) => {
+              if (!product?.id) return
+              
+              const existingIndex = updatedItems.findIndex(
+                item => item.id === product.id
+              );  
+
+              if (existingIndex > -1) {
+                updatedItems[existingIndex] = {
+                  ...updatedItems[existingIndex],
+                  quantity: (updatedItems[existingIndex].quantity || 0) + 
+                           (product.quantity || 1)
+                };
+              } else {
+                updatedItems.push({
+                  ...product,
+                  quantity: product.quantity || 1
+                });
+              }
+            })
+
+            return {
+              cartItems: updatedItems,
+              lastAction: 'addMany'
+            }
+          })
+      },
 
       removeFromCart: (itemId) =>
         set((state) => {

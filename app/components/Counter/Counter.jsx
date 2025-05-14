@@ -2,13 +2,13 @@
 import { useState, useCallback } from "react";
 import styles from './style.module.scss';
 
-const Counter = ({ onChange, documentId }) => {
+const Counter = ({ onChange, documentId, disabled }) => {
 
     /**
      * documentId - это в каждый счетчик прокидывается documentId для добавления в корзину
      */
 
-
+    console.log(disabled)
     const [count, setCount] = useState(0);
     // Обновляем count и вызываем onChange
     const increment = useCallback(() => {
@@ -26,9 +26,10 @@ const Counter = ({ onChange, documentId }) => {
     return (
         <div className={styles.button_wrapper}>
             <button
+                
                 onClick={decrement}
                 className={styles.button}
-                disabled={count === 0}
+                disabled={count === 0 && disabled}
             >
                 &ndash;
             </button>
@@ -36,6 +37,7 @@ const Counter = ({ onChange, documentId }) => {
             <button
                 onClick={increment}
                 className={styles.button}
+                disabled={count === 0 && disabled}
             >
                 +
             </button>

@@ -9,12 +9,15 @@ import { motion } from 'framer-motion';
 
 import { useImperativeHandle } from 'react';
 import { format } from 'date-fns';
+import getUserById from '@/app/utils/getUserById';
 
 const url = 'http://90.156.134.142:1337/api/zakazies'
 
 export function getCurrentDate() {
   return format(new Date(), 'yyyy-MM-dd');
 }
+
+const documentId = 'f9bh8d19a9ij1gg5zegvposx';
 
 export async function sendOrderService(orderData) {
     console.log('orderData', orderData)
@@ -44,6 +47,29 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
+
+    /**
+     * TODO: вынести в кастомный хук
+     */
+
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const response = await getUserById(documentId);
+                setUser(response[0]);
+
+            } catch (error) {
+                console.error('Произошла ошибка', error);
+            }
+        };
+
+        loadData();
+    }, []);
+
+    console.log(user);
+
 
     const [error, setError] = useState();
     const [sending, isSending] = useState(false);
@@ -96,12 +122,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
         'Курьер по Владивостоку'
     ];
 
-    const currentUser = {
-        id: 1,
-        name: 'Kirill',
-        email: 'test@mail.ru',
-        phone: '89620000000'
-    }
+   
 
     console.log(deliveryMethodsWithFields.includes(deliveryMethod))
 
@@ -170,7 +191,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                         nameOrganization: nameOrganization
                     }
                 }]
-        
+            
         const formData = {
             orderNumber: `Заказ №${crypto.randomUUID()}`,
             orderText: orderText,
@@ -178,8 +199,21 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
             dateDelivery: getCurrentDate() + 10,
             
             // Связи
-            customers: currentUser?.id ? { connect: [currentUser.id] } : null,
-            orderItems: { connect: [cartItems.map(item => ({ documentId	: item.documentId	 }))] },
+            customers: user?.id ? { connect: [user.id] } : null,
+            // orderItems: { connect: [cartItems.map(item => ({ documentId	: item.documentId	 }))] },
+            
+            orderData: [{
+                orderItems: {
+                    connect: [cartItems.map(item => ({
+                        documentId: item.documentId,
+                        quantity: item.quantity
+                	 }))] },
+                quantity: cartItems.map(item => ({
+                    id: item.documentId,
+                    НАЗВАНИЕ_ТОВАРА: item.title,
+                    КОЛИЧ_ВО: item.quantity
+                }))
+            }],
             
             // Данные доставки (добавляем только если есть)
             ...(deliveryData && { address: deliveryData }),
@@ -234,8 +268,14 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                                 alt='name' 
                                                 placeholder='ФИО получателя*' 
                                                 className={`${errors.name ? styles.errors : ''}`}
-                                                {...register('name', { required: {value: true, message: 'Введите name'}})}
+                                                {...register('name', {
+                                                    required: {
+                                                        value: true,
+                                                        message: 'Введите ФИО получателя'
+                                                    }
+                                                })}
                                                 error={errors.name}
+                                                defaultValue={user?.username ?? ''}
                                             />
                                         </div>
                                     </div>
@@ -249,8 +289,14 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                                 alt='tel' 
                                                 placeholder='Телефон' 
                                                 className={`${errors.name ? styles.errors : ''}`}
-                                                {...register('tel', { required: {value: true, message: 'Введите tel'}})}
-                                                error={errors.name}
+                                                {...register('tel', { 
+                                                    required: {
+                                                      value: true, 
+                                                      message: 'Введите телефон'
+                                                    },
+                                                  })}                                                error={errors.name}
+                                                defaultValue={user?.phone ?? ''}
+                                              
                                             />
                                         </div>
                                     </div>
@@ -264,8 +310,14 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                                 alt='email' 
                                                 placeholder='Электронная почта' 
                                                 className={`${errors.name ? styles.errors : ''}`}
-                                                {...register('email', { required: {value: true, message: 'Введите email'}})}
+                                                {...register('email', {
+                                                    required: {
+                                                        value: true,
+                                                        message: 'Введите email'
+                                                    }
+                                                })}
                                                 error={errors.name}
+                                                defaultValue={user?.email ?? ''}
                                             />
                                         </div>
                                     </div>
@@ -279,8 +331,15 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                                 alt='inn' 
                                                 placeholder='ИНН' 
                                                 className={`${errors.name ? styles.errors : ''}`}
-                                                {...register('inn', { required: {value: true, message: 'Введите inn'}})}
+                                                {...register('inn', {
+                                                    required: {
+                                                        value: true,
+                                                        message: 'Введите inn'
+                                                    }
+                                                })}
                                                 error={errors.name}
+                                                defaultValue={user?.inn ?? ''}
+
                                             />
                                         </div>
                                     </div>

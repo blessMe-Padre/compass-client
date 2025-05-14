@@ -3,28 +3,52 @@ import styles from './style.module.scss';
 import Link from "next/link";
 import useCartStore from "@/app/store/cartStore";
 
-const AddToCartButton = ({ href = '/', text, item }) => {
+
+const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) => {
+    const addManyToCart = useCartStore(state => state.addManyToCart);
     const addToCart = useCartStore(state => state.addToCart);
 
-     const handleClick = () => {
-         addToCart({
-            id: item.id ?? '55',
-            documentId: item?.documentId ?? '',	
-            mainImg: item?.imgs[0]?.url ?? '',
-            sku: item.sku ?? '',
-            size: item.size ?? '',
-            title: item.title ?? '',
-            height: item.height ?? '',
-            priceSales: item.priceSales ?? '',
-            price: item.price ?? '',
-            quantity: item.amount !== 0 || item.amount !== null ? 1 : 0,
-        });
-    };
 
+    const prepareProduct = afterCounter 
+        ? (item) => ({
+            id: item?.id ?? '55',
+            documentId: item?.documentId ?? '',
+            mainImg: item?.imgs?.[0]?.url ?? '',
+            sku: item?.sku ?? '',
+            size: item?.size ?? '',
+            title: item?.title ?? '',
+            height: item?.height ?? '',
+            priceSales: item?.priceSales ?? 0,
+            price: item?.price ?? 0,
+            quantity: item?.amount > 0 ? item.amount : 1, 
+        })
+        : (item) => ({
+            id: item?.id ?? '55',
+            documentId: item?.documentId ?? '',
+            mainImg: item?.imgs?.[0]?.url ?? '',
+            sku: item?.sku ?? '',
+            size: item?.size ?? '',
+            title: item?.title ?? '',
+            height: item?.height ?? '',
+            priceSales: item?.priceSales ?? 0,
+            price: item?.price ?? 0,
+            quantity: item?.amount !== 0 || item?.amount !== null ? 1 : 0,
+        });
+    
+        
+    
+    const handleClick = () => {
+        if (many && items.length > 0) {
+            const products = items.map(prepareProduct);
+            addManyToCart(products);
+        } else if (item) {
+            addToCart(prepareProduct(item));
+        }
+    
+    }
 
     return (
         <>
-
             <button
                 className={styles.btn}
                 onClick={handleClick}
