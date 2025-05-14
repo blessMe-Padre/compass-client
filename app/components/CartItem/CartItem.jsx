@@ -68,8 +68,8 @@ export default function CartItem({ idx, el, location}) {
                 </div>
 
                 <div className={styles.wrapper_price}>
-                    <p className={styles.item_price_sale}>{el.priceSales} / шт.</p>
-                    <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price}</p>
+                    <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
+                    <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price.toLocaleString('ru-Ru')}₽</p>
                 </div>
             </div>
 

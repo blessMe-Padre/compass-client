@@ -14,7 +14,7 @@ export default function MiniCart({ cartItems }) {
     }, 0);
 
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('ru-RU').format(price);
+        return price.toLocaleString('ru-Ru')
     };
 
 
@@ -29,7 +29,7 @@ export default function MiniCart({ cartItems }) {
             <div className={styles.total_info}>
                 <div className={styles.total_sum}>
                     <p className={styles.total_p}>Итого:</p>
-                    <p className={styles.total_price}>{Number(formatPrice(totalSum).replace(/\s/g, ''))}</p>
+                    <p className={styles.total_price}>{formatPrice(totalSum)} ₽ </p>
                 </div>
 
                 <div className={styles.btn_link_wrapper}>

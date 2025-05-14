@@ -168,6 +168,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 <div className={styles.list_header_text}>Размер:</div>
                                 <div className={styles.list_header_text}>Рост:</div>
                                 <div className={styles.list_header_text}>Кол-во:</div>
+                                <div className={styles.list_header_text}>Цена:</div>
                             </li>
 
                             {
@@ -190,7 +191,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                     documentId={item.documentId}
                                             />
                                             </div>
-                                            <div className={styles.price}>{item.price !== 0 ? item.price :
+                                            <div className={styles.price}>{item.price !== 0 ? <div> {item.price.toLocaleString('ru-RU')}  ₽</div> :
                                                 <div className='flex'>
                                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <rect width="14" height="14" rx="7" fill="#F79410"/>

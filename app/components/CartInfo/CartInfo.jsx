@@ -14,6 +14,7 @@ export default function CartInfo({ onSubmit, forSubmit }) {
         return new Intl.NumberFormat('ru-RU').format(price);
     };
 
+
     return (
         
         <div className={styles.cart_info}>
