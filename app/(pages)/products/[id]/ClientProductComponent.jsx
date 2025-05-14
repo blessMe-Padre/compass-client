@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 
-import { useRef, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Thumbs } from 'swiper/modules';
 
@@ -10,7 +10,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import fetchData from "@/app/utils/fetchData";
 import { AddToCartButton, Counter, TableSize } from "@/app/components";
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
@@ -20,7 +19,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
-    const [productsWithSameName, setProductsWithSameName] = useState([]);
     const openTab = e => setActive(+e.target.dataset.index);
 
     // расчет стоимости товара и его вариантов
@@ -59,27 +57,17 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         return { total, totalSales };
     };
 
-    const productsData = productsWithSameName.map(product => ({
-            id: product.id?.value || product.id,
-            size: product.size?.value || product.size,
-            height: product.height?.value || product.height,
-            amount: product.amount,
-            price: product.price,
-            status: product.statusProduct
-    }));
-    
-    console.log('productsData', productsData);
-       {/* 
-            
-            TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
-            получать у них все атрибуты 
-            выводить их в сокращенном формате количество 
-            по нажатию на кнопку формировать массив с продуктами
-            и добавлять его в корзину, он будет парситься в конкретный продукт конкретный Item 
-            корзины, тогда не надо будет менять логику отрпавки формы и так далее
+    {/* 
+        
+        TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
+        получать у них все атрибуты 
+        выводить их в сокращенном формате количество 
+        по нажатию на кнопку формировать массив с продуктами
+        и добавлять его в корзину, он будет парситься в конкретный продукт конкретный Item 
+        корзины, тогда не надо будет менять логику отрпавки формы и так далее
 
 
-        */}
+    */}
 
 
     const { total, totalSales } = calculateTotal();
@@ -188,11 +176,12 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                     documentId={item.documentId}
                                                 />
                                             </div>
+                                            <div className={styles.price}>{item.price ? item.price : item.status}</div>
                                         </li>
                                     )
                                 })
                             }
-                           
+
                          
                             
                         </ul>
@@ -201,7 +190,11 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
-                        <AddToCartButton item={data} text={'В корзину'} />
+                        <AddToCartButton 
+                            many 
+                            items={sameProducts} 
+                            text={'Добавить в корзину'}
+                        />
                     </div>
                 </div>
 

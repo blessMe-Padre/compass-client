@@ -14,10 +14,16 @@ export default function Notification({ text }) {
             setMessage('Корзина очищена');
             setActive(true);
         } else if (lastAction === 'add') {
-            setMessage(`Добавлен товар! Всего: ${cartItems.length}`);
+            setMessage(`Добавлен товар!`);
             setActive(true);
+        }
+
+        else if (lastAction === 'addMany') {
+            setMessage(`Добавлены товары!`);
+            setActive(true);
+            
         } else if (lastAction === 'remove') {
-            setMessage(`Товар удален! Осталось: ${cartItems.length}`);
+            setMessage(`Товар удален!`);
             setActive(true);
         }
         
