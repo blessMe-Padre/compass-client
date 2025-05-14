@@ -20,7 +20,6 @@ export default function CartItem({ idx, el, location }) {
         }
     }
 
-
     const price = el?.priceSales !== null || el?.priceSales !== 0 ? el?.priceSales : el?.price;
     const quantity = el?.quantity !== null ? el?.quantity : 1;
 
@@ -37,7 +36,6 @@ export default function CartItem({ idx, el, location }) {
                     />
                 )
                     : (
-
                         <Image
                             src={`${domain}${el?.imgs[0]?.url}`}
                             alt={`${el?.title}`}
@@ -51,21 +49,20 @@ export default function CartItem({ idx, el, location }) {
                 }
             </div>
 
-
-
             <div className={styles.item_info}>
                 <p className={styles.item_sku}>{el.sku}</p>
                 <Link className={styles.item_title} href={`/products/${el?.id}`}>{el.title}</Link>
                 <p className={styles.item_size}>Размер: {el.size}</p>
                 <p className={styles.item_height}>Рост: {el.height}</p>
             </div>
-
             <div className={`${styles.item_btns} ${location === 'cartPage' ? `${styles.cartPage}` : ''} `}>
-                <div className={styles.btns_amount}>
-                    <button className={styles.btn_minus} onClick={handleDecrease}>-</button>
-                    <p className={styles.quantity}>{el?.quantity}</p>
-                    <button className={styles.btn_plus} onClick={handleIncrease}>+</button>
-                </div>
+                {location != 'orderPage' &&
+                    <div className={styles.btns_amount}>
+                        <button className={styles.btn_minus} onClick={handleDecrease}>-</button>
+                        <p className={styles.quantity}>{el?.quantity}</p>
+                        <button className={styles.btn_plus} onClick={handleIncrease}>+</button>
+                    </div>
+                }
 
                 <div className={styles.wrapper_price}>
                     <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
@@ -73,13 +70,14 @@ export default function CartItem({ idx, el, location }) {
                 </div>
             </div>
 
-
-            <div className={styles.btns_delete}>
-                <button
-                    onClick={() => removeFromCart(el.id)}
-                    className={styles.btn_delete}
-                >×</button>
-            </div>
+            {location != 'orderPage' &&
+                <div className={`${styles.btns_delete}`}>
+                    <button
+                        onClick={() => removeFromCart(el.id)}
+                        className={styles.btn_delete}
+                    >×</button>
+                </div>
+            }
         </div>
     )
 }
