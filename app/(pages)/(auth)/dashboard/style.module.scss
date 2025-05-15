@@ -34,3 +34,28 @@
 .bold {
     font-weight: 600;
 }
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.button {
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 10px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    svg {
+        stroke: var(--toggle-color);
+    }
+}

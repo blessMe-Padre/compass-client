@@ -19,19 +19,19 @@
 
     @media (max-width:500px) {
         padding: 40px 20px;
-       
-     }
-   
+
+    }
+
 }
 
 
 .info_section {
     background-image: url('../../../public/info.png');
     background-repeat: no-repeat;
-    background-size:cover;
+    background-size: cover;
     width: 100%;
 
-    
+
     @media (max-width:800px) {
         background-image: url('../../../public/info2.png');
     }
@@ -39,8 +39,8 @@
 
     @media (max-width:500px) {
         background-image: url('../../../public/info3.png');
-        background-size:cover;
-     }
+        background-size: cover;
+    }
 }
 
 .info_title {
