@@ -87,21 +87,31 @@ function CardItem({ element }) {
             </div>
         
             <div className={styles.price_container}>
-                {priceSales ? (
+                {priceSales && price && (
                     <>
                         <p className={styles.item_sale_price}>{priceSales?.toLocaleString('ru-Ru')} Р / шт.</p>
                         <p className={`${styles.item_sale_price} ${styles.price_underline}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
                     </>
-                ) : (
-                    <p className={styles.price}>{price?.toLocaleString('ru-Ru')} Р / шт.</p>
+                )}
+
+                {!priceSales && price && (
+                    <>
+                        <p className={`${styles.item_sale_price}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
+                    </>
                 )}
             </div>
             
             <div className={styles.btn_wrapper}>
-               
-                    <AddToCartButton item={element} text={'В корзину'} />
-                
-
+                {!priceSales && !price
+                    ? (
+                        <>
+                            <p className={`${styles.item_sale_price}`}>Нельзя добавить в корзину</p>
+                        </>
+                    )
+                    : (
+                        <AddToCartButton item={element} text={'В корзину'} />
+                    )
+                }
               
             </div>
         </div>
