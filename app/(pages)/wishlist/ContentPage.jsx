@@ -1,9 +1,10 @@
 'use client';
-import { Breadcrumbs, ContentRenderer, ProductsList } from '@/app/components';
-import Image from 'next/image';
-import styles from './style.module.scss';
+import { Breadcrumbs, ProductsList } from '@/app/components';
+import useWishlistStore from '@/app/store/wishlistStore';
 
 export default function ContentPage({ data }) {
+
+    const { wishlist } = useWishlistStore();
     return (
         <>  
             <div className='container'>
@@ -14,7 +15,7 @@ export default function ContentPage({ data }) {
                 <h2 className='page_title'>Список желаемого</h2>
 
                 {/* TODO: тут будет запрос по пользователю к его списку желаемого */}
-                <ProductsList products={data} />
+                <ProductsList products={wishlist} />
                 
             </div>
         </>
