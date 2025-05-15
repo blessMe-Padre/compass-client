@@ -11,7 +11,6 @@ import "swiper/css/navigation";
 import fetchData from '@/app/utils/fetchData';
 
 function TopOffers() {
-
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -37,7 +36,7 @@ function TopOffers() {
             try {
                 const response = await fetchData(apiUrl);
                 setProducts(response.data);
-            
+
             } catch (error) {
                 console.error('Произошла ошибка', error);
             }
@@ -107,9 +106,8 @@ function TopOffers() {
                     : (
                         <ul className={styles.top_items}>
 
-                                
-                            {products.map((el, idx) => 
-                            {
+
+                            {products.map((el, idx) => {
                                 if (el?.hit === true) {
                                     return (
                                         <CardItem key={idx} element={el} />
