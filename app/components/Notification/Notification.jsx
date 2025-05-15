@@ -14,19 +14,19 @@ export default function Notification({ text }) {
             setMessage('Корзина очищена');
             setActive(true);
         } else if (lastAction === 'add') {
-            setMessage(`Добавлен товар!`);
+            setMessage(`Товар добавлен в корзину!`);
             setActive(true);
         }
 
         else if (lastAction === 'addMany') {
-            setMessage(`Добавлены товары!`);
+            setMessage(`Товары добавлены в корзину!`);
             setActive(true);
-            
+
         } else if (lastAction === 'remove') {
             setMessage(`Товар удален!`);
             setActive(true);
         }
-        
+
         const timer = setTimeout(() => {
             setActive(false);
         }, 2000);
@@ -40,20 +40,20 @@ export default function Notification({ text }) {
             className={`${styles.modalNotificationWrapper} ${active ? styles.active : ''}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{
-            opacity: active ? 1 : 0,
-            x: active ? 0 : 1000
+                opacity: active ? 1 : 0,
+                x: active ? 0 : 1000
             }}
             transition={{ duration: 0.3 }}
         >
-        <div className={styles.modalContent}>
-            {message}
-            <motion.div
-                className={styles.progressBar}
-                initial={{ width: 0 }}
-                animate={{ width: '100%' }}
-                transition={{ duration: 3 }}
-            />
-        </div>
+            <div className={styles.modalContent}>
+                {message}
+                <motion.div
+                    className={styles.progressBar}
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 3 }}
+                />
+            </div>
         </motion.div>
     );
 }

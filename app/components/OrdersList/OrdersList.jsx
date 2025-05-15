@@ -9,11 +9,16 @@ import getProductWordForm from '@/app/utils/getProductWordForm';
 import { CartItem, Preloader } from '@/app/components';
 import Image from 'next/image';
 
+import { AddToCartButton } from "@/app/components";
+
 import styles from './style.module.scss';
 
 const OrdersList = ({ orders = [] }) => {
     const [productsByOrderId, setProductsByOrderId] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+
+    console.log(orders);
+
 
     function calculateTotalPrice(products) {
         if (!Array.isArray(products)) return 0;
@@ -87,16 +92,11 @@ const OrdersList = ({ orders = [] }) => {
                         <CartItem key={product.id} el={product} location="orderPage" />
                     ))}
 
-                    <button className={styles.link}>
-                        <Image
-                            src='./icons/repeat.svg'
-                            alt={`repeat`}
-                            width={15}
-                            height={15}
-                            className={styles.item_img}
-                        />
-                        <span>повторить</span>
-                    </button>
+                    <AddToCartButton
+                        items={productsByOrderId[order.id]}
+                        many
+                        text={'Повторить заказ'}
+                    />
                 </li>
             ))}
 
