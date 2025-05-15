@@ -72,7 +72,8 @@ const CategoryList = () => {
                                                 ? (
                                                     <Image
                                                         className={styles.slide}
-                                                        src={`${domain}${slide?.image?.url}`}                                                alt="logo"
+                                                        src={`${domain}${slide?.image?.url}`}
+                                                        alt="logo"
                                                         width={345}
                                                         height={223}
                                                         placeholder="blur"
@@ -83,6 +84,7 @@ const CategoryList = () => {
                                                         src={placeholder}
                                                         className={styles.slide}
                                                         width={345}
+                                                        alt="logo"
                                                         height={223}
                                                         placeholder="blur"
                                                         blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
@@ -108,7 +110,8 @@ const CategoryList = () => {
                                                 ? (
                                                     <Image
                                                         className={styles.slide}
-                                                        src={`${domain}${slide?.image?.url}`}                                                alt="logo"
+                                                        src={`${domain}${slide?.image?.url}`}
+                                                        alt="logo"
                                                         width={345}
                                                         height={223}
                                                         placeholder="blur"
@@ -120,6 +123,7 @@ const CategoryList = () => {
                                                         className={styles.slide}
                                                         width={345}
                                                         height={223}
+                                                        alt='logo'
                                                         placeholder="blur"
                                                         blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                                     />

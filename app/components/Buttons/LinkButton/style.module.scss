@@ -12,7 +12,7 @@
     text-align: center;
     color: var(--white);
     background-color: var(--blue);
-    padding: 20px 25px;
+    padding: 20px 10px;
 
     width: 100%;
     max-width: 256px;
@@ -37,5 +37,11 @@
         background-color: var(--orange);
         border: 1px solid var(--white);
         color: var(--white);
+    }
+
+
+    
+    @media (max-width: 480px) {
+        max-width: 100%;
     }
 }

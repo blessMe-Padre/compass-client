@@ -14,12 +14,22 @@
     gap: 2%; 
     align-items: start; 
 
-    
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
         display: flex;
         flex-direction: column; 
+        
     }
 }
+
+
+@media (max-width:480px) {
+  .catalog_wrapper .dop_wrapper {
+    width: 100%;
+  }
+}
+
+
+
 
 
 .categories_list {
@@ -64,6 +74,11 @@
   gap: 100px;
 
   margin-bottom: 30px;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    gap: 30px;
+}
 }
 
 .catalog_btn {

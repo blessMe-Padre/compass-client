@@ -28,7 +28,6 @@ function CardItem({ element }) {
         <div className={styles.card}>
             <div className={styles.img_wrapper}>
                 <div className={styles.swiper_image_wrapper}>
-
                     <Swiper
                         spaceBetween={20}
                         loop={true}
@@ -59,7 +58,7 @@ function CardItem({ element }) {
                             )
                         })}
                     </Swiper>
-                    </div>
+                </div>
             </div>
 
 
