@@ -212,7 +212,7 @@ export default function ContentPage({ data }) {
             animate="visible"
             className={styles.catalog_wrapper}
         >
-            <div>
+            <div className={styles.dop_wrapper}>
               <Link href={'/catalog'}>
                 <div className={styles.catalog_btn}>
                   Каталог
@@ -303,7 +303,7 @@ export default function ContentPage({ data }) {
               </div>
             </div>
               
-            <div>
+            <div className={styles.dop_wrapper}>
               <div className={styles.catalog_options}>
                 <div className='flex gap-5' onClick={() => setActivePopup(true)}>
                   <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">

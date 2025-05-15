@@ -4,7 +4,7 @@
 
     margin: 0 0 40px 0;
 
-    @media (max-width: 800px) {
+    @media (max-width: 1000px) {
         flex-direction: column;
         gap: 30px;
     }
@@ -16,7 +16,7 @@
     gap: 10px;
     width: 50%;
 
-    @media (max-width: 800px) {
+    @media (max-width: 1000px) {
         width: 100%;
     }
 }

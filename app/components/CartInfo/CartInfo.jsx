@@ -20,7 +20,7 @@ export default function CartInfo({ onSubmit, forSubmit }) {
             <div className={styles.info_inner}>
                 <div>
                     <p>Количество товаров:</p>
-                    <p>{totalQuantity}</p>
+                    <p>{totalQuantity} шт.</p>
                 </div>
                 <div>
                     <p>Стоимость без учета доставки::</p>

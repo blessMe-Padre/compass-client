@@ -2,6 +2,7 @@
 
 
 .cart_item {
+    position: relative;
     display: flex;
     justify-content: space-between;
     gap: 30px;
@@ -10,21 +11,13 @@
 
     margin-bottom: 30px;
 
-    &.cartPage {
-        margin-bottom: 0px;
-    }
-
     border-bottom: 1px solid var(--light-gray);
 
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
         flex-direction: column;
     }
 }
 
-.cart_wrapper {
-    display: flex;
-    gap: 70px;
-}
 
 .item_img {
     width: 100px;
@@ -105,6 +98,7 @@
 }
 
 .btns_delete {
+    cursor: pointer;
     width: 30px;
     height: 30px;
     padding: 5px;
@@ -128,6 +122,13 @@
 
     &:active {
         background-color: var(--orange);
+    }
+
+
+    @media (max-width:600px) {
+        position: absolute;
+        top: 20px;
+        right: 10px
     }
 }
 
@@ -180,12 +181,12 @@
     width: 100px;
     height: 100px;
 
-    background-color: var(--super-light-graygray);
+    background-color: var(--super-light-gray);
 
     img {
         width: 100%;
         height: 100px;
-        object-fit: contain;
+        object-fit: cover;
     }
 }
 
