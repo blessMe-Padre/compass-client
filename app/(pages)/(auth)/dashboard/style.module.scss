@@ -1,21 +1,29 @@
 @use '@/app/mixins' as *;
 // @include adaptiv-value("padding-top", 100, 40);
 
+.tab_buttons_header {
+    overflow: hidden;
+}
 
 .tab_buttons_wrapper {
     padding: 35px 0;
     display: flex;
     align-items: center;
-    gap: 40px;
+    @include adaptiv-value("gap", 40, 20);
+
+    @media (max-width: 520px) {
+        overflow-x: auto;
+    }
 }
 
 .tabs_btn {
     font-weight: 500;
-    font-size: 20px;
+    @include adaptiv-value("font-size", 20, 16);
     color: var(--toggle-color-gray);
     border: none;
     background-color: transparent;
     cursor: pointer;
+    flex: 0 0 auto;
 }
 
 .btn_active {

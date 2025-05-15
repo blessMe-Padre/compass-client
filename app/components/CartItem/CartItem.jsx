@@ -24,7 +24,11 @@ export default function CartItem({ idx, el, location }) {
     const quantity = el?.quantity !== null ? el?.quantity : 1;
 
     return (
-        <div key={idx} className={`${styles.cart_item} ${location === 'cartPage' ? `${styles.cartPage}` : ''}`}>
+        <div key={idx} className={`
+            ${styles.cart_item}
+            ${location === 'cartPage' ? `${styles.cartPage}` : ''}
+            ${location === 'orderPage' ? `${styles.orderPage}` : ''}
+        `}>
             <div className={styles.img_wrapper}>
                 {el.mainImg ? (
                     <Image
@@ -49,7 +53,10 @@ export default function CartItem({ idx, el, location }) {
                 }
             </div>
 
-            <div className={styles.item_info}>
+            <div className={`
+                ${styles.item_info}
+                ${location === 'orderPage' ? `${styles.orderPage_info}` : ''}
+                `}>
                 <p className={styles.item_sku}>{el.sku}</p>
                 <Link className={styles.item_title} href={`/products/${el?.id}`}>{el.title}</Link>
                 <p className={styles.item_size}>Размер: {el.size}</p>

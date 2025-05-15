@@ -17,9 +17,6 @@ const OrdersList = ({ orders = [] }) => {
     const [productsByOrderId, setProductsByOrderId] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    console.log(orders);
-
-
     function calculateTotalPrice(products) {
         if (!Array.isArray(products)) return 0;
 
