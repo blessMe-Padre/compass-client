@@ -69,6 +69,20 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
     */}
 
+   
+    {/* 
+            
+            TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
+            получать у них все атрибуты 
+            выводить их в сокращенном формате количество 
+            по нажатию на кнопку формировать массив с продуктами
+            и добавлять его в корзину, он будет парситься в конкретный продукт конкретный Item 
+            корзины, тогда не надо будет менять логику отрпавки формы и так далее
+
+
+        */}
+
+
 
     const { total, totalSales } = calculateTotal();
 
@@ -206,6 +220,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     )
                                 })
                             }
+
                             {
                                 console.log('quantities', quantities)
                             }
@@ -214,6 +229,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 item.amount = quantities[idx]
                             })}
                             
+
                         </ul>
 
                         <div className={styles.total}>
@@ -246,9 +262,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 <div
                     className={`${active === 0 ? `${styles.block}` : `${styles.none}`}`}
                 >
-                
+
                     <div className={styles.wrapper_attr}>
-                        {data.attributes.map((el, id) => 
+                        {data.attributes.map((el, id) =>
                             <div key={id} className="flex gap-5">
                                 <p>{el.name}</p>
                                 <p>{el.value}</p>
@@ -256,8 +272,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         )}
                     </div>
 
-                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description}}>
-                      
+                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description }}>
+
                     </div>
                 </div>
                 <div

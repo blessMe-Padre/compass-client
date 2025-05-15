@@ -14,9 +14,8 @@ export default function CartInfo({ onSubmit, forSubmit }) {
         return new Intl.NumberFormat('ru-RU').format(price);
     };
 
-
     return (
-        
+
         <div className={styles.cart_info}>
             <div className={styles.info_inner}>
                 <div>
@@ -29,7 +28,7 @@ export default function CartInfo({ onSubmit, forSubmit }) {
                 </div>
                 <div>
                     <p>Скидка постоянного клиента::</p>
-                    <p title="Скидка по промокоду" style={{ color: 'red'}}>{promocodSales} %</p>                                        </div>
+                    <p title="Скидка по промокоду" style={{ color: 'red' }}>{promocodSales} %</p>                                        </div>
             </div>
 
             <PromocodComponent />

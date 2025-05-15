@@ -1,13 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react';
 import getUserById from '@/app/utils/getUserById';
-import { UserForm } from '@/app/components';
+import { LinkButton, OrdersList, Preloader, UserForm } from '@/app/components';
 import { motion } from "framer-motion";
 
 import styles from './style.module.scss';
 
-// const documentId = 'f9bh8d19a9ij1gg5zegvposx';
-const documentId = 'bxgol3fvr7ei2e5522yrqpp6';
+const documentId = 'f9bh8d19a9ij1gg5zegvposx';
+// const documentId = 'bxgol3fvr7ei2e5522yrqpp6';
 
 /**
  * Здесь получаем юзера по его documentId => getUserById(documentId)
@@ -17,7 +17,6 @@ const documentId = 'bxgol3fvr7ei2e5522yrqpp6';
 
 const Dashboard = () => {
     const [user, setUser] = useState({});
-
     const variants = {
         visible: {
             opacity: 1,
@@ -90,7 +89,21 @@ const Dashboard = () => {
                     initial={"hidden"}
                     animate={active === 1 ? "visible" : "hidden"}
                 >
-                    История заказов
+                    {user?.orders !== null ?
+                        <OrdersList orders={user?.orders} />
+                        :
+                        <div className='mb-30'>
+                            <p className={styles.bold}>Здесь еще ничего нет.</p>
+                            <p className='mb-20'>
+                                Выберите товары в каталоге
+                            </p>
+                            <LinkButton
+                                href="/catalog"
+                                text="Перейти в каталог"
+                            />
+                        </div>
+                    }
+
                 </motion.div>
                 <motion.div
                     layout

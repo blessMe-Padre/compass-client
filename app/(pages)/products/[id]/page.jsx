@@ -18,8 +18,6 @@ export default async function Page({ params }) {
     const productTitle = await product?.title;
     const sameProducts = await getAllProductsByTitle(productTitle);
 
-    console.log(id)
-
     return (
         <ClientProductComponent
             data={product}
