@@ -3,11 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import getUserById from '@/app/utils/getUserById';
-import { LinkButton, OrdersList, Preloader, UserForm } from '@/app/components';
+import { LinkButton, OrdersList, Preloader, ProductsList, UserForm } from '@/app/components';
 import { motion } from "framer-motion";
 
 import styles from './style.module.scss';
 import { Discounts, RelativeProducts } from '@/app/section';
+import useWishlistStore from '@/app/store/wishlistStore';
 
 const documentId = 'f9bh8d19a9ij1gg5zegvposx';
 // const documentId = 'bxgol3fvr7ei2e5522yrqpp6';
@@ -21,6 +22,8 @@ const documentId = 'f9bh8d19a9ij1gg5zegvposx';
 const Dashboard = () => {
     const router = useRouter();
     const [user, setUser] = useState({});
+    const { wishlist } = useWishlistStore();
+
     const variants = {
         visible: {
             opacity: 1,
@@ -135,7 +138,7 @@ const Dashboard = () => {
                         initial={"hidden"}
                         animate={active === 2 ? "visible" : "hidden"}
                     >
-                        Избранное
+                        <ProductsList count={4} products={wishlist} />
                     </motion.div>
                     <motion.div
                         layout

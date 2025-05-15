@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { CardItem } from '..';
 
 
-export default function ProductsList({ products, isLoading }) {
+export default function ProductsList({ products, isLoading, count }) {
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={styles.products_list}
+            className={`${styles.products_list} ${count === 4 ? styles.count : ''}`}
             >
                 {products?.length > 0 ? (
                     products.map((product) => (
