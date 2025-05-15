@@ -105,9 +105,30 @@
 }
 
 .btns_delete {
-    padding: 15px;
-    background-color: var(--gray);
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    background-color: var(--light-gray);
     border-radius: 50%;
+    border: none;
+
+    transition: all 0.3s ease-in-out;
+
+    svg path {
+        transition: all 0.3s ease-in-out;        
+    }
+
+    &:hover {
+        background-color: var(--blue);
+    }
+
+    &:hover svg path {
+        stroke: white;
+    }
+
+    &:active {
+        background-color: var(--orange);
+    }
 }
 
 .btn_link_wrapper {
@@ -133,6 +154,7 @@
 
 .btn_minus,
 .btn_plus {
+    cursor: pointer;
     height: 30px;
     border-radius: 20px;
     width: 30px;

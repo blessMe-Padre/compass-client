@@ -6,6 +6,7 @@ const useCartStore = create(
     (set, get) => ({
       cartItems: [],
       lastAction: null,
+      clearLastAction: () => set({ lastAction: null }),
 
       increaseQuantity: (itemId) => 
         set((state) => ({
@@ -126,7 +127,6 @@ const useCartStore = create(
       partialize: (state) => 
         ({ 
           cartItems: state.cartItems,
-          lastAction: state.lastAction 
         })
     }
   )

@@ -10,6 +10,8 @@ export default function Notification({ text }) {
     const [active, setActive] = useState(false);
 
     useEffect(() => {
+        if (!lastAction) return;
+
         if (cartItems.length === 0 && lastAction === 'clear') {
             setMessage('Корзина очищена');
             setActive(true);
@@ -29,11 +31,12 @@ export default function Notification({ text }) {
 
         const timer = setTimeout(() => {
             setActive(false);
+            useCartStore.getState().clearLastAction();
         }, 2000);
 
         return () => clearTimeout(timer);
 
-    }, [cartItems, lastAction])
+    }, [lastAction])
 
     return (
         <motion.div
