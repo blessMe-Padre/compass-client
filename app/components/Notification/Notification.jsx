@@ -15,19 +15,33 @@ export default function Notification({ text }) {
         if (cartItems.length === 0 && lastAction === 'clear') {
             setMessage('Корзина очищена');
             setActive(true);
-        } else if (lastAction === 'add') {
+        }
+        else if (lastAction === 'add') {
             setMessage(`Товар добавлен в корзину!`);
             setActive(true);
         }
-
         else if (lastAction === 'addMany') {
             setMessage(`Товары добавлены в корзину!`);
             setActive(true);
-
-        } else if (lastAction === 'remove') {
+        }
+        else if (lastAction === 'remove') {
             setMessage(`Товар удален!`);
             setActive(true);
         }
+        else if (lastAction === 'addWish') {
+            setMessage(`Товар добавлен в Избранное!`);
+            setActive(true);
+        }
+        else if (lastAction === 'removeWish') {
+            setMessage(`Товар удален из Избранного!`);
+            setActive(true);
+        }
+        else if (lastAction === 'clearWish') {
+            setMessage(`Избранное очищено!`);
+            setActive(true);
+        }
+
+        
 
         const timer = setTimeout(() => {
             setActive(false);

@@ -8,33 +8,20 @@ const useWishlistStore = create(
             lastAction: null,
             clearLastAction: () => set({ lastAction: null }),
             
-            addToWishlist: (product) => {
-                set((state) => {
-                    if (!product || !product.id) return state;
-
-                    const existingItem = state.wishlist.find(item => item && item.id === product.id);
-
-                    if (existingItem) {
-                        return {
-                            wishlist: state.wishlist.map(item => {
-                                return item && item.id === product.id
-                                    ? { ...item }
-                                    : item
-                            }),
-                            lastAction: 'addWish'
-                        }
-                    }
-
-                    return {
-                        wishlist: [
-                            ...state.wishlist,
-                            {
-                                ...product
-                            }
-                        ],
-                        lastAction: 'addWish'
-                    }
-                })
+            toggleWishlist: (product) => {
+                const exists = get().wishlist.some(item => item.id === product.id);
+                
+                if(exists) {
+                set({
+                    wishlist: get().wishlist.filter(item => item.id !== product.id),
+                    lastAction: 'removeWish'
+                });
+                } else {
+                set({
+                    wishlist: [...get().wishlist, product],
+                    lastAction: 'addWish'
+                });
+                }
             },
 
             removeFromWishlist: (productId) =>
