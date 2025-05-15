@@ -1,11 +1,65 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
+
 .list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
+
+    @media (max-width: 926px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .item {
-    padding: 20px;
+    @include adaptiv-value("padding", 40, 20);
     background-color: var(--super-light-gray);
     color: var(--black);
+}
+
+.item_title {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--blue);
+    margin-bottom: 20px;
+}
+
+.item_text {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.item_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-family);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 16, 14);
+    border-radius: 6px;
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 10px 25px;
+
+    width: 100%;
+    transition: all var(--anim-function);
+
+    &:hover {
+        background-color: var(--hover-blue);
+    }
+
+    cursor: pointer;
 }

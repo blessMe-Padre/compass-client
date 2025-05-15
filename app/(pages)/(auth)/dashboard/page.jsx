@@ -54,7 +54,7 @@ const Dashboard = () => {
         { title: 'Избранное' },
         { title: 'Скидки и бонусы' }
     ]
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState(1);
     const openTab = e => setActive(+e.target.dataset.index);
 
     return (
@@ -62,17 +62,19 @@ const Dashboard = () => {
             <div className="container">
                 <h1>Здравствуйте, {user?.username}</h1>
 
-                <div className={styles.tab_buttons_wrapper}>
-                    {
-                        tabButtons.map((button, index) => (
-                            <button
-                                className={`${styles.tabs_btn} ${index === active ? `${styles.btn_active}` : ''}`}
-                                onClick={openTab}
-                                data-index={index}
-                                key={index}
-                            >{button.title}</button>
-                        ))
-                    }
+                <div className={styles.tab_buttons_header}>
+                    <div className={styles.tab_buttons_wrapper}>
+                        {
+                            tabButtons.map((button, index) => (
+                                <button
+                                    className={`${styles.tabs_btn} ${index === active ? `${styles.btn_active}` : ''}`}
+                                    onClick={openTab}
+                                    data-index={index}
+                                    key={index}
+                                >{button.title}</button>
+                            ))
+                        }
+                    </div>
                 </div>
 
                 <motion.div

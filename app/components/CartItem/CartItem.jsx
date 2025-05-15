@@ -21,7 +21,11 @@ export default function CartItem({ idx, el, location }) {
     }
 
     return (
-        <div key={idx} className={`${styles.cart_item} ${location === 'cartPage' ? `${styles.cartPage}` : ''}`}>
+        <div key={idx} className={`
+            ${styles.cart_item}
+            ${location === 'cartPage' ? `${styles.cartPage}` : ''}
+            ${location === 'orderPage' ? `${styles.orderPage}` : ''}
+        `}>
             <div className={styles.img_wrapper}>
                 {el.mainImg ? (
                     <Image
@@ -33,7 +37,6 @@ export default function CartItem({ idx, el, location }) {
                     />
                 )
                     : (
-
                         <Image
                             src={`${domain}${el?.imgs[0]?.url}`}
                             alt={`${el?.title}`}
@@ -47,21 +50,23 @@ export default function CartItem({ idx, el, location }) {
                 }
             </div>
 
-
-
-            <div className={styles.item_info}>
+            <div className={`
+                ${styles.item_info}
+                ${location === 'orderPage' ? `${styles.orderPage_info}` : ''}
+                `}>
                 <p className={styles.item_sku}>{el.sku}</p>
                 <Link className={styles.item_title} href={`/products/${el?.id}`}>{el.title}</Link>
                 <p className={styles.item_size}>Размер: {el.size}</p>
                 <p className={styles.item_height}>Рост: {el.height}</p>
             </div>
-
             <div className={`${styles.item_btns} ${location === 'cartPage' ? `${styles.cartPage}` : ''} `}>
-                <div className={styles.btns_amount}>
-                    <button className={styles.btn_minus} onClick={handleDecrease}>-</button>
-                    <p className={styles.quantity}>{el?.quantity}</p>
-                    <button className={styles.btn_plus} onClick={handleIncrease}>+</button>
-                </div>
+                {location != 'orderPage' &&
+                    <div className={styles.btns_amount}>
+                        <button className={styles.btn_minus} onClick={handleDecrease}>-</button>
+                        <p className={styles.quantity}>{el?.quantity}</p>
+                        <button className={styles.btn_plus} onClick={handleIncrease}>+</button>
+                    </div>
+                }
 
                 <div className={styles.wrapper_price}>
                     <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
@@ -69,10 +74,13 @@ export default function CartItem({ idx, el, location }) {
                 </div>
             </div>
 
-            <svg onClick={() => removeFromCart(el.id)} width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
-                <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
-            </svg>
+            {location != 'orderPage' &&
+                  <svg onClick={() => removeFromCart(el.id)} width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
+                    <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
+                </svg>
+            }
+
         </div>
     )
 }
