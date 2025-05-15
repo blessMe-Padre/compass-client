@@ -20,9 +20,6 @@ export default function CartItem({ idx, el, location }) {
         }
     }
 
-    const price = el?.priceSales !== null || el?.priceSales !== 0 ? el?.priceSales : el?.price;
-    const quantity = el?.quantity !== null ? el?.quantity : 1;
-
     return (
         <div key={idx} className={`
             ${styles.cart_item}
@@ -78,13 +75,12 @@ export default function CartItem({ idx, el, location }) {
             </div>
 
             {location != 'orderPage' &&
-                <div className={`${styles.btns_delete}`}>
-                    <button
-                        onClick={() => removeFromCart(el.id)}
-                        className={styles.btn_delete}
-                    >×</button>
-                </div>
+                  <svg onClick={() => removeFromCart(el.id)} width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
+                    <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
+                </svg>
             }
+
         </div>
     )
 }
