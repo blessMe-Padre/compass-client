@@ -1,0 +1,48 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("font-size", 24, 13);
+
+.section {
+    margin-bottom: 40px;
+    font-size: 18px;
+
+    ul {
+        margin-bottom: 40px;
+    }
+
+    li {
+        margin-bottom: 10px;
+    }
+
+    span {
+        font-weight: 700;
+    }
+}
+
+.title {
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.discount_block {
+    padding: 25px 0;
+    @include adaptiv-value("padding-left", 40, 20);
+    @include adaptiv-value("padding-right", 40, 20);
+
+    background-color: var(--orange);
+    max-width: 400px;
+    color: var(--white);
+
+    margin-bottom: 40px;
+}
+
+.discount_block_title {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.discount_block_value {
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.5;
+}

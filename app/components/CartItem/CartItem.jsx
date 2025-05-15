@@ -75,9 +75,9 @@ export default function CartItem({ idx, el, location }) {
             </div>
 
             {location != 'orderPage' &&
-                  <svg onClick={() => removeFromCart(el.id)} width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
-                    <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" stroke-linecap="round"/>
+                <svg onClick={() => removeFromCart(el.id)} width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" strokeLinecap="round" />
+                    <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" strokeLinecap="round" />
                 </svg>
             }
 
