@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import { AddToCartButton, Counter, TableSize } from "@/app/components";
+import { AddToCartButton, Counter, ReviewsForm, TableSize } from "@/app/components";
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
 
@@ -252,7 +252,10 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 </div>
                 <div
                     className={`${active === 1 ? `${styles.block}` : `${styles.none}`}`}
-                >Отзывы</div>
+                >
+                    Отзывы
+                    <ReviewsForm />
+                </div>
                 <div
                     className={`${active === 2 ? `${styles.block}` : `${styles.none}`}`}
                 >

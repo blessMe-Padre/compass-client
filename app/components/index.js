@@ -34,6 +34,7 @@ export { default as CartItem } from './CartItem/CartItem';
 export { default as Notification } from './Notification/Notification';
 export { default as Popup } from './Popup/Popup';
 export { default as OrdersList } from './OrdersList/OrdersList';
+export { default as ReviewsForm } from './ReviewsForm/ReviewsForm';
 
 // микро компоненты
 // чекбоксы, input, btn
