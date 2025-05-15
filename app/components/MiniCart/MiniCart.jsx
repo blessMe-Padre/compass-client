@@ -3,8 +3,6 @@ import styles from './style.module.scss';
 import { CartItem } from "..";
 import Link from "next/link";
 
-import useCartStore from "@/app/store/cartStore";
-
 export default function MiniCart({ cartItems }) {
 
     const totalSum = cartItems.reduce((sum, item) => {
