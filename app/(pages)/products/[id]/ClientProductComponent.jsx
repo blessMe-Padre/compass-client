@@ -254,7 +254,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                     className={`${active === 1 ? `${styles.block}` : `${styles.none}`}`}
                 >
                     Отзывы
-                    <ReviewsForm />
+                    <ReviewsForm data={data} />
                 </div>
                 <div
                     className={`${active === 2 ? `${styles.block}` : `${styles.none}`}`}
