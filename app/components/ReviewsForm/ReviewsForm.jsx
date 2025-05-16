@@ -1,19 +1,38 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
+import getUserById from '@/app/utils/getUserById';
 import { StarRating } from '@/app/components';
 import styles from './style.module.scss';
 
 // fg9woxmrul9wtf4rofpvnkh4 id товара
 
-// запрос на получение товара и его полных отзывов
-// http://90.156.134.142:1337/api/products?filters[documentId][$containsi]=fg9woxmrul9wtf4rofpvnkh4&populate[otzyvy_tovaries][populate]=*  
+// получение отзывов по id товара 
+//http://90.156.134.142:1337/api/products?filters[documentId][$containsi]=fg9woxmrul9wtf4rofpvnkh4&populate[otzyvy_tovaries][populate]=*
 
 // запрос на получение полных отзывов
 // http://90.156.134.142:1337/api/otzyvy-tovaries?populate=*  
 
+const uploadUrl = 'http://90.156.134.142:1337/api/upload/';
 const url = 'http://90.156.134.142:1337/api/otzyvy-tovaries';
 
+export async function uploadFiles(files) {
+    const formData = new FormData();
+
+    files.forEach((file) => {
+        if (file) formData.append('files', file);
+    });
+
+    const response = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData,
+    });
+    if (!response.ok) {
+        throw new Error(`Upload failed: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+}
 export async function sendReviewsService(reviewsData) {
     try {
         const response = await fetch(url, {
@@ -24,6 +43,8 @@ export async function sendReviewsService(reviewsData) {
             })
         });
         const data = await response.json();
+        console.log('отправка');
+
         return { response, data };
     } catch (error) {
         console.error("sendReviewsService Error:", error);
@@ -32,25 +53,58 @@ export async function sendReviewsService(reviewsData) {
 }
 
 const ReviewsForm = ({ data }) => {
-    const productDocumentId = data.documentId;
     const [rating, setRating] = useState(5);
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm();
+    const [user, setUser] = useState({});
+
+    const productDocumentId = data.documentId;
+    const { register, handleSubmit, formState: { errors }, control, reset, getValues } = useForm();
     const [submitting, setSubmitting] = useState(false);
 
+    // получаем юзера
+    const documentId = 'f9bh8d19a9ij1gg5zegvposx';
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const response = await getUserById(documentId);
+                setUser(response[0]);
+
+            } catch (error) {
+                console.error('Произошла ошибка', error);
+            }
+        };
+
+        loadData();
+    }, []);
 
     // Собираем данные
-    const name = 'Андрей';
+    const name = user?.username;
     const fullText = useWatch({ control, name: 'textarea' });
+    const userName = user?.documentId;
 
-    const onSubmit = async () => {
-        setSubmitting(true);
+    const onSubmit = async (formData) => {
         try {
+            const files = [
+                formData.file1?.[0],
+                formData.file2?.[0],
+                formData.file3?.[0]
+            ].filter(Boolean);
+
+            let uploaded = [];
+            if (files.length > 0) {
+                uploaded = await uploadFiles(files);
+            }
+
+            const fileIds = uploaded.map((file) => file.id);
+
             const reviewsData = {
                 name,
                 fullText,
                 starsRating: rating,
-                product: productDocumentId
+                product: productDocumentId,
+                customers: userName,
+                file: fileIds
             };
+
             const { response } = await sendReviewsService(reviewsData);
             if (response.ok) {
                 reset();
@@ -63,7 +117,6 @@ const ReviewsForm = ({ data }) => {
             setSubmitting(false);
         }
     };
-
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
