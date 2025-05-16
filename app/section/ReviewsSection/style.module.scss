@@ -1,0 +1,83 @@
+@use '@/app/mixins' as *;
+// @include adaptiv-value("padding-top", 100, 40);
+
+.section {
+    padding: 40px 0;
+}
+
+.button {
+    display: block;
+    font-family: var(--font-family);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 16, 14);
+    border-radius: 6px;
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 20px 10px;
+
+    width: 100%;
+    max-width: 256px;
+    transition: all var(--anim-function);
+
+    border: none;
+    cursor: pointer;
+
+    margin-bottom: 30px;
+}
+
+.list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.review_item {
+    padding: 40px;
+    background-color: var(--gray-gray);
+    color: var(--black);
+}
+
+.review_header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.review_ava {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    color: var(--white);
+    background-color: red;
+    border-radius: 50%;
+}
+
+.review_name {
+    font-weight: 500;
+    font-size: 30px;
+}
+
+.review_text {
+    font-size: 18px;
+    line-height: 1.3;
+    margin-bottom: 30px;
+}
+
+.review_footer {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.review_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}

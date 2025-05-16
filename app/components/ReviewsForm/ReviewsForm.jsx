@@ -7,9 +7,6 @@ import styles from './style.module.scss';
 
 // fg9woxmrul9wtf4rofpvnkh4 id товара
 
-// получение отзывов по id товара 
-//http://90.156.134.142:1337/api/products?filters[documentId][$containsi]=fg9woxmrul9wtf4rofpvnkh4&populate[otzyvy_tovaries][populate]=*
-
 // запрос на получение полных отзывов
 // http://90.156.134.142:1337/api/otzyvy-tovaries?populate=*  
 

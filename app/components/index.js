@@ -33,6 +33,7 @@ export { default as CartItem } from './CartItem/CartItem';
 
 export { default as Notification } from './Notification/Notification';
 export { default as Popup } from './Popup/Popup';
+export { default as PopupReviews } from './PopupReviews/PopupReviews';
 export { default as OrdersList } from './OrdersList/OrdersList';
 export { default as ReviewsForm } from './ReviewsForm/ReviewsForm';
 export { default as StarRating } from './StarRating/StarRating';
