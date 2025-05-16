@@ -1,1 +1,90 @@
-.app {}
+@use '@/app/mixins' as *;
+// @include adaptiv-value("padding-top", 100, 40);
+
+
+.title {
+    font-weight: 700;
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+.form_item {
+
+    position: relative;
+
+    label {
+        display: block;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 1.3;
+        color: #6b6b6b;
+        margin-bottom: 10px;
+    }
+
+    textarea {
+        border-radius: 6px;
+        padding: 15px 20px;
+        background: #f6f6f6;
+        border: none;
+        width: 100%;
+        min-height: 200px;
+        margin-bottom: 20px;
+        color: var(--black);
+    }
+}
+
+.fileInputs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+
+    position: relative;
+
+    label {
+        display: block;
+        border: 1px dashed var(--black);
+        cursor: pointer;
+        padding: 20px;
+    }
+
+    input {
+        display: none;
+    }
+}
+
+.button {
+    display: block;
+    font-family: var(--font-family);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 16, 14);
+    border-radius: 6px;
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 20px 10px;
+
+    width: 100%;
+    transition: all var(--anim-function);
+
+    border: none;
+    cursor: pointer;
+
+    margin-bottom: 30px;
+}
+
+.errors {
+    color: red;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+}
+
+.inputError {
+    color: red;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+}

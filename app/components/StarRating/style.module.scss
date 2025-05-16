@@ -1,14 +1,17 @@
 @use '@/app/mixins' as *;
 // @include adaptiv-value("padding-top", 100, 40);
 
+
+.starRating {
+    margin-bottom: 30px;
+    display: flex;
+    gap: 10px;
+}
+
 .starInput {
     display: none;
 }
 
 .starLabel {
     cursor: pointer;
-}
-
-.yellow {
-    stroke: var(--yellow);
 }
