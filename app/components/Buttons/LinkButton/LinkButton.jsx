@@ -3,23 +3,25 @@ import styles from './style.module.scss';
 import Link from "next/link";
 
 const LinkButton = ({ href = '/', text, ...props }) => {
-    const { style, forClick, onClick } = props;
+    const { style, forClick, onClick, width } = props;
+    const customStyle = width ? { maxWidth: width } : {};
 
     return (
-        
+
         forClick === true ?
-                (
-                    <button onClick={onClick} className={`${styles.link}`}>Оформить заказ</button>
-                )
+            (
+                <button onClick={onClick} className={`${styles.link}`}>Оформить заказ</button>
+            )
             :
             (
                 <Link
+                    style={customStyle}
                     className={`${styles.link} ${style === 'noBg' ? `${styles.noBg}` : ''}`}
                     href={href}>
                     {text}
                 </Link>
             )
-        )
-    }
+    )
+}
 
 export default LinkButton

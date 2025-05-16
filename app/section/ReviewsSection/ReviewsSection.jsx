@@ -3,19 +3,39 @@
 import { useEffect, useState } from 'react';
 
 import getReviewsByProductId from '@/app/utils/getReviewsByProductId';
-import { PopupReviews } from '@/app/components';
+import { PopupReviews, PopupText } from '@/app/components';
 import styles from './style.module.scss';
 
 const ReviewsSection = ({ data }) => {
     const [activePopup, setActivePopup] = useState(false);
+    const [activePopupText, setActivePopupText] = useState(false);
     const [reviews, setReviews] = useState([]);
+
+    // Проверка на авторизацию
+    const [auth, setAuth] = useState(false);
+
+    useEffect(() => {
+        const getCookie = (name) => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        const jwt = getCookie('jwt');
+        console.log('VALUE ===', jwt);
+        setAuth(!!jwt);
+    }, []);
 
     const id = data?.documentId;
 
-    console.log(reviews);
-
     const handleClick = () => {
-        setActivePopup(!activePopup);
+
+        if (auth) {
+            setActivePopup(!activePopup);
+        } else {
+            // alert('зарегистрируйтесь');
+            setActivePopupText(!activePopupText);
+        }
     }
 
     useEffect(() => {
@@ -97,6 +117,12 @@ const ReviewsSection = ({ data }) => {
                 data={data}
                 activePopup={activePopup}
                 setActivePopup={setActivePopup}
+            />
+
+            <PopupText
+                title='Оцените товар'
+                activePopupText={activePopupText}
+                setActivePopupText={setActivePopupText}
             />
         </>
     )
