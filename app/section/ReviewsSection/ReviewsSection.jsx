@@ -32,6 +32,15 @@ const ReviewsSection = ({ data }) => {
         loadData();
     }, []);
 
+    function getInitials(fullName) {
+        const parts = fullName.trim().split(/\s+/);
+        const [firstName, lastName] = parts;
+        if (!lastName) {
+            return firstName[0].toUpperCase();
+        }
+        return firstName[0].toUpperCase() + lastName[0].toUpperCase();
+    }
+
     return (
 
         <>
@@ -52,7 +61,7 @@ const ReviewsSection = ({ data }) => {
                             return (
                                 <li key={index} className={styles.review_item}>
                                     <div className={styles.review_header}>
-                                        <div className={styles.review_ava}>ГГ</div>
+                                        <div className={styles.review_ava}>{getInitials(item?.name)}</div>
                                         <div className={styles.review_name}>{item?.name}</div>
                                     </div>
                                     <p className={styles.review_text}>{item?.fullText}</p>
