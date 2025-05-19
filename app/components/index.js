@@ -38,6 +38,7 @@ export { default as PopupText } from './PopupText/PopupText';
 export { default as OrdersList } from './OrdersList/OrdersList';
 export { default as ReviewsForm } from './ReviewsForm/ReviewsForm';
 export { default as StarRating } from './StarRating/StarRating';
+export { default as Clipboard } from './Clipboard/Clipboard';
 
 // микро компоненты
 // чекбоксы, input, btn

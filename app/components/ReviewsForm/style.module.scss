@@ -73,6 +73,10 @@
     cursor: pointer;
 
     margin-bottom: 30px;
+
+    &:disabled {
+        opacity: 0.6;
+    }
 }
 
 .errors {
@@ -80,6 +84,14 @@
     position: absolute;
     bottom: -20px;
     left: 0;
+}
+
+.errors_submit {
+    color: red;
+    font-weight: 600;
+    border: 1px solid red;
+    padding: 5px 10px;
+    margin: -10px 0 20px;
 }
 
 .inputError {

@@ -61,7 +61,7 @@ const Dashboard = () => {
         { title: 'Избранное' },
         { title: 'Скидки и бонусы' }
     ]
-    const [active, setActive] = useState(3);
+    const [active, setActive] = useState(0);
     const openTab = e => setActive(+e.target.dataset.index);
 
     const handleLogout = () => {

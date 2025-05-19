@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import getUserById from '@/app/utils/getUserById';
-import { StarRating } from '@/app/components';
+import { StarRating, Clipboard } from '@/app/components';
 import Image from "next/image";
 import styles from './style.module.scss';
 
@@ -12,7 +12,7 @@ import styles from './style.module.scss';
 // http://90.156.134.142:1337/api/otzyvy-tovaries?populate=*  
 
 const uploadUrl = 'http://90.156.134.142:1337/api/upload/';
-const url = 'http://90.156.134.142:1337/api/otzyvy-tovaries';
+const url = 'http://90.156.134.142:1337/api/otzyvy-tovaries1';
 
 export async function uploadFiles(files) {
     const formData = new FormData();
@@ -56,7 +56,9 @@ const ReviewsForm = ({ data }) => {
 
     const productDocumentId = data.documentId;
     const { register, watch, handleSubmit, formState: { errors }, control, reset, getValues } = useForm();
-    const [submitting, setSubmitting] = useState(false);
+    const [sending, setSending] = useState(false); // отправка формы
+    const [isSuccessSend, setIsSuccessSend] = useState(true); // успешная отправка формы
+    const [submitError, setSubmitErrors] = useState(false); // ошибка при отправке формы
 
     // получаем юзера
     const documentId = 'f9bh8d19a9ij1gg5zegvposx';
@@ -102,17 +104,20 @@ const ReviewsForm = ({ data }) => {
                 customers: userName,
                 file: fileIds
             };
-
+            setSending(true);
             const { response } = await sendReviewsService(reviewsData);
             if (response.ok) {
+                setSending(false);
                 reset();
             } else {
                 console.error('API Error:', response.status);
+                setSubmitErrors(true);
             }
         } catch (err) {
+            setSubmitErrors(true);
             console.error('Fetch error:', err);
         } finally {
-            setSubmitting(false);
+            setSending(false);
         }
     };
 
@@ -166,105 +171,117 @@ const ReviewsForm = ({ data }) => {
     }, [fileList3]);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <div className={styles.formInner}>
-                <h2 className={styles.title}>Оцените товар</h2>
-                <StarRating setRating={setRating} rating={rating} />
-                <div className={styles.form_item}>
-                    <label htmlFor="textarea">Напишите отзыв</label>
-                    <textarea
-                        id="textarea"
-                        {...register('textarea', { required: 'Пожалуйста, введите отзыв' })}
-                        placeholder="Напишите ваш отзыв"
-                    />
-                    {errors.textarea && <p className={styles.inputError}>{errors.textarea.message}</p>}
-                </div>
-                <div className={styles.fileInputs}>
-                    <label>
-                        <input
-                            type="file"
-                            {...register('file1', {
-                                validate: {
-                                    // Проверка размера — < 2 МБ
-                                    lessThan2MB: files =>
-                                        (files[0]?.size ?? 0) < 2 * 1024 * 1024 ||
-                                        'Максимальный размер файла — 2 МБ'
-                                }
-                            })}
-                        />
-                        <Image
-                            className={styles.slide}
-                            src={`${preview ? preview : "/icons/upload.svg"}`}
-                            alt="upload"
-                            width={50}
-                            height={50}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            type="file"
-                            {...register('file2', {
-                                validate: {
-                                    // Проверка размера — < 2 МБ
-                                    lessThan2MB: files =>
-                                        (files[0]?.size ?? 0) < 2 * 1024 * 1024 ||
-                                        'Максимальный размер файла — 2 МБ'
-                                }
-                            })}
-                        />
-                        <Image
-                            className={styles.slide}
-                            src={`${preview2 ? preview2 : "/icons/upload.svg"}`}
-                            alt="upload"
-                            width={50}
-                            height={50}
-                        />
-                    </label>
-                    <label>
-                        <input
-                            type="file"
-                            {...register('file3', {
-                                validate: {
-                                    // Проверка размера — < 2 МБ
-                                    lessThan2MB: files =>
-                                        (files[0]?.size ?? 0) < 2 * 1024 * 1024 ||
-                                        'Максимальный размер файла — 2 МБ'
-                                }
-                            })}
-                        />
-                        <Image
-                            className={styles.slide}
-                            src={`${preview3 ? preview3 : "/icons/upload.svg"}`}
-                            alt="upload"
-                            width={50}
-                            height={50}
-                        />
-                    </label>
-                    {errors.file1 && (
-                        <p className={styles.errors}>
-                            {errors.file1.message}||
-                        </p>
-                    )}
-                    {errors.file2 && (
-                        <p className={styles.errors}>
-                            {errors.file2.message}||
-                        </p>
-                    )}
-                    {errors.file3 && (
-                        <p className={styles.errors}>
-                            {errors.file3.message}||
-                        </p>
-                    )}
-                </div>
-            </div>
 
-            <button type="submit" className={styles.button}>
-                {submitting ? 'Отправка...' : 'Оставить отзыв'}
-            </button>
+        <>
+            {!isSuccessSend ?
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                    <div className={styles.formInner}>
+                        <h2 className={styles.title}>Оцените товар</h2>
+                        <StarRating setRating={setRating} rating={rating} />
+                        <div className={styles.form_item}>
+                            <label htmlFor="textarea">Напишите отзыв</label>
+                            <textarea
+                                id="textarea"
+                                {...register('textarea', { required: 'Пожалуйста, введите отзыв' })}
+                                placeholder="Напишите ваш отзыв"
+                            />
+                            {errors.textarea && <p className={styles.inputError}>{errors.textarea.message}</p>}
+                        </div>
+                        <div className={styles.fileInputs}>
+                            <label>
+                                <input
+                                    type="file"
+                                    {...register('file1', {
+                                        validate: {
+                                            // Проверка размера — < 2 МБ
+                                            lessThan2MB: files =>
+                                                (files[0]?.size ?? 0) < 2 * 1024 * 1024 ||
+                                                'Максимальный размер файла — 2 МБ'
+                                        }
+                                    })}
+                                />
+                                <Image
+                                    className={styles.slide}
+                                    src={`${preview ? preview : "/icons/upload.svg"}`}
+                                    alt="upload"
+                                    width={50}
+                                    height={50}
+                                />
+                            </label>
+                            <label>
+                                <input
+                                    type="file"
+                                    {...register('file2', {
+                                        validate: {
+                                            // Проверка размера — < 2 МБ
+                                            lessThan2MB: files =>
+                                                (files[0]?.size ?? 0) < 2 * 1024 * 1024 ||
+                                                'Максимальный размер файла — 2 МБ'
+                                        }
+                                    })}
+                                />
+                                <Image
+                                    className={styles.slide}
+                                    src={`${preview2 ? preview2 : "/icons/upload.svg"}`}
+                                    alt="upload"
+                                    width={50}
+                                    height={50}
+                                />
+                            </label>
+                            <label>
+                                <input
+                                    type="file"
+                                    {...register('file3', {
+                                        validate: {
+                                            // Проверка размера — < 2 МБ
+                                            lessThan2MB: files =>
+                                                (files[0]?.size ?? 0) < 2 * 1024 * 1024 ||
+                                                'Максимальный размер файла — 2 МБ'
+                                        }
+                                    })}
+                                />
+                                <Image
+                                    className={styles.slide}
+                                    src={`${preview3 ? preview3 : "/icons/upload.svg"}`}
+                                    alt="upload"
+                                    width={50}
+                                    height={50}
+                                />
+                            </label>
+                            {errors.file1 && (
+                                <p className={styles.errors}>
+                                    {errors.file1.message}||
+                                </p>
+                            )}
+                            {errors.file2 && (
+                                <p className={styles.errors}>
+                                    {errors.file2.message}||
+                                </p>
+                            )}
+                            {errors.file3 && (
+                                <p className={styles.errors}>
+                                    {errors.file3.message}||
+                                </p>
+                            )}
+                        </div>
+                    </div>
 
-            <p>Оставьте отзыв, заполнив все поля
-                и получите промокод на скидку 3%</p>
-        </form>
+                    <button type="submit" className={styles.button} disabled={sending}>
+                        {sending ? 'Отправка...' : 'Оставить отзыв'}
+                    </button>
+
+                    {submitError && (
+                        <p className={styles.errors_submit}>При отправке отзыва произошла ошибка, попробуйте позже или напишите нам на почту</p>
+                    )}
+
+                    <p>Оставьте отзыв, заполнив все поля
+                        и получите промокод на скидку 3%</p>
+                </form>
+                :
+                <Clipboard />
+            }
+        </>
+
     );
 }
 
