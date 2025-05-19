@@ -1,0 +1,105 @@
+@use '@/app/mixins' as *;
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+
+    min-width: 350px;
+}
+
+
+.input_wrapper {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    width: 100%;
+  
+    input {
+        font-size: 18px;
+        background-color: var(--super-light-gray);
+        padding: 15px 25px;
+        color: var(--light-gray);
+        border-radius: 6px;
+        border: 1px solid var(--light-gray);
+        width: 100%;
+        transition: all 0.3s ease;
+        outline: none;
+
+
+        // применится при фокусе к placeholder
+        &:focus::placeholder { 
+            transform: translateY(-200%) translateX(-100%);
+            font-size: 12px;
+            padding: 5px;
+            color: var(--white);
+            opacity: 0;
+        }
+    }
+  
+    ::placeholder {
+      position: absolute;
+      top: 15px;
+      left: 25px;
+      color: #ACACAC;
+      font-size: 18px;
+      transition: transform 0.3s ease, font-size 0.3s ease, opacity 0.3s ease; 
+      pointer-events: none; 
+    }
+}
+
+
+
+.button {
+    cursor: pointer;
+
+
+    display: block;
+    font-family: var(--font-family);
+    font-weight: 500;
+    @include adaptiv-value("font-size", 16, 14);
+    border-radius: 6px;
+
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    padding: 20px 10px;
+
+    width: 100%;
+    width: 100%;
+    transition: all var(--anim-function);
+
+    border: none;
+
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.checkbox_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    a {
+        display: block;
+        text-decoration: underline;
+    }
+}

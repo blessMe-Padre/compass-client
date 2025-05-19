@@ -42,7 +42,7 @@
     min-height: 430px;
     padding: 40px;
     background: var(--reverse-color);
-    color: var(--blue);
+    color: var(--toggle-color);
     text-align: center;
 }
 
@@ -90,6 +90,11 @@
     align-items: center;
     justify-content: center;
     border-radius: 100%;
+}
+
+.popup_title {
+    text-transform: uppercase;
+    color: var(--toggle-color) !important;
 }
 
 .popup__btn svg path {

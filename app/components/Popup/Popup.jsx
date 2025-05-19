@@ -1,8 +1,8 @@
 import Form from '../';
-import { FilterForm } from '../'
+import { FilterForm, AskForm } from '../'
 import styles from './style.module.css';
 
-export default function Popup({ activePopup, setActivePopup, data, handleChange, statusForm }) {
+export default function Popup({ activePopup, setActivePopup, data, handleChange, statusForm, forAsk }) {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Escape' || event.key === 'Esc') {
@@ -25,7 +25,7 @@ export default function Popup({ activePopup, setActivePopup, data, handleChange,
                     onClick={e => e.stopPropagation()}
                 >
 
-                    <h3>Фильтры</h3>
+                    {forAsk ? <h3 className={styles.popup_title}>Задать вопрос</h3> : <h3 className={styles.popup_title}>Фильтры</h3>}
 
                     <button
                         className={styles.popup__close}
@@ -43,8 +43,7 @@ export default function Popup({ activePopup, setActivePopup, data, handleChange,
                     /> */}
 
                   
-                    <FilterForm data={data} handleChange={handleChange} statusForm={statusForm} />
-                
+                    {forAsk ? <AskForm /> : <FilterForm data={data} handleChange={handleChange} statusForm={statusForm} />}                
                 </div>
             </div>
         </div>
