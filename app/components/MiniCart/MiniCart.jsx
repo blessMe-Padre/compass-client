@@ -11,22 +11,19 @@ export default function MiniCart({ cartItems }) {
         return sum + (price * quantity);
     }, 0);
 
-
-    console.log(totalSum)
-
     const formatPrice = (price) => {
         return price.toLocaleString('ru-Ru')
     };
 
 
     return (
-         <div>
+        <div>
             {cartItems.map((el, idx) => (
                 el !== null && (
                     <CartItem key={idx} el={el} idx={idx} location={'miniCart'} />
                 )
             ))}
-            
+
             <div className={styles.total_info}>
                 <div className={styles.total_sum}>
                     <p className={styles.total_p}>Итого:</p>

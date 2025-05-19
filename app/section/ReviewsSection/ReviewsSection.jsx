@@ -16,7 +16,7 @@ const ReviewsSection = ({ data }) => {
     const [activePopupText, setActivePopupText] = useState(false);
     const [reviews, setReviews] = useState([]);
 
-    const domain = 'http://90.156.134.142:1337';
+    const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
     // Проверка на авторизацию
     const [auth, setAuth] = useState(false);
@@ -29,7 +29,6 @@ const ReviewsSection = ({ data }) => {
         }
 
         const jwt = getCookie('jwt');
-        console.log('VALUE ===', jwt);
         setAuth(!!jwt);
     }, []);
 

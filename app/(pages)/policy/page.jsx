@@ -7,7 +7,7 @@ export const metadata = {
     description: "Магазин «КОМПАС» — ваш надежный проводник в мире качественной одежды и обуви для охоты, рыбалки и работы!",
 }
 
-const apiUrl = 'http://90.156.134.142:1337/api/stranicza-politika-konfidenczialnosti?populate=*';
+const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/stranicza-politika-konfidenczialnosti?populate=*`;
 
 export default async function page() {
     let data = null;
@@ -15,14 +15,14 @@ export default async function page() {
     try {
         const response = await fetchData(apiUrl);
         data = response?.data || null;
-    
+
     } catch (error) {
         console.error('Ошибка при загрузке данных:', error);
     }
 
     return (
         <>
-           <ContentPage data={data} />
+            <ContentPage data={data} />
         </>
     )
 }

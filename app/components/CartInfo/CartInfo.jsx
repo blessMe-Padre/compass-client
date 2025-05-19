@@ -19,13 +19,12 @@ export default function CartInfo({ onSubmit, forSubmit }) {
 
     useEffect(() => {
         const getCookie = (name) => {
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop().split(';').shift();
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
         }
-    
+
         const jwt = getCookie('jwt');
-        console.log('VALUE ===', jwt);
         setAuth(!!jwt);
     }, []);
 
@@ -59,17 +58,17 @@ export default function CartInfo({ onSubmit, forSubmit }) {
                 </div>
 
                 <div className={styles.btn_nav}>
-                    {auth ? 
+                    {auth ?
                         forSubmit === true
                             ?
                             <LinkButton onClick={onSubmit} forClick={true} href={'/checkout'} text={'Оформить заказ'} />
                             :
                             <LinkButton href={'/checkout'} text={'Оформить заказ'} />
 
-                    
+
                         : <LinkButton href={'/dashboard'} text={'зарегистрироваться'} />
                     }
-                   
+
                     <LinkButton href={'/catalog'} text={'Продолжить покупки'} style={'noBg'} />
                 </div>
             </div>

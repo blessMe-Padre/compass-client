@@ -6,7 +6,7 @@ import useContactStore from '@/app/store/contactStore';
 import Link from 'next/link';
 import { useState } from 'react';
 
-const domain = 'http://90.156.134.142:1337';
+const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 export default function ContentPage({ data }) {
 
@@ -30,16 +30,16 @@ export default function ContentPage({ data }) {
                 <div className='flex gap-10' style={{ marginBottom: '40px' }}>
                     <div className='flex-column'>
                         ТЕЛЕФОН:
-                        <div> 
+                        <div>
                             {contacts[0]?.phones?.map((contact, index) => (
                                 <>
                                     <Link key={`${contact.id}-${index}`}
-                                    href={`tel:+${contact.tel_for_robot}`} className={styles.tel}>
+                                        href={`tel:+${contact.tel_for_robot}`} className={styles.tel}>
                                         {contact.tel}
                                     </Link>
                                     {index !== contacts[0]?.phones.length - 1 && ', '}
                                 </>
-                                )
+                            )
                             )}
                         </div>
                     </div>

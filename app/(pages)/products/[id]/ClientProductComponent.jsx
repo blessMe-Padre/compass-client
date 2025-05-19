@@ -28,7 +28,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const [direction, setDirection] = useState('vertical');
 
     const imageList = data?.imgs;
-    const domain = 'http://90.156.134.142:1337';
+    const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
     useEffect(() => {
         const handleResize = () => {

@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { usePathname } from 'next/navigation';
-import styles from './style.module.scss'; 
+import styles from './style.module.scss';
 
 import useContactStore from '@/app/store/contactStore';
 
 import useCartStore from '@/app/store/cartStore';
 
-const domain = 'http://90.156.134.142:1337'
+const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`
 
 
 import { MenuButton, PageMenu, Search, MiniCart } from './../index';
@@ -311,7 +311,7 @@ const Header = () => {
     const [activeSubmenuLvl1, setActiveSubmenuLvl1] = useState(null);
     const [hoveredSubmenuItem, setHoveredSubmenuItem] = useState(null);
 
-    const { cartItems, removeFromCart  } = useCartStore();
+    const { cartItems, removeFromCart } = useCartStore();
 
     const menuClick = (e) => {
         document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
@@ -368,17 +368,17 @@ const Header = () => {
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
     const submenuRef = useRef(null);
-    const modalMiniCartRef = useRef(null); 
+    const modalMiniCartRef = useRef(null);
 
 
     const handleClickOutside = (e) => {
         if (
-        modalMiniCartRef.current && 
-        !modalMiniCartRef.current.contains(e.target) &&
-        // Дополнительная проверка, если есть кнопка открытия
-        !e.target.closest('.cart-btn') 
+            modalMiniCartRef.current &&
+            !modalMiniCartRef.current.contains(e.target) &&
+            // Дополнительная проверка, если есть кнопка открытия
+            !e.target.closest('.cart-btn')
         ) {
-        setModalMiniCartOpened(false);
+            setModalMiniCartOpened(false);
         }
     };
 
@@ -442,16 +442,16 @@ const Header = () => {
         };
     }, [searchOpened]);
 
- 
+
     useEffect(() => {
         if (modalMiniCartOpened) {
-        document.addEventListener('mousedown', handleClickOutside);
+            document.addEventListener('mousedown', handleClickOutside);
         } else {
-        document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         }
-        
+
         return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [modalMiniCartOpened]);
 
@@ -463,9 +463,6 @@ const Header = () => {
 
         fetchContacts();
     }, [])
-
-
-    console.log(contacts);
 
     return (
         <header className={`
@@ -630,7 +627,7 @@ const Header = () => {
                                             )}
                                         </button>
 
-                            
+
                                         {modalMiniCartOpened && (
                                             <motion.div
                                                 ref={modalMiniCartRef}
@@ -638,25 +635,25 @@ const Header = () => {
                                                 className={styles.mini_cart}>
                                                 {cartItems.length > 0
                                                     ? (
-                                                    <MiniCart cartItems={cartItems} />
+                                                        <MiniCart cartItems={cartItems} />
                                                     )
                                                     : 'В вашей корзине пусто'
                                                 }
                                             </motion.div>
                                         )}
-                                    
+
                                     </>
-                                )   
-                            }    
-                            
+                                )
+                            }
+
                             {
                                 isMobile === true && (
                                     <>
-                                    
+
                                         <Link
                                             href={'/cart'}
                                             className={`${styles.button} ${isHome ? styles.button_homeColor : styles.button_otherColor} cart-btn relative`}
-                                            title='Корзина'  
+                                            title='Корзина'
                                         >
 
                                             <svg width="25" height="26" viewBox="0 0 25 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -664,7 +661,7 @@ const Header = () => {
                                             </svg>
 
                                         </Link>
-                                    
+
                                         {cartItems.length > 0 && (
                                             <div className={styles.cartAmount}>
                                                 {cartItems.length}
@@ -673,11 +670,11 @@ const Header = () => {
                                     </>
                                 )
                             }
-                            
+
                         </div>
 
 
-                        
+
 
                         <Link
                             title='Личный кабинет'

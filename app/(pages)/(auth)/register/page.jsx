@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import styles from './style.module.scss';
 
-const url = 'http://90.156.134.142:1337/api/auth/local/register';
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/register`;
 // zarodiny@yandex.ru
 // 123456789
 

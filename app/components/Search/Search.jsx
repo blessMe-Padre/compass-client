@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Preloader } from '@/app/components';
 
 
-const domain = 'http://90.156.134.142:1337';
+const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 export default function Search() {
     const [inputValue, setInputValue] = useState('');
@@ -130,7 +130,6 @@ export default function Search() {
                                 {
                                     !loading &&
                                     dataList.map((product, index) => {
-                                        console.log(product); // лог внутри map
                                         return (
                                             <li key={product.id || index} className={styles.item}>
                                                 <Link href={`/products/${product.id}`}

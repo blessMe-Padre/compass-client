@@ -6,7 +6,7 @@ import styles from './style.module.scss';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const url = 'http://90.156.134.142:1337/api/auth/local/';
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/`;
 // Иван
 // zarodiny@yandex.ru
 // 123456789

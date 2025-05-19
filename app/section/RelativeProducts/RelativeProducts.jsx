@@ -17,7 +17,7 @@ import fetchData from '@/app/utils/fetchData';
 
 const RelativeProducts = () => {
     const [products, setProducts] = useState([]);
-    const apiUrl = 'http://90.156.134.142:1337/api/products?populate=*';
+    const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?populate=*`;
 
     const swiperRef = useRef(null);
     const [current, setCurrent] = useState(1);

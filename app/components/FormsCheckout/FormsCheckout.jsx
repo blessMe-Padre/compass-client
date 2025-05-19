@@ -11,7 +11,7 @@ import { useImperativeHandle } from 'react';
 import { format } from 'date-fns';
 import getUserById from '@/app/utils/getUserById';
 
-const url = 'http://90.156.134.142:1337/api/zakazies'
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/zakazies`;
 
 export function getCurrentDate() {
     return format(new Date(), 'yyyy-MM-dd');
@@ -20,7 +20,6 @@ export function getCurrentDate() {
 const documentId = 'f9bh8d19a9ij1gg5zegvposx';
 
 export async function sendOrderService(orderData) {
-    console.log('orderData', orderData)
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -30,11 +29,7 @@ export async function sendOrderService(orderData) {
             body: JSON.stringify({ data: { ...orderData } }),
         });
 
-        console.log(response)
-
         const data = await response.json();
-        console.log('data', data)
-
         return { response, data };
     } catch (error) {
         console.error("sendOrder Service Error:", error);
@@ -118,10 +113,6 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
         'Доставка почтой',
         'Курьер по Владивостоку'
     ];
-
-
-
-    console.log(deliveryMethodsWithFields.includes(deliveryMethod))
 
     const addressVariants = {
         hidden: { opacity: 0, y: 10 },
