@@ -69,8 +69,40 @@ export default function CartItem({ idx, el, location }) {
                 }
 
                 <div className={styles.wrapper_price}>
-                    <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
-                    <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price.toLocaleString('ru-Ru')}₽</p>
+                {/* {priceSales && price ? (
+                    <>
+                        <p className={styles.item_sale_price}>{priceSales?.toLocaleString('ru-Ru')} Р / шт.</p>
+                        <p className={`${styles.item_sale_price} ${styles.price_underline}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
+                    </>
+                )
+                    :
+                    <>
+                    </>
+                }
+
+                {!priceSales && price && (
+                    <>
+                        <p className={`${styles.item_sale_price}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
+                    </>
+                )} */}
+                    
+                    {el.priceSales && el.price ? (
+                        <>
+                          <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
+                          <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price.toLocaleString('ru-Ru')}₽</p>
+                        </>
+                    )
+                        :
+                        <>
+                        </>
+                    } 
+
+                    {!el.priceSales && el.price && (
+                        <>
+                          <p className={styles.item_price_sale}>{el.price.toLocaleString('ru-Ru')} ₽ / шт.</p>
+                        </>
+                    )}
+
                 </div>
             </div>
 

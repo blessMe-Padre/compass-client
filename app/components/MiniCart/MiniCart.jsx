@@ -6,10 +6,13 @@ import Link from "next/link";
 export default function MiniCart({ cartItems }) {
 
     const totalSum = cartItems.reduce((sum, item) => {
-        const price = item?.priceSales ?? item?.price;
+        const price = item?.priceSales || item?.price;
         const quantity = item?.quantity ?? 1;
         return sum + (price * quantity);
     }, 0);
+
+
+    console.log(totalSum)
 
     const formatPrice = (price) => {
         return price.toLocaleString('ru-Ru')

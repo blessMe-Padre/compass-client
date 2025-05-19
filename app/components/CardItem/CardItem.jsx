@@ -43,12 +43,12 @@ function CardItem({ element }) {
                         modules={[Navigation, Pagination]}
                         pagination={{
                             clickable: true,
-                            el: '.custom-pagination',
-                        }}
-                        // отправляем кастомное событие при клике на слайдер
-                        onTouchEnd={(swiper, event) => {
-                            document.dispatchEvent(new CustomEvent("sliderClick"));
-                        }}
+                            el: '.custom-pagination2',
+                            type: 'bullets',
+                            dynamicBullets: true, 
+                            dynamicMainBullets: 4 
+                          }}
+                        
                         >
                         {imgs?.map((img, idx) => {
                             return (
@@ -66,6 +66,7 @@ function CardItem({ element }) {
                                 </SwiperSlide>
                             )
                         })}
+                    <div className={`custom-pagination2 ${styles.custom_pagination}`} />
                     </Swiper>
                 </div>
             </div>
@@ -95,12 +96,16 @@ function CardItem({ element }) {
             </div>
         
             <div className={styles.price_container}>
-                {priceSales && price && (
+                {priceSales && price ? (
                     <>
                         <p className={styles.item_sale_price}>{priceSales?.toLocaleString('ru-Ru')} Р / шт.</p>
                         <p className={`${styles.item_sale_price} ${styles.price_underline}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
                     </>
-                )}
+                )
+                    :
+                    <>
+                    </>
+                }
 
                 {!priceSales && price && (
                     <>

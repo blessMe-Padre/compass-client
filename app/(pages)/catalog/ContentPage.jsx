@@ -106,6 +106,31 @@ export default function ContentPage({ data }) {
 
   }
 
+
+  const handleClickDefault = async () => {
+    
+    const apiUrl = [
+      'http://90.156.134.142:1337/api/products?',
+      `pagination[page]=${pageCount}&`,
+      `pagination[pageSize]=${PAGE_SIZE}&`,
+      'populate=*'
+    ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
+
+    const products = await getAllProducts(apiUrl);
+
+    if (pageCount === 1) {
+      setProducts(products);
+      setLoadMoreHidden(products.length < PAGE_SIZE);
+    } else {
+      if (products.length === 0) {
+        setLoadMoreHidden(true);
+      } else {
+        setProducts(prev => [...prev, ...products]);
+        setLoadMoreHidden(products.length < PAGE_SIZE);
+      }
+    }
+  }
+
   useEffect(() => {
     setNotificationActive(true)
   }, [cartItems])
@@ -214,7 +239,7 @@ export default function ContentPage({ data }) {
         >
             <div className={styles.dop_wrapper}>
               <Link href={'/catalog'}>
-                <div className={styles.catalog_btn}>
+                <div className={styles.catalog_btn} onClick={() => handleClickDefault()}>
                   Каталог
                 </div>
               </Link>

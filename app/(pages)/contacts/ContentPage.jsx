@@ -2,10 +2,14 @@
 import { Breadcrumbs, ContentRenderer } from '@/app/components';
 import Image from 'next/image';
 import styles from './style.module.scss';
+import useContactStore from '@/app/store/contactStore';
+import Link from 'next/link';
 
 const domain = 'http://90.156.134.142:1337';
 
 export default function ContentPage({ data }) {
+
+    const { contacts } = useContactStore();
 
     return (
         <>
@@ -19,14 +23,23 @@ export default function ContentPage({ data }) {
                 <div className='flex gap-10' style={{ marginBottom: '40px' }}>
                     <div className='flex-column'>
                         ТЕЛЕФОН:
-                        8 (423) 244-60 90,
-                        8 (423) 230-2238,
-                        8 (423) 230-2239,
+                        <div> 
+                            {contacts[0]?.phones?.map((contact, index) => (
+                                <>
+                                    <Link key={`${contact.id}-${index}`}
+                                    href={`tel:+${contact.tel_for_robot}`} className={styles.tel}>
+                                        {contact.tel}
+                                    </Link>
+                                    {index !== contacts[0]?.phones.length - 1 && ', '}
+                                </>
+                                )
+                            )}
+                        </div>
                     </div>
 
                     <div className='flex-column'>
                         E-MAIL
-                        kompas-vl@mail.ru
+                        {contacts.map(item => <Link className={styles.email} href={`mailto:+${item.email}`}>{item.email}</Link>)}
                     </div>
 
                     <div>

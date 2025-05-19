@@ -195,4 +195,14 @@
 
 .price {
     font-weight: 500;
+    display: flex;
+    align-items: center;
+
+    div {
+        display: flex;
+        align-items: center;
+
+        gap: 10px;
+    }
 }
+

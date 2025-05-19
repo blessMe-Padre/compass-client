@@ -46,7 +46,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         let totalSales = Number(0);
 
         sameProducts.forEach((item, index) => {
-            const priceSales = Number(item.priceSales);
+            const priceSales = Number(item.priceSales) || Number(item.price);
             const price = Number(item.price);
 
             const quantity = quantities[index] || 0;
@@ -238,14 +238,14 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                     className={`${active === 0 ? `${styles.block}` : `${styles.none}`}`}
                 >
 
-                    <div className={styles.wrapper_attr}>
+                    {/* <div className={styles.wrapper_attr}>
                         {data.attributes.map((el, id) =>
                             <div key={id} className="flex gap-5">
                                 <p>{el.name}</p>
                                 <p>{el.value}</p>
                             </div>
                         )}
-                    </div>
+                    </div> */}
 
                     <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description }}>
 

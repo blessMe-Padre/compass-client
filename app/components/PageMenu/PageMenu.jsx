@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './style.module.scss';
 import Image from "next/image";
+import useContactStore from '@/app/store/contactStore';
 
 /**
  * добавить asyng/await для получение menuLinks по api
@@ -37,6 +38,7 @@ const menuLinks = [
 
 const PageMenu = ({ opened, setOpened, isHome }) => {
     const pathname = usePathname();
+    const { contacts } = useContactStore();
 
     return (
         <div className={`${styles.nav_wrapper} ${opened ? styles.popup_active : ''}`}>
@@ -92,9 +94,11 @@ const PageMenu = ({ opened, setOpened, isHome }) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    <a
-                        className={`${isHome ? styles.link_homeColor : styles.link_otherColor}`}
-                        href="tel:+74232446090">8 (423) 244-6090</a>
+                    {contacts[0]?.phones.map((item, idx) => 
+                        idx === 0 && (
+                            <a className={`${isHome ? styles.link_homeColor : styles.link_otherColor}`} href={`tel:${item.tel_for_robot}`}>{item.tel}</a>
+                        )
+                   )}
                 </div>
                 <div className={styles.icons_wrapper}>
                     <a href="#" className={`${styles.icon} ${isHome ? styles.icon_homeColor : styles.icon_otherColor}`}>
