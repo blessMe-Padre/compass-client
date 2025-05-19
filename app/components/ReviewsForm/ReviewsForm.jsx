@@ -12,7 +12,7 @@ import styles from './style.module.scss';
 // http://90.156.134.142:1337/api/otzyvy-tovaries?populate=*  
 
 const uploadUrl = 'http://90.156.134.142:1337/api/upload/';
-const url = 'http://90.156.134.142:1337/api/otzyvy-tovaries1';
+const url = 'http://90.156.134.142:1337/api/otzyvy-tovaries';
 
 export async function uploadFiles(files) {
     const formData = new FormData();
@@ -57,7 +57,7 @@ const ReviewsForm = ({ data }) => {
     const productDocumentId = data.documentId;
     const { register, watch, handleSubmit, formState: { errors }, control, reset, getValues } = useForm();
     const [sending, setSending] = useState(false); // отправка формы
-    const [isSuccessSend, setIsSuccessSend] = useState(true); // успешная отправка формы
+    const [isSuccessSend, setIsSuccessSend] = useState(false); // успешная отправка формы
     const [submitError, setSubmitErrors] = useState(false); // ошибка при отправке формы
 
     // получаем юзера
@@ -109,6 +109,7 @@ const ReviewsForm = ({ data }) => {
             if (response.ok) {
                 setSending(false);
                 reset();
+                setIsSuccessSend(true);
             } else {
                 console.error('API Error:', response.status);
                 setSubmitErrors(true);

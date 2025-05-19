@@ -28,6 +28,7 @@ const Clipboard = () => {
 
     return (
         <div className={styles.clipboard}>
+            <p className={styles.text}>Отзыв успешно отправлен!!!</p>
             <p className={styles.text}>Ваш промокод на скидку 3%:</p>
             <div className={styles.row}>
                 <input
