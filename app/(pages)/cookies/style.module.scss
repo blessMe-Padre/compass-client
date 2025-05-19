@@ -1,0 +1,25 @@
+.section {
+    padding: 20px 0 60px;
+
+    h1,
+    h2,
+    p {
+        margin-bottom: 20px;
+    }
+
+    button {
+        border: none;
+        padding: 10px 20px;
+        background-color: var(--white);
+        color: var(--black);
+        border-radius: 6px;
+        border: 1px solid var(--black);
+        text-transform: uppercase;
+        font-size: 16px;
+        cursor: pointer;
+
+        box-sizing: border-box;
+
+    }
+
+}

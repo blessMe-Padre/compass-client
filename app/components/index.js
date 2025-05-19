@@ -40,6 +40,7 @@ export { default as OrdersList } from './OrdersList/OrdersList';
 export { default as ReviewsForm } from './ReviewsForm/ReviewsForm';
 export { default as StarRating } from './StarRating/StarRating';
 export { default as Clipboard } from './Clipboard/Clipboard';
+export { default as Cookies } from './Cookies/Cookies';
 
 // микро компоненты
 // чекбоксы, input, btn
