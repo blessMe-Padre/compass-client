@@ -156,6 +156,7 @@
     }
 
     .icon {
+        transition: all 0.3s ease-in-out;
         background-color: var(--black2);
     }
 
@@ -179,8 +180,20 @@
 
 .link_homeColor {
     color: var(--white);
+    transition: all 0.3s ease-in-out;
+
+
+    &:hover {
+        color: var(--blue);
+    }
 }
 
 .link_otherColor {
     color: var(--toggle-color);
+    transition: all 0.3s ease-in-out;
+
+    
+    &:hover {
+        color: var(--blue);
+    }
 }

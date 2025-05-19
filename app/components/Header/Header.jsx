@@ -6,11 +6,15 @@ import { motion } from "framer-motion";
 import { usePathname } from 'next/navigation';
 import styles from './style.module.scss'; 
 
+import useContactStore from '@/app/store/contactStore';
+
 import useCartStore from '@/app/store/cartStore';
 
 const domain = 'http://90.156.134.142:1337'
 
+
 import { MenuButton, PageMenu, Search, MiniCart } from './../index';
+import fetchData from '@/app/utils/fetchData';
 
 const catalogLinks = [
     {
@@ -297,6 +301,8 @@ const Header = () => {
     const [searchOpened, setSearchOpened] = useState(false);
     const [modalMiniCartOpened, setModalMiniCartOpened] = useState(false)
 
+    const { setContacts, contacts } = useContactStore();
+
     // разные цвета header для страниц
     const pathname = usePathname();
     const isHome = pathname === '/';
@@ -362,8 +368,19 @@ const Header = () => {
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
     const submenuRef = useRef(null);
-    const modalMiniCartRef = useRef(null);
+    const modalMiniCartRef = useRef(null); 
 
+
+    const handleClickOutside = (e) => {
+        if (
+        modalMiniCartRef.current && 
+        !modalMiniCartRef.current.contains(e.target) &&
+        // Дополнительная проверка, если есть кнопка открытия
+        !e.target.closest('.cart-btn') 
+        ) {
+        setModalMiniCartOpened(false);
+        }
+    };
 
     useEffect(() => {
         if (isMobile) return;
@@ -425,17 +442,7 @@ const Header = () => {
         };
     }, [searchOpened]);
 
-    const handleClickOutside = (e) => {
-        if (
-        modalMiniCartRef.current && 
-        !modalMiniCartRef.current.contains(e.target) &&
-        // Дополнительная проверка, если есть кнопка открытия
-        !e.target.closest('.cart-btn') 
-        ) {
-        setModalMiniCartOpened(false);
-        }
-    };
-
+ 
     useEffect(() => {
         if (modalMiniCartOpened) {
         document.addEventListener('mousedown', handleClickOutside);
@@ -447,6 +454,18 @@ const Header = () => {
         document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [modalMiniCartOpened]);
+
+    useEffect(() => {
+        const fetchContacts = async () => {
+            const response = await fetchData(`${domain}/api/kontakties?populate[social_links][populate]=*&populate[phones][populate]=*`);
+            setContacts(response.data)
+        }
+
+        fetchContacts();
+    }, [])
+
+
+    console.log(contacts);
 
     return (
         <header className={`
