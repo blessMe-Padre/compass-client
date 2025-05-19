@@ -32,12 +32,21 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
 .review_item {
     padding: 40px;
     background-color: var(--gray-gray);
     color: var(--black);
+
+    @media (max-width: 768px) {
+        padding: 20px;
+    }
 }
 
 .review_header {
@@ -45,6 +54,11 @@
     align-items: center;
     gap: 30px;
     margin-bottom: 30px;
+
+    @media (max-width: 560px) {
+        gap: 20px;
+        margin-bottom: 15px;
+    }
 }
 
 .review_ava {
@@ -56,17 +70,30 @@
     color: var(--white);
     background-color: red;
     border-radius: 50%;
+
+    @media (max-width: 560px) {
+        width: 40px;
+        height: 40px;
+    }
 }
 
 .review_name {
     font-weight: 500;
     font-size: 30px;
+
+    @media (max-width: 560px) {
+        font-size: 20px;
+    }
 }
 
 .review_text {
     font-size: 18px;
     line-height: 1.3;
     margin-bottom: 30px;
+
+    @media (max-width: 560px) {
+        margin-bottom: 15px;
+    }
 }
 
 .review_footer {
@@ -87,12 +114,21 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 30px;
+
+    @media (max-width: 560px) {
+        margin-bottom: 15px;
+    }
 }
 
 .img_wrapper {
     display: block;
     width: 100px;
     height: 100px;
+
+    @media (max-width: 560px) {
+        width: 80px;
+        height: 80px;
+    }
 
     img {
         width: 100%;

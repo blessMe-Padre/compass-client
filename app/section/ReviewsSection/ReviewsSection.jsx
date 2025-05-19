@@ -108,8 +108,6 @@ const ReviewsSection = ({ data }) => {
                                     <div className="pswp-gallery">
                                         <ul className={styles.gallery_list}>
                                             {item?.file.map((image, index) => {
-                                                console.log(image);
-
                                                 return (
                                                     <li key={index}>
                                                         <a
