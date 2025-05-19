@@ -84,7 +84,7 @@ const UserForm = ({ user }) => {
     const [pending, setPending] = useState(false);
 
     const userId = user?.id
-    const url = 'http://90.156.134.142:1337/api/users';
+    const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/users`;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -94,8 +94,6 @@ const UserForm = ({ user }) => {
         const formData = new FormData(event.target);
         const formDataObj = Object.fromEntries(formData.entries());
 
-        console.log(formDataObj);
-
         try {
             setPending(true);
             const response = await updateUserDateService(
@@ -103,8 +101,6 @@ const UserForm = ({ user }) => {
                 formDataObj,
                 url
             );
-
-            // console.log('Данные обновлены:', response, formData);
             setSuccess(true);
             setPending(false);
 

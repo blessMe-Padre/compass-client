@@ -3,7 +3,7 @@ import Image from 'next/image';
 import useCartStore from '@/app/store/cartStore';
 import Link from 'next/link';
 
-const domain = 'http://90.156.134.142:1337';
+const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 export default function CartItem({ idx, el, location }) {
     const { removeFromCart, increaseQuantity, decreaseQuantity } = useCartStore();
@@ -69,7 +69,7 @@ export default function CartItem({ idx, el, location }) {
                 }
 
                 <div className={styles.wrapper_price}>
-                {/* {priceSales && price ? (
+                    {/* {priceSales && price ? (
                     <>
                         <p className={styles.item_sale_price}>{priceSales?.toLocaleString('ru-Ru')} Р / шт.</p>
                         <p className={`${styles.item_sale_price} ${styles.price_underline}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
@@ -85,21 +85,21 @@ export default function CartItem({ idx, el, location }) {
                         <p className={`${styles.item_sale_price}`}>{price.toLocaleString('ru-Ru')} Р / шт.</p>
                     </>
                 )} */}
-                    
+
                     {el.priceSales && el.price ? (
                         <>
-                          <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
-                          <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price.toLocaleString('ru-Ru')}₽</p>
+                            <p className={styles.item_price_sale}>{el.priceSales.toLocaleString('ru-Ru')} ₽ / шт.</p>
+                            <p className={`${styles.item_price} ${el.priceSales !== null ? `${styles.hasSales}` : ''}`}>{el.price.toLocaleString('ru-Ru')}₽</p>
                         </>
                     )
                         :
                         <>
                         </>
-                    } 
+                    }
 
                     {!el.priceSales && el.price && (
                         <>
-                          <p className={styles.item_price_sale}>{el.price.toLocaleString('ru-Ru')} ₽ / шт.</p>
+                            <p className={styles.item_price_sale}>{el.price.toLocaleString('ru-Ru')} ₽ / шт.</p>
                         </>
                     )}
 
@@ -109,9 +109,9 @@ export default function CartItem({ idx, el, location }) {
             {location != 'orderPage' &&
 
                 <button className={styles.btns_delete} onClick={() => removeFromCart(el.id)}>
-                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" strokeLinecap="round"/>
-                        <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" strokeLinecap="round"/>
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1L1.00036 9.99964" stroke="#1B1B1B" strokeLinecap="round" />
+                        <path d="M1 1L9.99964 9.99964" stroke="#1B1B1B" strokeLinecap="round" />
                     </svg>
                 </button>
 

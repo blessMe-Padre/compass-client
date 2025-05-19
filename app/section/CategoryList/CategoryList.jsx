@@ -11,8 +11,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const url = 'http://90.156.134.142:1337/api/categories?populate=*'
-const domain = 'http://90.156.134.142:1337';
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?populate=*`
+const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 import fetchData from '@/app/utils/fetchData';
 import Link from 'next/link';
@@ -24,10 +24,10 @@ const CategoryList = () => {
     useEffect(() => {
         try {
             const getCategories = async () => {
-            const response = await fetchData(url);
-            const data = response.data;
-            setSlides(data);
-        }
+                const response = await fetchData(url);
+                const data = response.data;
+                setSlides(data);
+            }
             getCategories();
         }
         catch (error) {
@@ -81,15 +81,15 @@ const CategoryList = () => {
                                                     />
                                                 )
                                                 : <Image
-                                                        src={placeholder}
-                                                        className={styles.slide}
-                                                        width={345}
-                                                        alt="logo"
-                                                        height={223}
-                                                        placeholder="blur"
-                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                    />
-                                                }
+                                                    src={placeholder}
+                                                    className={styles.slide}
+                                                    width={345}
+                                                    alt="logo"
+                                                    height={223}
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                />
+                                            }
                                         </div>
                                         <h3 className={styles.text}>{slide?.text}</h3>
                                     </div>
@@ -100,39 +100,37 @@ const CategoryList = () => {
                     </Swiper>
                 ) : (
                     <ul className={styles.list}>
-                            {slides.map((slide, index) => {
-           
-                                console.log(slide?.image?.formats?.thumbnail?.url)
-                                return (
-                                    <Link href={'/catalog'} className={styles.item} key={index}>
-                                        <div className={styles.image_wrapper}>
-                                            {slide?.image?.url
-                                                ? (
-                                                    <Image
-                                                        className={styles.slide}
-                                                        src={`${domain}${slide?.image?.url}`}
-                                                        alt="logo"
-                                                        width={345}
-                                                        height={223}
-                                                        placeholder="blur"
-                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                    />
-                                                )
-                                                : <Image
-                                                        src={placeholder}
-                                                        className={styles.slide}
-                                                        width={345}
-                                                        height={223}
-                                                        alt='logo'
-                                                        placeholder="blur"
-                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                    />
-                                                }
-                                        </div>
+                        {slides.map((slide, index) => {
+                            return (
+                                <Link href={'/catalog'} className={styles.item} key={index}>
+                                    <div className={styles.image_wrapper}>
+                                        {slide?.image?.url
+                                            ? (
+                                                <Image
+                                                    className={styles.slide}
+                                                    src={`${domain}${slide?.image?.url}`}
+                                                    alt="logo"
+                                                    width={345}
+                                                    height={223}
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                />
+                                            )
+                                            : <Image
+                                                src={placeholder}
+                                                className={styles.slide}
+                                                width={345}
+                                                height={223}
+                                                alt='logo'
+                                                placeholder="blur"
+                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                            />
+                                        }
+                                    </div>
 
-                                        <h3 className={styles.text}>{slide?.name}</h3>
-                                    </Link>
-                                )
+                                    <h3 className={styles.text}>{slide?.name}</h3>
+                                </Link>
+                            )
                         })}
                     </ul>
                 )}

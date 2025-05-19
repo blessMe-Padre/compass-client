@@ -28,7 +28,7 @@ function TopOffers() {
 
     const [products, setProducts] = useState([]);
 
-    const apiUrl = 'http://90.156.134.142:1337/api/products?populate=*';
+    const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?populate=*`;
 
     useEffect(() => {
 

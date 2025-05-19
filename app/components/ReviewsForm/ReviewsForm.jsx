@@ -11,8 +11,8 @@ import styles from './style.module.scss';
 // запрос на получение полных отзывов
 // http://90.156.134.142:1337/api/otzyvy-tovaries?populate=*  
 
-const uploadUrl = 'http://90.156.134.142:1337/api/upload/';
-const url = 'http://90.156.134.142:1337/api/otzyvy-tovaries';
+const uploadUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/upload/`;
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/otzyvy-tovaries`;
 
 export async function uploadFiles(files) {
     const formData = new FormData();

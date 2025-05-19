@@ -1,6 +1,6 @@
 const getUserById = async (documentId) => {
     try {
-        const res = await fetch(`http://90.156.134.142:1337/api/users/?filters[documentId][$eq]=${documentId}&populate[orders][populate]=*`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/users/?filters[documentId][$eq]=${documentId}&populate[orders][populate]=*`);
         if (!res.ok) {
             throw new Error(`Ошибка HTTP: ${res.status}`);
         }

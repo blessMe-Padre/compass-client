@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
 
-export default function FilterForm({ data, handleChange, statusForm}) {    
+export default function FilterForm({ data, handleChange, statusForm }) {
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
 
@@ -13,7 +13,7 @@ export default function FilterForm({ data, handleChange, statusForm}) {
 
     const maxPrice = parseInt(Math.max.apply(null, arrPrice));
     const minPrice = parseInt(Math.min.apply(null, arrPrice));
-    
+
 
     // TODO: 04.05.2025 - нужно доделать фильтрацию - по кнопке грузится форма, сейчас через useEffect
 
@@ -28,15 +28,12 @@ export default function FilterForm({ data, handleChange, statusForm}) {
 
             acc[attr.name].add(attr.value);
             return acc;
-    }, {}) // Вернется объект с именем атрибутов (1 раз) и n число значений
+        }, {}) // Вернется объект с именем атрибутов (1 раз) и n число значений
 
     const attrFilters = Object.entries(attributes).map(([name, values]) => ({
         name,
         values: Array.from(values)
     }));
-
-    // console.log(selectedFilters)
-    console.log(filters)
 
     /** TODO: 
      * 
@@ -62,13 +59,13 @@ export default function FilterForm({ data, handleChange, statusForm}) {
     const handlePriceChange = (type, value) => {
         setFilters({
             ...filters,
-        price: {
-            ...filters.price,
-            [type]: Number(value) || 0
-        }
+            price: {
+                ...filters.price,
+                [type]: Number(value) || 0
+            }
         });
     };
-    
+
     return (
         <form className={styles.form}>
             {/* <div className={styles.form_filter_wrapper_price}>
@@ -79,8 +76,8 @@ export default function FilterForm({ data, handleChange, statusForm}) {
             <div className={styles.form_filter_wrapper_select}>
                 <div>
                     <label>От</label>
-                    <input 
-                        type="number" 
+                    <input
+                        type="number"
                         name="priceFrom"
                         value={filters.price?.from || ''}
                         onChange={(e) => handlePriceChange('from', e.target.value)}
@@ -90,8 +87,8 @@ export default function FilterForm({ data, handleChange, statusForm}) {
                 </div>
                 <div>
                     <label>До</label>
-                    <input 
-                        type="number" 
+                    <input
+                        type="number"
                         name="priceTo"
                         value={filters.price?.to || ''}
                         onChange={(e) => handlePriceChange('to', e.target.value)}
@@ -107,9 +104,9 @@ export default function FilterForm({ data, handleChange, statusForm}) {
                     className={styles.form_filter_wrapper_select}
                 >
                     <label htmlFor={el.name}>{el.name}</label>
-                    <select 
-                        name={el.name} 
-                        id={el.name} 
+                    <select
+                        name={el.name}
+                        id={el.name}
                         onChange={(e) => handleFilterChange(el.name, e.target.value)}
                     >
                         <option value="">Все</option>
@@ -120,7 +117,7 @@ export default function FilterForm({ data, handleChange, statusForm}) {
                         }
                     </select>
                 </div>
-           ))}
+            ))}
 
             <div className={styles.wrapper_btns}>
                 <button className={styles.form_btn_submit}>

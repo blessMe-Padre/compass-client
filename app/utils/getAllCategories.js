@@ -13,8 +13,8 @@ const getAllCategories = async () => {
         *   или так
         *   http://90.156.134.142:1337/api/categories?filters[slug][$eq]=letniy_i_zimniy_assortiment&populate[products][populate]=*
         */
-        
-        const res = await fetch(`http://90.156.134.142:1337/api/categories?filters[parent][$null]=true&populate[children][populate][children][populate]=*`);
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[parent][$null]=true&populate[children][populate][children][populate]=*`);
         if (!res.ok) {
             throw new Error(`Ошибка HTTP: ${res.status}`);
         }

@@ -1,6 +1,6 @@
 const getProductByDocumentId = async (id) => {
     try {
-        const res = await fetch(`http://90.156.134.142:1337/api/products/?filters[documentId][$eq]=${id}&populate=*`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/products/?filters[documentId][$eq]=${id}&populate=*`);
         if (!res.ok) {
             throw new Error(`Ошибка HTTP: ${res.status}`);
         }
