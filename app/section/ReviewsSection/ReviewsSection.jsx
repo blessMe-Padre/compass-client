@@ -4,12 +4,19 @@ import { useEffect, useState } from 'react';
 
 import getReviewsByProductId from '@/app/utils/getReviewsByProductId';
 import { PopupReviews, PopupText } from '@/app/components';
+
+import Image from 'next/image';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
+
 import styles from './style.module.scss';
 
 const ReviewsSection = ({ data }) => {
     const [activePopup, setActivePopup] = useState(false);
     const [activePopupText, setActivePopupText] = useState(false);
     const [reviews, setReviews] = useState([]);
+
+    const domain = 'http://90.156.134.142:1337';
 
     // Проверка на авторизацию
     const [auth, setAuth] = useState(false);
@@ -29,7 +36,6 @@ const ReviewsSection = ({ data }) => {
     const id = data?.documentId;
 
     const handleClick = () => {
-
         if (auth) {
             setActivePopup(!activePopup);
         } else {
@@ -52,6 +58,22 @@ const ReviewsSection = ({ data }) => {
         loadData();
     }, []);
 
+    useEffect(() => {
+        if (!reviews) return;
+
+        let lightbox = new PhotoSwipeLightbox({
+            gallery: '.pswp-gallery',
+            children: 'a',
+            pswpModule: () => import('photoswipe'),
+        });
+        lightbox.init();
+
+        return () => {
+            lightbox.destroy();
+            lightbox = null;
+        };
+    }, [reviews]);
+
     function getInitials(fullName) {
         const parts = fullName.trim().split(/\s+/);
         const [firstName, lastName] = parts;
@@ -73,7 +95,6 @@ const ReviewsSection = ({ data }) => {
                 </button>
 
                 <ul className={styles.list}>
-
                     {
                         reviews.filter(item => item.approved).map((item, index) => {
                             const date = new Date(item.publishedAt);
@@ -83,6 +104,37 @@ const ReviewsSection = ({ data }) => {
                                     <div className={styles.review_header}>
                                         <div className={styles.review_ava}>{getInitials(item?.name)}</div>
                                         <div className={styles.review_name}>{item?.name}</div>
+                                    </div>
+                                    <div className="pswp-gallery">
+                                        <ul className={styles.gallery_list}>
+                                            {item?.file.map((image, index) => {
+                                                console.log(image);
+
+                                                return (
+                                                    <li key={index}>
+                                                        <a
+                                                            href={`${domain}${image?.url}`}
+                                                            data-pswp-width={image.width}
+                                                            data-pswp-height={image.height}
+                                                            target='_blank'
+                                                            rel="noreferrer"
+                                                            key={index}
+                                                            className={`${styles.img_wrapper} dsv-image`}
+                                                        >
+                                                            <Image
+                                                                src={`${domain}${image?.url}`}
+                                                                alt="фото отзыва"
+                                                                width={200}
+                                                                height={200}
+                                                                placeholder="blur"
+                                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                            />
+                                                        </a>
+                                                    </li>
+                                                )
+                                            })
+                                            }
+                                        </ul>
                                     </div>
                                     <p className={styles.review_text}>{item?.fullText}</p>
                                     <div className={styles.review_footer}>
@@ -124,6 +176,26 @@ const ReviewsSection = ({ data }) => {
                 activePopupText={activePopupText}
                 setActivePopupText={setActivePopupText}
             />
+
+            {/* <div className="pswp-gallery2">
+                <a
+                    href='/info2.png'
+                    data-pswp-width={200}
+                    data-pswp-height={200}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <Image
+                        className='3333'
+                        src='/info2.png'
+                        alt="фото отзыва"
+                        width={200}
+                        height={200}
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                    />
+                </a>
+            </div> */}
         </>
     )
 }
