@@ -133,11 +133,17 @@ svg path {
   opacity: 1 !important;
   width: 100% !important;
   height: 2px !important;
+  border-radius: 0 !important;
 }
+
+.custom-pagination2 .swiper-pagination-bullet {
+  width: 50px !important;
+} 
 
 .swiper-pagination-bullet-active {
   background: var(--light-gray) !important;
 }
+
 
 .section {
   padding-top: clamp(3.125rem, 1.585rem + 6.573vw, 7.5rem);

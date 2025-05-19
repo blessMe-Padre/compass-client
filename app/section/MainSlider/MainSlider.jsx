@@ -64,10 +64,6 @@ const MainSlider = () => {
                 breakpoints={{
                     320: { slidesPerView: 1 },
                 }}
-                // отправляем кастомное событие при клике на слайдер
-                onTouchEnd={(swiper, event) => {
-                    document.dispatchEvent(new CustomEvent("sliderClick"));
-                }}
             >
                 {slides.map((slide, index) => {
                     return (
