@@ -5,11 +5,11 @@ import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
 
-export default function FilterForm({ data, handleChange, statusForm}) {    
+export default function FilterForm({ data, handleChangwe, statusForm}) {    
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
 
-    const arrPrice = data.map(el => parseInt(el?.price) || [])
+    const arrPrice = data?.map(el => parseInt(el?.price) || [])
 
     const maxPrice = parseInt(Math.max.apply(null, arrPrice));
     const minPrice = parseInt(Math.min.apply(null, arrPrice));
@@ -18,7 +18,7 @@ export default function FilterForm({ data, handleChange, statusForm}) {
     // TODO: 04.05.2025 - нужно доделать фильтрацию - по кнопке грузится форма, сейчас через useEffect
 
 
-    const attributes = data
+    const attributes = data !== undefined && data
         .flatMap(el => el?.attributes || []) // "Расплющиваем" массивы, изначально map возвращает [[]] - что неудобно (flatMap убирает пустые массивы)
         .reduce((acc, attr) => {
             // Группируем атрибуты по имени
