@@ -4,6 +4,8 @@ import styles from './style.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import fetchData from '@/app/utils/fetchData';
+
 const Footer = () => {
     const menu_categories = [
         {

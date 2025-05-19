@@ -1,15 +1,22 @@
 'use client';
-import { Breadcrumbs, ContentRenderer } from '@/app/components';
+import { Breadcrumbs, ContentRenderer, Popup } from '@/app/components';
 import Image from 'next/image';
 import styles from './style.module.scss';
 import useContactStore from '@/app/store/contactStore';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 export default function ContentPage({ data }) {
 
     const { contacts } = useContactStore();
+
+    const [activePopup, setActivePopup] = useState(false);
+
+    const handleClick = () => {
+        setActivePopup(!activePopup);
+    }
 
     return (
         <>
@@ -42,9 +49,13 @@ export default function ContentPage({ data }) {
                         {contacts.map(item => <Link className={styles.email} href={`mailto:+${item.email}`}>{item.email}</Link>)}
                     </div>
 
-                    <div>
-                        ЗАДАТЬ ВОПРОС
-                    </div>
+                    <button
+                        className={styles.button}
+                        onClick={handleClick}
+                    >
+                        Задать вопрос
+                    </button>
+
                 </div>
                 <div>
                     <div style={{ position: 'relative', overflow: 'hidden' }}>
@@ -65,6 +76,9 @@ export default function ContentPage({ data }) {
                 </div>
 
             </div>
+
+            <Popup forAsk setActivePopup={setActivePopup} activePopup={activePopup} />
+
         </>
     );
 }
