@@ -94,11 +94,11 @@ const PageMenu = ({ opened, setOpened, isHome }) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    {contacts[0]?.phones.map((item, idx) => 
+                    {contacts[0]?.phones.map((item, idx) =>
                         idx === 0 && (
-                            <a className={`${isHome ? styles.link_homeColor : styles.link_otherColor}`} href={`tel:${item.tel_for_robot}`}>{item.tel}</a>
+                            <a key={idx} className={`${isHome ? styles.link_homeColor : styles.link_otherColor}`} href={`tel:${item.tel_for_robot}`}>{item.tel}</a>
                         )
-                   )}
+                    )}
                 </div>
                 <div className={styles.icons_wrapper}>
                     <a href="#" className={`${styles.icon} ${isHome ? styles.icon_homeColor : styles.icon_otherColor}`}>
