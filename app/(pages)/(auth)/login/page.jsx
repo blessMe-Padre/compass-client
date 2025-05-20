@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import styles from './style.module.scss';
 
 import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/`;
@@ -42,7 +43,11 @@ const Login = () => {
                 document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
                 console.log('Успешный вход', data?.user?.username);
                 console.log('Данные пользователя', data);
-                router.push('/dashboard');
+
+                router.refresh(); // dirty fix, but it works
+                router.push("/dashboard");
+                window.location.href = '/dashboard';
+
             } else {
                 setError('Ошибка входа: неверный логин/пароль');
             }
