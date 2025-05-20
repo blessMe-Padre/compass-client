@@ -37,12 +37,13 @@ export default function CartInfo({ onSubmit, forSubmit }) {
                     <p>{totalQuantity} шт.</p>
                 </div>
                 <div>
-                    <p>Стоимость без учета доставки::</p>
+                    <p>Стоимость без учета доставки:</p>
                     <p>{formatPrice(totalSum)} ₽</p>
                 </div>
                 <div>
-                    <p>Скидка постоянного клиента::</p>
-                    <p title="Скидка по промокоду" style={{ color: 'red' }}>{promocodSales} %</p>                                        </div>
+                    <p>Скидка постоянного клиента:</p>
+                    <p title="Скидка по промокоду" style={{ color: 'red' }}>{promocodSales} %</p>
+                </div>
             </div>
 
             <PromocodComponent />

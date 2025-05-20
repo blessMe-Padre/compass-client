@@ -59,6 +59,7 @@
 
 .quantity {
     color: var(--black);
+    font-weight: 500;
 }
 
 .item_sku,
@@ -160,6 +161,8 @@
     border-radius: 20px;
     width: 30px;
     background-color: var(--black);
+    font-size: 16px;
+    color: var(--white);
 }
 
 .total_p {

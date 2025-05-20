@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import fetchData from '@/app/utils/fetchData';
+import { useEffect, useState } from 'react';
 import { Cookies } from '@/app/components';
 
 const Footer = () => {
@@ -112,7 +113,35 @@ const Footer = () => {
 
     ]
 
+    const [linksCatalog, setLinksCatalog] = useState();
     const { contacts } = useContactStore();
+
+    useEffect(() => {
+        const fetchLinks = async () => {
+            try {
+                const response = await fetchData(
+                    `${process.env.NEXT_PUBLIC_DOMAIN}/api/menyu-v-futere-dlya-kategorij?populate=*`
+                );
+                
+                if (!response?.data?.kategoriis) {
+                    throw new Error('Invalid response structure');
+                }
+
+                const data = response.data.kategoriis;
+                
+                setLinksCatalog(data);
+                
+                console.log('Fetched data:', data);
+                
+            } catch (error) {
+                console.error('Error fetching links:', error);
+            }
+        }
+    
+        fetchLinks();
+    }, []);
+    
+
 
 
     return (
@@ -181,21 +210,25 @@ const Footer = () => {
                                 </div>
                             </div>
 
+
+                    
                             <div className={styles.wrapper_catalog_menu}>
                                 <p className={styles.title_info}>
                                     КАТАЛОГ
                                 </p>
 
 
-                                <ul className={styles.menu_categories}>
-                                    {
-                                        menu_categories.map((el, idx) =>
-                                            <li key={idx} className={styles.menu_item}>
-                                                <a href={el.link}>{el.title}</a>
-                                            </li>
-                                        )
-                                    }
-                                </ul>
+                          <ul className={styles.menu_categories}>
+                                {
+                                    linksCatalog?.map((el, idx) =>
+                                        <li key={idx} className={styles.menu_item}>
+                                            <Link href={'/catalog'}>
+                                                {el.name}
+                                            </Link>
+                                        </li>
+                                    )
+                                }
+                            </ul>
 
                             </div>
 
