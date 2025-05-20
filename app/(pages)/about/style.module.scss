@@ -8,10 +8,11 @@
     }
 }
 
+
 .designer_fckg_wrapper {
     max-width: 40%;
 
-    @media (max-width: 780px) {
-       max-width: 100%;
+    @media (max-width: 780) {
+        max-width: 100%;
     }
 }

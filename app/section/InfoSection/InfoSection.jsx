@@ -26,7 +26,7 @@ function InfoSection() {
           </div>
 
           <LinkButton
-            href={'/'}
+            href={'/about'}
             text={'Подробнее'}
           />
         </div>
