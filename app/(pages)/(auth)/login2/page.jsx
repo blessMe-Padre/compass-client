@@ -21,60 +21,67 @@ const api = https://sms.targetsms.ru/sendsms.php?user=root&pwd=password&name_del
 response = 1179038981
 */
 
-export async function loginToTargetSMS(userData) {
-    const response = await fetch(api, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-    });
+const sendCode = async (phone) => {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/auth/send-code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone })
+        });
 
-    const data = await response.json();
-    return { response, data };
+        if (!res.ok) throw new Error('Ошибка отправки кода');
+        setStep('code');
+    } catch (err) {
+        setError(err.message);
+    }
 }
+
+const verifyCode = async (code) => {
+
+};
     
-export async function loginUserService(userData) {
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-    });
+// async function loginUserService(userData) {
+//     const response = await fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(userData),
+//     });
 
-    const data = await response.json();
-    return { response, data };
-}
+//     const data = await response.json();
+//     return { response, data };
+// }
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     //const [isSuccess, setIsSuccess] = useState(false); если response.ok
     const [error, setError] = useState();
     const [isSending, setIsSending] = useState(false);
+    const [step, setStep] = useState('phone');
 
     const router = useRouter();
 
-    const onSubmit = async (formData) => {
-        setIsSending(true);
-        setError(null);
+    // const onSubmit = async (formData) => {
+    //     setIsSending(true);
+    //     setError(null);
 
-        try {
-            const { response, data } = await loginUserService(formData);
-            if (response.ok) {
-                document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
-                console.log('Успешный вход', data?.user?.username);
-                console.log('Данные пользователя', data);
-                router.push('/dashboard');
-            } else {
-                setError('Ошибка входа: неверный логин/пароль');
-            }
-        } catch (error) {
-            setError('Ошибка запроса, попробуйте позже');
-        } finally {
-            setIsSending(false);
-        }
-    };
+    //     try {
+    //         const { response, data } = await loginUserService(formData);
+    //         if (response.ok) {
+    //             document.cookie = `jwt=${data.jwt}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
+    //             console.log('Успешный вход', data?.user?.username);
+    //             console.log('Данные пользователя', data);
+    //             router.push('/dashboard');
+    //         } else {
+    //             setError('Ошибка входа: неверный логин/пароль');
+    //         }
+    //     } catch (error) {
+    //         setError('Ошибка запроса, попробуйте позже');
+    //     } finally {
+    //         setIsSending(false);
+    //     }
+    // };
 
     return (
         <div className={styles.page_wrapper}>
@@ -83,17 +90,26 @@ const Login = () => {
                     <h1 className={styles.title}>Авторизация</h1>
                     <p className={styles.sub_title}>Для входа на сайт введите ваш номер телефона</p>
                     <div className={styles.form_wrapper}>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <form onSubmit={handleSubmit(step === 'phone' ?
+                            (data) => sendCode(data.phone) :
+                            (data) => verifyCode(data.code))}
+                        >
                             <div className={styles.form_item}>
                                 <input
-                                    id="phone"
-                                    name="phone"
-                                    type="text"
-                                    placeholder="Введите телефон"
-                                    className={`${errors.phone ? styles.error : ''}`}
-                                    {...register('phone', { required: { value: true, message: 'Введите номер телефона' } })}
-                                    error={errors.name}
+                                 id="phone"
+                                 name="phone"
+                                 type="text"
+                                 className={`${errors.phone ? styles.error : ''}`}
+                                    {...register('phone', {
+                                    required: 'Введите номер',
+                                    pattern: {
+                                        value: /^\+7\d{10}$/,
+                                        message: 'Формат: +79991234567'
+                                    }
+                                    })}
+                                    placeholder="+79991234567"
                                 />
+
                                 <div className={styles.input_text_error}>{errors['email'] && errors['email'].message}</div>
                             </div>
 
@@ -116,7 +132,7 @@ const Login = () => {
                             </div>
 
 
-                            <button className={styles.form_button}>
+                            <button type='submit' className={styles.form_button}>
                                 Получить код
                                 {!isSending &&
                                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
