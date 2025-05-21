@@ -42,16 +42,24 @@
 }
 
 .form_item input {
-    padding: 10px 20px;
+    padding: 16px 20px;
+    background-color: var(--super-light-gray);
+    border-radius: 6px;
+    border: none;
+    box-shadow: none;
+    outline: none;
 }
 
 .form_button {
+    border: none;
+    box-shadow: none;
     color: white;
     background-color: var(--blue);
     text-transform: uppercase;
-    padding: 10px 20px;
+    padding: 16px 20px;
     border-radius: 6px;
     width: 100%;
+    font-size: 18px;
     font-weight: 500;
     cursor: pointer;
 }
