@@ -104,24 +104,7 @@ const Register = () => {
                                 />
                                 <div className={styles.input_text_error}>{errors['password'] && errors['password'].message}</div>
                             </div>
-
-                            {/* <div className={styles.form_item_checkbox}>
-                                <div className={styles.checkbox_wrapper}>
-                                    <input
-                                        id="checkbox"
-                                        name="checkbox"
-                                        type="checkbox"
-                                        className={`${styles.checkbox} ${errors.checkbox ? styles.error : ''}`}
-                                        {...register('checkbox', { required: { value: true, message: 'Подтвердите согласие' } })}
-                                        error={errors.name}
-                                    />
-                                    <div>
-                                        Нажимая кнопку, даю согласие на <Link href='/policy'>обработку персональных данных</Link>
-                                    </div>
-                                </div>
-
-                                <div className={styles.input_text_error}>{errors['checkbox'] && errors['checkbox'].message}</div>
-                            </div> */}
+                            
                             <button className={styles.form_button}>
                                 зарегистрироваться
                                 {!sending &&
