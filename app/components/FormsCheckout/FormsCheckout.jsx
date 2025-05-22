@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { useImperativeHandle } from 'react';
 import { format } from 'date-fns';
 import getUserById from '@/app/utils/getUserById';
+import { Sdek } from '@/app/components';
 
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/zakazies`;
 
@@ -380,7 +381,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                         ))}
                     </div>
 
-                    {deliveryMethodsWithFields.includes(deliveryMethod) && (
+                    {deliveryMethodsWithFields.includes(deliveryMethod) && deliveryMethod !== 'Доставка СДЭК' && (
                         <div className={styles.address}>
                             <h3>Адрес доставки</h3>
 
@@ -409,6 +410,20 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                     </div>
                                 </motion.div>
                             ))}
+                        </div>
+                    )}
+
+                    {deliveryMethod === 'Доставка СДЭК' && (
+                        <div className={styles.address}>
+                            <h3>Выберите пункт выдачи СДЭК</h3>
+                            <motion.div
+                                variants={addressVariants}
+                                className={styles.input_wrapper}
+                            >
+                                <div className={styles.wrapper}>
+                                    <Sdek />
+                                </div>
+                            </motion.div>
                         </div>
                     )}
 

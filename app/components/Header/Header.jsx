@@ -458,7 +458,7 @@ const Header = () => {
     useEffect(() => {
         const fetchContacts = async () => {
             const response = await fetchData(`${domain}/api/kontakties?populate[social_links][populate]=*&populate[phones][populate]=*`);
-            setContacts(response.data)
+            setContacts(response.data || [])
         }
 
         fetchContacts();

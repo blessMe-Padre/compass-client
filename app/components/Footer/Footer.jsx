@@ -122,25 +122,24 @@ const Footer = () => {
                 const response = await fetchData(
                     `${process.env.NEXT_PUBLIC_DOMAIN}/api/menyu-v-futere-dlya-kategorij?populate=*`
                 );
-                
+
                 if (!response?.data?.kategoriis) {
                     throw new Error('Invalid response structure');
                 }
 
                 const data = response.data.kategoriis;
-                
+
                 setLinksCatalog(data);
-                
-                console.log('Fetched data:', data);
-                
+
             } catch (error) {
                 console.error('Error fetching links:', error);
+                setLinksCatalog([]);
             }
         }
-    
+
         fetchLinks();
     }, []);
-    
+
 
 
 
@@ -211,24 +210,24 @@ const Footer = () => {
                             </div>
 
 
-                    
+
                             <div className={styles.wrapper_catalog_menu}>
                                 <p className={styles.title_info}>
                                     КАТАЛОГ
                                 </p>
 
 
-                          <ul className={styles.menu_categories}>
-                                {
-                                    linksCatalog?.map((el, idx) =>
-                                        <li key={idx} className={styles.menu_item}>
-                                            <Link href={'/catalog'}>
-                                                {el.name}
-                                            </Link>
-                                        </li>
-                                    )
-                                }
-                            </ul>
+                                <ul className={styles.menu_categories}>
+                                    {
+                                        linksCatalog?.map((el, idx) =>
+                                            <li key={idx} className={styles.menu_item}>
+                                                <Link href={'/catalog'}>
+                                                    {el.name}
+                                                </Link>
+                                            </li>
+                                        )
+                                    }
+                                </ul>
 
                             </div>
 

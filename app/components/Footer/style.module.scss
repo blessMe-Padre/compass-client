@@ -4,11 +4,12 @@
     padding: 50px 0;
     margin-top: 120px;
 
+    background-color: var(--black2);
+
     @media (max-width: 900px) {
         margin-top: 80px;
     }
 
-    background-color: var(--black2);
 
     @media (max-width: 480px) {
         padding: 20px 0;
