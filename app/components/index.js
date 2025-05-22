@@ -47,3 +47,7 @@ export { default as Cookies } from './Cookies/Cookies';
 export { default as PromocodComponent } from './PromocodComponent/PromocodComponent';
 export { default as CartInfo } from './CartInfo/CartInfo';
 export { default as Preloader } from './Preloader/Preloader';
+
+
+// timer
+export { default as Timer } from './Timer/Timer';
