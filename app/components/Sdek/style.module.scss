@@ -1,2 +1,44 @@
 @use '@/app/mixins' as *;
 // @include adaptiv-value("font-size", 24, 13);
+
+.city_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.search_input {
+    padding: 5px 10px;
+}
+
+.button {
+    font-size: 14px;
+    border: none;
+    background-color: transparent;
+    color: var(--blue);
+    border-bottom: 1px dashed var(--blue);
+    cursor: pointer;
+}
+
+.list {
+    margin-top: 10px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1;
+
+    background-color: var(--white);
+    box-shadow: 0 2px 15px #0000004d, 0 5px 5px #00000038;
+}
+
+.item {
+    cursor: pointer;
+    padding: 5px 10px;
+    min-width: 250px;
+    margin-bottom: 5px;
+    color: var(--black);
+}

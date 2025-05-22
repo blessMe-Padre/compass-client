@@ -1,6 +1,6 @@
 'use client'
-
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
 import useCdekTokenStore from '@/app/store/cdekStore';
 
 import styles from './style.module.scss';
@@ -19,11 +19,21 @@ const localApiPvzUrl = '/api/cdek/pvz';
 
 export default function Sdek() {
     const { token, setToken } = useCdekTokenStore();
+    const [connectError, setConnectError] = useState(false);
 
+    // работа с городами
     const [cities, setCities] = useState(null);
+    const [currentCity, setCurrentCity] = useState(null);
+    const [isSearch, setIsSearch] = useState(false);
+
+    // работа с ПВЗ
     const [pvz, setPvz] = useState(null);
+    const [currentPvz, setCurrentPvz] = useState(null);
+    const [isPvzList, setIsPvzList] = useState(false);
+
     const [query, setQuery] = useState('');
     const [filteredCities, setFilteredCities] = useState([]);
+
 
     const handleAuth = async () => {
         const res = await fetch(localApiUrl, {
@@ -32,18 +42,23 @@ export default function Sdek() {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({
-                client_id: 'wqGwiQx0gg8mLtiEKsUinjVSICCjtTEP',
-                client_secret: 'RmAmgvSgSl1yirlz9QupbzOJVqhCxcP5',
+                client_id: process.env.NEXT_PUBLIC_CDEK_USER,
+                client_secret: process.env.NEXT_PUBLIC_CDEK_PASSWORD,
                 grant_type: 'client_credentials'
             })
         })
-        if (!res.ok) throw new Error(await res.text())
+        if (!res.ok) {
+            setConnectError(true);
+            throw new Error(await res.text());
+        }
         const data = await res.json()
         console.log('CDEK token:', data)
         setToken(data);
     }
 
     const handleGetCities = async () => {
+        setIsSearch(true);
+
         const res = await fetch(localApiCitiesUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -83,45 +98,121 @@ export default function Sdek() {
     }
 
     const handleSetCity = (city) => {
-        handleGetPvz(city.code)
+        handleGetPvz(city.code);
+        setCurrentCity(city.city);
+        setIsSearch(false);
+        setIsPvzList(true);
     }
 
+    const handleSetPvz = (pvz) => {
+        setCurrentPvz(pvz.name);
+        setIsPvzList(false);
+    }
+
+    const handleChangePvz = () => {
+        setIsPvzList(true);
+    }
+
+    useEffect(() => {
+        if (token && token.access_token) return;
+        handleAuth();
+    }, []);
+
+    const variants = {
+        visible: {
+            opacity: 1,
+            height: "auto",
+            visibility: 'visible',
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+            },
+        },
+        hidden: {
+            opacity: 0,
+            height: 0,
+            visibility: 'hidden',
+        },
+    };
+
     return (
-        <>
-            <div>
-                <button onClick={handleAuth}>Авторизоваться в CDEK</button>
-            </div>
-
-            <div>
-                <button onClick={handleGetCities}>Выбрать город</button>
-                <input
-                    type="text"
-                    placeholder="Введите название города"
-                    value={query}
-                    onChange={handleSearch}
-                />
-                <ul>
-                    {filteredCities.slice(0, 10).map((city, i) => (
-                        <li
-                            onClick={() => handleSetCity(city)}
-                            key={i}>
-                            {city.city}, {city.region} код {city.code}
-                        </li>
-                    ))}
-                </ul>
-
-                <ul>
-                    {pvz && pvz.map((item, i) => (
-                        <li
-                            key={i}
+        <div>
+            {connectError ? (<p>Ошибка получения данных от СДЭК</p>)
+                :
+                (
+                    <>
+                        <div className={styles.city_wrapper}>
+                            <p>{currentCity}</p>
+                            <button
+                                className={styles.button}
+                                onClick={handleGetCities}
+                            >
+                                {currentCity ? 'Изменить город' : 'Выбрать город'}
+                            </button>
+                        </div>
+                        <motion.div
+                            layout
+                            variants={variants}
+                            initial={"hidden"}
+                            animate={isSearch ? "visible" : "hidden"}
+                            className="overflow-hidden"
                         >
-                            <p>{item?.name}</p>
-                            <p>{item?.address_comment}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </>
+
+                            <input
+                                className={styles.search_input}
+                                type="text"
+                                placeholder="Введите название города"
+                                value={query}
+                                onChange={handleSearch}
+                            />
+                        </motion.div>
+
+                        <div className='relative'>
+                            {isSearch &&
+                                <ul className={styles.list}>
+                                    {filteredCities.slice(0, 10).map((city, i) => (
+                                        <li
+                                            onClick={() => handleSetCity(city)}
+                                            key={i}
+                                            className={styles.item}
+                                        >
+                                            {city.city}, {city.region}
+                                        </li>
+                                    ))}
+                                </ul>
+                            }
+
+                        </div>
+
+                        <div className='relative'>
+                            {currentPvz && <p>пункт выдачи: {currentPvz}</p>}
+                            {currentPvz &&
+                                <button
+                                    className={styles.button}
+                                    onClick={handleChangePvz}
+                                >
+                                    изменить пункт выдачи
+                                </button>
+                            }
+                            {isPvzList &&
+                                <ul className={styles.list}>
+                                    {pvz && pvz.map((item, i) => (
+                                        <li
+                                            key={i}
+                                            className={styles.item}
+                                            onClick={() => handleSetPvz(item)}
+                                        >
+                                            <p>{item?.name}</p>
+                                            <p>{item?.address_comment}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            }
+
+                        </div>
+                    </>
+                )}
+        </div>
     )
 
 }
