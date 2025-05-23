@@ -1,95 +1,99 @@
 @use '@/app/mixins' as *;
 
 .form_content {
-    max-width: 530px;
+  max-width: 530px;
 }
 
 .input_wrapper {
-    box-sizing: border-box;
-    width: 100%;
+  box-sizing: border-box;
+  width: 100%;
 }
-
-
 
 .errors {
-    border: 1px solid red;
+  border: 1px solid red;
 }
 
-  
 .wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  width: 100%;
+
+  input {
+    font-size: 18px;
+    background-color: var(--super-light-gray);
+    padding: 15px 25px;
+    color: var(--light-gray);
+    border-radius: 6px;
+    border: 1px solid var(--light-gray);
     width: 100%;
-  
-    input {
-        font-size: 18px;
-        background-color: var(--super-light-gray);
-        padding: 15px 25px;
-        color: var(--light-gray);
-        border-radius: 6px;
-        border: 1px solid var(--light-gray);
-        width: 100%;
-        transition: all 0.3s ease;
-        outline: none;
+    transition: all 0.3s ease;
+    outline: none;
 
 
-        // применится при фокусе к placeholder
-        &:focus::placeholder { 
-            transform: translateY(-200%) translateX(-100%);
-            font-size: 12px;
-            padding: 5px;
-            color: var(--white);
-            opacity: 0;
-        }
+    // применится при фокусе к placeholder
+    &:focus::placeholder {
+      transform: translateY(-200%) translateX(-100%);
+      font-size: 12px;
+      padding: 5px;
+      color: var(--white);
+      opacity: 0;
     }
-  
-    ::placeholder {
-      position: absolute;
-      top: 15px;
-      left: 25px;
-      color: #ACACAC;
-      font-size: 18px;
-      transition: transform 0.3s ease, font-size 0.3s ease, opacity 0.3s ease; 
-      pointer-events: none; 
-    }
+  }
+
+  ::placeholder {
+    position: absolute;
+    top: 15px;
+    left: 25px;
+    color: #ACACAC;
+    font-size: 18px;
+    transition: transform 0.3s ease, font-size 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+  }
 }
 
-.delivery_wrapper, .payment_wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.delivery_wrapper,
+.payment_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.payment h3, .delivery h3, .comment h3, .address h3 {
-    font-size: 24px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+.payment h3,
+.delivery h3,
+.comment h3,
+.address h3 {
+  font-size: 24px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.delivery_input, .payment_input {
+.delivery_input,
+.payment_input {
   position: absolute;
   opacity: 0;
-  
-  &:checked + label {
+
+  &:checked+label {
     border-color: var(--blue);
     background-color: var(--blue);
-    
+
     &::before {
       transform: scale(1);
     }
   }
 }
 
-.payment_address, .delivery_address {
-    margin-top: 20px;
-    margin-bottom: 20px;
+.payment_address,
+.delivery_address {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 
-.delivery_label, .payment_label {
+.delivery_label,
+.payment_label {
   display: flex;
   align-items: center;
   padding: 15px 20px;
@@ -100,7 +104,7 @@
   font-size: 15px;
   position: relative;
   padding-left: 45px;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -112,7 +116,7 @@
     border-radius: 50%;
     transition: all 0.2s ease;
   }
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -127,12 +131,12 @@
 
 }
 
-.delivery_input:checked + .delivery_label,
-.payment_input:checked + .payment_label {
+.delivery_input:checked+.delivery_label,
+.payment_input:checked+.payment_label {
   &::before {
     border-color: var(--white);
   }
-  
+
   &::after {
     transform: translateY(0) scale(1);
   }
@@ -147,35 +151,38 @@
 }
 
 .comment_wrapper p {
-    color: var(--light-gray);
-    margin: 10px 0;
+  color: var(--light-gray);
+  margin: 10px 0;
 }
 
 .comment_wrapper {
-    textarea {
-        padding: 10px;
-        height: 100px;
-        width: 100%;
-        background-color: var(--super-light-gray);
-        color: var(--black);
+  textarea {
+    padding: 10px;
+    height: 100px;
+    width: 100%;
+    background-color: var(--super-light-gray);
+    color: var(--black);
 
-    }
+  }
 
-    textarea:focus {
-        border: none;
-        box-sizing: border-box;
-        color: var(--black);
-        font-size: 16px;
-    }
+  textarea:focus {
+    border: none;
+    box-sizing: border-box;
+    color: var(--black);
+    font-size: 16px;
+  }
 }
 
 // Адаптив
 @media (max-width: 768px) {
-  .delivery, .payment {
+
+  .delivery,
+  .payment {
     padding: 20px 15px;
   }
-  
-  .delivery_label, .payment_label {
+
+  .delivery_label,
+  .payment_label {
     padding: 12px 15px 12px 40px;
     font-size: 14px;
   }

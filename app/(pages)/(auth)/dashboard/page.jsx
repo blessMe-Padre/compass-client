@@ -117,9 +117,15 @@ const Dashboard = () => {
                         initial={"hidden"}
                         animate={active === 1 ? "visible" : "hidden"}
                     >
-                        {user?.orders !== null ?
-                            <OrdersList orders={user?.orders} />
-                            :
+                        {Array.isArray(user?.orders) && user.orders.length > 0 ? (
+                            <OrdersList
+                                orders={[
+                                    ...new Map(
+                                        user.orders.map(order => [order.documentId, order])
+                                    ).values()
+                                ]}
+                            />
+                        ) : (
                             <div className='mb-30'>
                                 <p className={styles.bold}>Здесь еще ничего нет.</p>
                                 <p className='mb-20'>
@@ -130,6 +136,7 @@ const Dashboard = () => {
                                     text="Перейти в каталог"
                                 />
                             </div>
+                        )
                         }
 
                     </motion.div>

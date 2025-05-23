@@ -34,10 +34,8 @@ const OrdersList = ({ orders = [] }) => {
         const loadData = async () => {
             try {
                 const newProductsByOrder = {};
-
                 for (const order of orders) {
                     const productIds = [];
-
                     order.orderData?.forEach(data => {
                         data.quantity?.forEach(item => {
                             productIds.push(item.id);
