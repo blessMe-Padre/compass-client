@@ -8,7 +8,7 @@ export async function POST(request) {
     formBody.append('client_secret', body.client_secret)
     formBody.append('grant_type', body.grant_type)
 
-    const res = await fetch('https://api.edu.cdek.ru/v2/oauth/token', {
+    const res = await fetch('https://api.cdek.ru/v2/oauth/token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
