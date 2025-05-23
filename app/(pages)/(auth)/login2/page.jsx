@@ -1,11 +1,12 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './style.module.scss';
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Timer } from '@/app/components';
+import useUserStore from '@/app/store/userStore';
 
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/`;
 // Иван
@@ -48,7 +49,8 @@ const CodeStep = ({ register, errors }) => (
         id="code"
         name="code"
         type="text"
-        inputMode="numeric"
+        inputMode="numeric" 
+        // pattern="[0-9]"
         className={errors.code ? styles.error : ''}
         {...register('code', {
           required: 'Введите код',
@@ -57,6 +59,7 @@ const CodeStep = ({ register, errors }) => (
         })}
         placeholder="123456"
       />
+     
       {/* {errors.code && <div className={styles.input_text_error}>{errors.code.message}</div>} */}
     </div>
   )
@@ -155,62 +158,94 @@ const sendCode = async (phone) => {
 }
 
 const verifyCode = async (phone, code) => {
-    console.log(phone, code)
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/verify-code`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone, code})
+            body: JSON.stringify({ phone, code })
         });
 
-        if (!res.ok) throw new Error('Ошибка отправки кода');
-        setStep('verify');
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || 'Ошибка проверки кода');
+        }
+
+        return await res.json();
     } catch (err) {
-        setError(err.message);
+        throw err; // Пробрасываем ошибку для обработки в компоненте
     }
 };
 
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm()
-    const [step, setStep] = useState('phone')
-    const [phone, setPhone] = useState('')
-    const [isSending, setIsSending] = useState(false)
-    const [error, setError] = useState('')
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [step, setStep] = useState('phone');
+    const [phone, setPhone] = useState('');
+    const [isSending, setIsSending] = useState(false);
+    const [error, setError] = useState('');
+    const [jwt, setJWT] = useState('');
+
+    const { setUserDocumentId, userData } = useUserStore();
+
+
+    console.log(userData)
+
+    useEffect(() => {
+        if (jwt) {
+            setStep('authSuccess')
+            setAuthCookie(jwt);
+
+            alert('Вы успешно авторизовались')
+            setTimeout(() => {
+                redirectToDashboard();
+            }, 2000)
+        }
+    }, [jwt]);
+
+    const setAuthCookie = (token) => {
+        document.cookie = `jwt=${token}; path=/; max-age=${60 * 60 * 24 * 7}; Secure; SameSite=Strict`;
+    };
+
+    const redirectToDashboard = () => {
+        window.location.href = '/dashboard';
+    };
 
     const handlePhoneSubmit = async (data) => {
-        setIsSending(true)
+        setIsSending(true);
+        setError('');
+
         try {
-            await sendCode(data.phone)
-            setPhone(data.phone)
-
-            setStep('verify')
-
+            await sendCode(data.phone);
+            setPhone(data.phone);
+            setStep('verify');
         } catch (err) {
-            setError(err.message)
-            setStep('verify')
-
+            setError(err.message || 'Ошибка при отправке кода');
+                setStep('verify')
 
         } finally {
-            setIsSending(false)
+            setIsSending(false);
         }
-    }
+    };
     
-      const handleCodeSubmit = async (data) => {
+    const handleCodeSubmit = async (data) => {
         setIsSending(true)
         setPhone(data.phone)
         try {
-            await verifyCode(data.phone, data.code)
+            const response = await verifyCode(data.phone, data.code);
+            
+            useUserStore.getState().setUserDocumentId(response.user.documentId);
+            setJWT(response.jwt);
+            
+            await new Promise(resolve => setTimeout(resolve, 50));
+            
+            window.location.href = '/dashboard';
             
         } catch (err) {
-            setError(err.message)
-            
+            setError(err.message);
         } finally {
-          setIsSending(false)
+            setIsSending(false);
         }
-      }
-
-    console.log(phone);
+    }
 
    return (
         <div className={styles.page_wrapper}>
