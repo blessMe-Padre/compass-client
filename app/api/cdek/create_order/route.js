@@ -6,8 +6,8 @@ export async function POST(request) {
     const body = {
         type: 2,
         tariff_code: 800,
-        shipment_point: "VLK37", // заменить на реальный код
-        delivery_point: "USS18", // заменить на реальный код
+        shipment_point: "VLK37",
+        delivery_point: "USS18",
         comment: "Заказ с сайта",
         recipient: {
             name: "Иван Иванов",
@@ -18,9 +18,9 @@ export async function POST(request) {
             {
                 number: "1",
                 weight: 1000,
-                length: 10,
-                width: 10,
-                height: 10,
+                length: 40,
+                width: 30,
+                height: 20,
                 comment: "Упаковка с товаром",
             }
         ],

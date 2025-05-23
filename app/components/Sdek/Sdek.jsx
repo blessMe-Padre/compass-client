@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import useCdekTokenStore from '@/app/store/cdekStore';
+import useDeliveryStore from '@/app/store/deliveryStore';
 
 import styles from './style.module.scss';
 
@@ -19,6 +20,11 @@ const localApiPvzUrl = '/api/cdek/pvz';
 
 export default function Sdek() {
     const { token, setToken } = useCdekTokenStore();
+
+    const data = useDeliveryStore((state) => state);
+    const { storeData, setDeliveryData } = useDeliveryStore();
+    console.log('store data', storeData);
+
     const [connectError, setConnectError] = useState(false);
 
     // работа с городами
@@ -33,9 +39,6 @@ export default function Sdek() {
 
     // работа с тарифами
     const [tariff, setTariff] = useState(null);
-    console.log(tariff);
-
-
     const [query, setQuery] = useState('');
     const [filteredCities, setFilteredCities] = useState([]);
 
@@ -104,7 +107,7 @@ export default function Sdek() {
 
     const handleSetCity = (city) => {
         handleGetPvz(city.code);
-        console.log(city.code);
+        setDeliveryData({ city: city.city, cityCode: city.code });
 
         setCurrentCity(city.city);
         setIsSearch(false);
@@ -114,6 +117,7 @@ export default function Sdek() {
     const handleSetPvz = (pvz) => {
         setCurrentPvz(pvz.name);
         setIsPvzList(false);
+        setDeliveryData({ pvzName: pvz.name, pvzCode: pvz.code });
     }
 
     const handleChangePvz = () => {
@@ -182,6 +186,7 @@ export default function Sdek() {
         const order = await res.json();
         console.log('создан CDEK заказ:', order)
     }
+
     const handleGetTariff = async () => {
         const res = await fetch('/api/cdek/tariff', {
             method: 'POST',
