@@ -9,8 +9,9 @@ import { motion } from "framer-motion";
 import styles from './style.module.scss';
 import { Discounts, RelativeProducts } from '@/app/section';
 import useWishlistStore from '@/app/store/wishlistStore';
+import useUserStore from '@/app/store/userStore';
 
-const documentId = 'f9bh8d19a9ij1gg5zegvposx';
+
 // const documentId = 'bxgol3fvr7ei2e5522yrqpp6';
 
 /**
@@ -19,10 +20,21 @@ const documentId = 'f9bh8d19a9ij1gg5zegvposx';
  * Прокидываем юзера дальше вниз по табам 
  */
 
+const documentId = useUserStore.getState().userData?.documentId ?? 'f9bh8d19a9ij1gg5zegvposx';
+
+
 const Dashboard = () => {
     const router = useRouter();
     const [user, setUser] = useState({});
     const { wishlist } = useWishlistStore();
+
+    // const { userData } = useUserStore();
+  
+    // useEffect(() => {
+    //     console.log('UserData updated:', userData);
+    // }, [userData]);
+
+    // const documentId = userData?.documentId
 
     const variants = {
         visible: {
@@ -44,7 +56,8 @@ const Dashboard = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const response = await getUserById(documentId);
+                const response = await getUserById(`${documentId}`);
+                console.log(response)
                 setUser(response[0]);
 
             } catch (error) {
