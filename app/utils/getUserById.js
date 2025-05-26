@@ -1,5 +1,5 @@
 const getUserById = async (documentId) => {
-    console.log('KLJKLSDJKG:SFKL:GJSKFLGJKL:FGJKL:GJKL:SFJGKL:SF:', documentId)
+
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/users/?filters[documentId][$eq]=${documentId}&populate[orders][populate]=*`);
         if (!res.ok) {

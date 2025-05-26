@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import getUserById from '@/app/utils/getUserById';
 import { StarRating, Clipboard } from '@/app/components';
+import useUserStore from '@/app/store/userStore';
 import Image from "next/image";
 import styles from './style.module.scss';
 
@@ -60,8 +61,8 @@ const ReviewsForm = ({ data }) => {
     const [isSuccessSend, setIsSuccessSend] = useState(false); // успешная отправка формы
     const [submitError, setSubmitErrors] = useState(false); // ошибка при отправке формы
 
-    // получаем юзера
-    const documentId = 'f9bh8d19a9ij1gg5zegvposx';
+    const documentId = useUserStore.getState().userData?.documentId ?? '';
+
     useEffect(() => {
         const loadData = async () => {
             try {

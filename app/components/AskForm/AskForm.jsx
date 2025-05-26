@@ -31,7 +31,6 @@ export async function sendNewQuestion(orderData) {
     }
 }
 
-
 export default function FilterForm() {
 
     const { register, handleSubmit, formState: { errors }, control, reset, setValue, watch } = useForm();
@@ -58,16 +57,39 @@ export default function FilterForm() {
         }
     };
 
+    // function formatPhone(raw) {
+    //     const matrix = '+7 (___) ___ __ __';
+    //     let i = 0;
+    //     const digits = raw.replace(/\D/g, '').slice(0, 11);
+    //     return matrix.replace(/./g, (a) => {
+    //         if (/[_\d]/.test(a) && i < digits.length) {
+    //             return digits.charAt(i++);
+    //         }
+    //         return i >= digits.length ? '' : a;
+    //     });
+    // }
+
     function formatPhone(raw) {
-        const matrix = '+7 (___) ___ __ __';
-        let i = 0;
-        const digits = raw.replace(/\D/g, '').slice(0, 11);
-        return matrix.replace(/./g, (a) => {
-            if (/[_\d]/.test(a) && i < digits.length) {
-                return digits.charAt(i++);
-            }
-            return i >= digits.length ? '' : a;
-        });
+        let digits = raw.replace(/\D/g, '');
+        if (digits.startsWith('7')) {
+            digits = digits.slice(1);
+        }
+        digits = digits.slice(0, 10);
+        let result = '+7';
+
+        if (digits.length > 0) {
+            result += ' (' + digits.slice(0, Math.min(3, digits.length));
+        }
+        if (digits.length >= 3) {
+            result += ') ' + digits.slice(3, Math.min(6, digits.length));
+        }
+        if (digits.length >= 6) {
+            result += ' ' + digits.slice(6, Math.min(8, digits.length));
+        }
+        if (digits.length >= 8) {
+            result += ' ' + digits.slice(8, 10);
+        }
+        return result;
     }
 
     return (

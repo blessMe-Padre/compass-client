@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import getUserById from '@/app/utils/getUserById';
 import { Sdek } from '@/app/components';
 
+import useUserStore from '@/app/store/userStore';
 import useCdekTokenStore from '@/app/store/cdekStore';
 import useDeliveryStore from '@/app/store/deliveryStore';
 
@@ -21,7 +22,7 @@ export function getCurrentDate() {
     return format(new Date(), 'yyyy-MM-dd');
 }
 
-const documentId = 'f9bh8d19a9ij1gg5zegvposx';
+const documentId = useUserStore.getState().userData?.documentId ?? '';
 
 export async function sendOrderService(orderData) {
     try {
@@ -39,6 +40,29 @@ export async function sendOrderService(orderData) {
         console.error("sendOrder Service Error:", error);
         throw error;
     }
+}
+
+function formatPhone(raw) {
+    let digits = raw.replace(/\D/g, '');
+    if (digits.startsWith('7')) {
+        digits = digits.slice(1);
+    }
+    digits = digits.slice(0, 10);
+    let result = '+7';
+
+    if (digits.length > 0) {
+        result += ' (' + digits.slice(0, Math.min(3, digits.length));
+    }
+    if (digits.length >= 3) {
+        result += ') ' + digits.slice(3, Math.min(6, digits.length));
+    }
+    if (digits.length >= 6) {
+        result += ' ' + digits.slice(6, Math.min(8, digits.length));
+    }
+    if (digits.length >= 8) {
+        result += ' ' + digits.slice(8, 10);
+    }
+    return result;
 }
 
 export default function FormsCheckout({ type, ref, setSubmitted }) {
