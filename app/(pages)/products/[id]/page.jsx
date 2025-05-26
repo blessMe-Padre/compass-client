@@ -8,7 +8,7 @@ export async function generateMetadata({ params }) {
     const { id } = await params;
     const product = await getProductById(id);
     return {
-        title: product?.title,
+        title: `Компас СП | ${product?.title}`,
         description: product?.description,
     }
 }

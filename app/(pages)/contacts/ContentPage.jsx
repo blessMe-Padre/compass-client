@@ -32,13 +32,13 @@ export default function ContentPage({ data }) {
                         ТЕЛЕФОН:
                         <div>
                             {contacts[0]?.phones?.map((contact, index) => (
-                                <>
+                                <span key={index}>
                                     <Link key={`${contact.id}-${index}`}
                                         href={`tel:+${contact.tel_for_robot}`} className={styles.tel}>
                                         {contact.tel}
                                     </Link>
                                     {index !== contacts[0]?.phones.length - 1 && ', '}
-                                </>
+                                </span>
                             )
                             )}
                         </div>
@@ -46,7 +46,7 @@ export default function ContentPage({ data }) {
 
                     <div className='flex-column'>
                         E-MAIL
-                        {contacts.map(item => <Link className={styles.email} href={`mailto:+${item.email}`}>{item.email}</Link>)}
+                        {contacts.map((item, i) => <Link key={i} className={styles.email} href={`mailto:+${item.email}`}>{item.email}</Link>)}
                     </div>
 
                     <button

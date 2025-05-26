@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Preloader } from '..';
 
+import { Controller } from 'react-hook-form';
+
 const url = 'http://90.156.134.142:1337/api/zayavki-na-obratnuyu-svyazs'
 
 export async function sendNewQuestion(orderData) {
@@ -21,7 +23,6 @@ export async function sendNewQuestion(orderData) {
         console.log(response)
 
         const data = await response.json();
-        console.log('data', data)
 
         return { response, data };
     } catch (error) {
@@ -31,31 +32,43 @@ export async function sendNewQuestion(orderData) {
 }
 
 
-export default function FilterForm() {    
-    
-    const { register, handleSubmit, formState: { errors }, control, reset } = useForm();
+export default function FilterForm() {
+
+    const { register, handleSubmit, formState: { errors }, control, reset, setValue, watch } = useForm();
 
     const [error, setError] = useState();
     const [sending, isSending] = useState(false);
 
-      const onSubmit = async (formData) => {
-            isSending(true);
-    
-            try {
-                const { response, data } = await sendNewQuestion(formData);
-                if (response.ok) {
-                    reset();
-                } else {
-                    setError(data?.error?.message || 'Что-то пошло не так');
-                    console.error('Статус ошибки:', response.status, data);
-                }
-            } catch (err) {
-                setError('Ошибка запроса, попробуйте позже');
-                console.error('Fetch error:', err);
-            } finally {
-                isSending(false);
+    const onSubmit = async (formData) => {
+        isSending(true);
+
+        try {
+            const { response, data } = await sendNewQuestion(formData);
+            if (response.ok) {
+                reset();
+            } else {
+                setError(data?.error?.message || 'Что-то пошло не так');
+                console.error('Статус ошибки:', response.status, data);
             }
-        };
+        } catch (err) {
+            setError('Ошибка запроса, попробуйте позже');
+            console.error('Fetch error:', err);
+        } finally {
+            isSending(false);
+        }
+    };
+
+    function formatPhone(raw) {
+        const matrix = '+7 (___) ___ __ __';
+        let i = 0;
+        const digits = raw.replace(/\D/g, '').slice(0, 11);
+        return matrix.replace(/./g, (a) => {
+            if (/[_\d]/.test(a) && i < digits.length) {
+                return digits.charAt(i++);
+            }
+            return i >= digits.length ? '' : a;
+        });
+    }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -82,24 +95,30 @@ export default function FilterForm() {
 
                     <div className={styles.wrapper}>
                         <label htmlFor="phone">Телефон*</label>
-                        <input
-                            type='tel'
-                            id='phone'
-                            alt='phone'
-                            placeholder='Телефон*'
-                            className={`${errors.phone ? styles.errors : ''}`}
-                            {...register('phone', {
-                                required: {
-                                    value: true,
-                                    message: 'Телефон'
-                                }
-                            })}
-                            error={errors.name}
+                        <Controller
+                            name="phone"
+                            control={control}
+                            defaultValue=""
+                            rules={{ required: 'Телефон обязателен' }}
+                            render={({ field: { value, onChange, onBlur, ref } }) => (
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    placeholder="Телефон*"
+                                    ref={ref}
+                                    value={value}
+                                    onChange={(e) => {
+                                        const formatted = formatPhone(e.target.value);
+                                        onChange(formatted);
+                                    }}
+                                    onBlur={onBlur}
+                                />
+                            )}
                         />
                     </div>
                 </div>
 
-               
+
                 <button className={styles.button}>
                     Отправить
                     {!isSending && <Preloader />}

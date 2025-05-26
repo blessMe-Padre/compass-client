@@ -79,35 +79,35 @@ const Footer = () => {
 
     const menu_clients = [
         {
-            'link': '/',
+            'link': '/about',
             'title': 'О компании'
         },
         {
-            'link': '/',
+            'link': '/delivery',
             'title': 'Условия доставки'
         },
         {
-            'link': '/',
+            'link': '/payment',
             'title': 'Способы оплаты'
         },
         {
-            'link': '/',
+            'link': '/guarantee',
             'title': 'Гарантия на товар'
         },
         {
-            'link': '/',
+            'link': '/contacts',
             'title': 'Контакты'
         },
         {
-            'link': '/',
+            'link': '/offer',
             'title': 'Публичная оферта'
         },
         {
-            'link': '/',
+            'link': '/policy',
             'title': 'Политика конфиденциальности'
         },
         {
-            'link': '/',
+            'link': '/agrement',
             'title': 'Пользовательское соглашение'
         }
 
