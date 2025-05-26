@@ -12,6 +12,7 @@ export default function ContentPage() {
 
     const [activeTab, setActiveTab] = useState('physical');
     const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
     const { cartItems } = useCartStore();
 
     const formRef = useRef();
@@ -92,7 +93,12 @@ export default function ContentPage() {
                                                                     exit="exit"
                                                                     className={styles.physical_tab}
                                                                 >
-                                                                    <FormsCheckout ref={formRef} type={'physical'} setSubmitted={setIsSubmitSuccessful} />
+                                                                    <FormsCheckout
+                                                                        ref={formRef}
+                                                                        type={'physical'}
+                                                                        setSubmitted={setIsSubmitSuccessful}
+                                                                        setIsSubmit={setIsSubmit}
+                                                                    />
                                                                 </motion.div>
                                                             )}
 
@@ -112,7 +118,11 @@ export default function ContentPage() {
                                                     </div>
                                                 </div>
 
-                                                <CartInfo forSubmit={true} onSubmit={() => formRef.current?.submit()} />
+                                                <CartInfo
+                                                    isSubmit={isSubmit}
+                                                    setIsSubmit={setIsSubmit}
+                                                    forSubmit={true}
+                                                    onSubmit={() => formRef.current?.submit()} />
                                             </>
                                         )
                                     }

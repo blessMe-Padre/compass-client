@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
 
-export default function CartInfo({ onSubmit, forSubmit }) {
+export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit }) {
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
     // console.log('DeliveryData store ', storeData);
@@ -47,7 +47,7 @@ export default function CartInfo({ onSubmit, forSubmit }) {
         setAuth(!!jwt);
     }, []);
 
-
+    const buttonText = isSubmit ? 'Отправка...' : 'Оформить заказ';
     return (
 
         <div className={styles.cart_info}>
@@ -82,9 +82,9 @@ export default function CartInfo({ onSubmit, forSubmit }) {
                     {auth ?
                         forSubmit === true
                             ?
-                            <LinkButton onClick={onSubmit} forClick={true} href={'/checkout'} text={'Оформить заказ'} />
+                            <LinkButton onClick={onSubmit} forClick={true} href={'/checkout'} text={buttonText} />
                             :
-                            <LinkButton href={'/checkout'} text={'Оформить заказ'} />
+                            <LinkButton href={'/checkout'} text={buttonText} />
 
 
                         : <LinkButton href={'/dashboard'} text={'зарегистрироваться'} />

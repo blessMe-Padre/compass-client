@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 import styles from './style.module.scss'
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import useCartStore from '@/app/store/cartStore';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
 import { motion } from 'framer-motion';
@@ -65,7 +65,7 @@ function formatPhone(raw) {
     return result;
 }
 
-export default function FormsCheckout({ type, ref, setSubmitted }) {
+export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) {
     const [user, setUser] = useState({});
 
     const { token } = useCdekTokenStore();
@@ -302,6 +302,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
         isSending(true);
 
         try {
+            setIsSubmit(true);
             const { response, data } = await sendOrderService(formData);
             if (response.ok) {
                 setSubmitted(true);
@@ -315,9 +316,11 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
             }
         } catch (err) {
             setError('Ошибка запроса, попробуйте позже');
+            setIsSubmit(false);
             console.error('Fetch error:', err);
         } finally {
             isSending(false);
+            setIsSubmit(false);
         }
     };
 
@@ -367,9 +370,30 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                     })} error={errors.name}
                                     defaultValue={user?.phone ?? ''}
                                 />
+
+                                {/* <Controller
+                                    name="phone"
+                                    control={control}
+                                    defaultValue={user?.phone ? formatPhone(user.phone) : ''}
+                                    rules={{ required: 'Телефон обязателен' }}
+                                    render={({ field: { value, onChange, onBlur, ref } }) => (
+                                        <input
+                                            type="tel"
+                                            id="phone"
+                                            placeholder="Телефон*"
+                                            readOnly
+                                            ref={ref}
+                                            value={value}
+                                            onChange={(e) => {
+                                                const formatted = formatPhone(e.target.value);
+                                                onChange(formatted);
+                                            }}
+                                            onBlur={onBlur}
+                                        />
+                                    )}
+                                /> */}
                             </div>
                             <div className={styles.input_text_error}>{errors['tel'] && errors['tel'].message}</div>
-
                         </div>
 
                         <div className={styles.input_wrapper}>
