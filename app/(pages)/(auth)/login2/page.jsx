@@ -44,7 +44,7 @@ const PhoneStep = ({ register, errors }) => (
     </div>
 )
   
-const CodeStep = ({ register }) => {
+const CodeStep = ({ register, errors }) => {
     const [code, setCode] = useState(['', '', '', '', '', '']);
     const inputs = useRef([]);
     const [fullCode, setFullCode] = useState('');
@@ -106,19 +106,12 @@ const CodeStep = ({ register }) => {
                 <input
                     className='visually-hidden'
                     type="text"
-                    {...register('code', {
-                        required: 'Введите код',
-                        minLength: {
-                            value: 6,
-                            message: 'Код должен содержать 6 цифр'
-                        },
-                        maxLength: {
-                            value: 6,
-                            message: 'Код должен содержать 6 цифр'
-                        }
-                    })}
+                    {...register('code')}
                     value={fullCode}
                 />
+
+                {errors.code && <div className={styles.input_text_error}>{errors.code.message}</div>}
+
             </div>
         </div>
     )
@@ -171,7 +164,7 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step  }) => (
     </>
 )
   
-const CodeForm = ({ onSubmit, register, errors, isSending, error, phone, useWatch, handleChangePhone, step   }) => (
+const CodeForm = ({ onSubmit, register, errors, isSending, phone, useWatch, handleChangePhone, step   }) => (
     <>
         
         <h1 className={styles.title}>Введите код из sms</h1>
@@ -191,7 +184,7 @@ const CodeForm = ({ onSubmit, register, errors, isSending, error, phone, useWatc
         )}
         <div className={styles.form_wrapper}>
             <form onSubmit={onSubmit}>
-                <CodeStep register={register} useWatch={useWatch} />
+                <CodeStep register={register} errors={errors} useWatch={useWatch} />
                 <Timer 
                     isRunning={!isSending}
                     onResend={() => sendCode(phone)}
