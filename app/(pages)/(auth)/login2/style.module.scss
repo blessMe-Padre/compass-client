@@ -25,6 +25,7 @@
     font-family: var(--font-family);
     font-weight: 400;
     font-size: 18px;
+    text-align: center;
     color: var(--toggle-color);
     margin-bottom: 20px;
 }
@@ -59,6 +60,7 @@
     text-transform: uppercase;
     padding: 16px 20px;
     border-radius: 6px;
+    margin-top: 20px;
     width: 100%;
     font-size: 18px;
     font-weight: 500;
@@ -96,3 +98,28 @@
         text-decoration: underline;
     }
 }
+
+.code_input_wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+   
+}
+
+.code_input {
+    width: 50px;
+    height: 60px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid var(--light-gray);
+    border-radius: 6px;
+    transition: border-color 0.3s;
+    background-color: var(--super-light-gray);
+    padding: 0 !important;
+}
+
+.code_input:focus {
+    border-color: #0066cc;
+    outline: none;
+  }

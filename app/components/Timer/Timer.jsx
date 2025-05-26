@@ -2,20 +2,28 @@
 
 import { useState, useEffect } from "react"
 
-function Timer({ isRunning }) {
+function Timer({ isRunning = true, onResend }) {
     const [secondsLeft, setSecondsLeft] = useState(300);
+    const [isExpired, setIsExpired] = useState(false);
 
     useEffect(() => {
-        let intervalid;
+        let intervalId;
         
         if (isRunning && secondsLeft > 0) {
-            intervalid = setInterval(() => {
-                setSecondsLeft(secondsLeft - 1);
-            }, 1000)    
+            intervalId = setInterval(() => {
+                setSecondsLeft(prev => {
+                    if(prev <= 1) {
+                        clearInterval(intervalId);
+                        setIsExpired(true);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
         }
 
-        return () => clearInterval(intervalid);
-    }, [isRunning, secondsLeft])
+        return () => clearInterval(intervalId);
+    }, [isRunning, secondsLeft]);
 
     const formatTime = (secs) => {
         const minutes = Math.floor(secs / 60);
@@ -23,10 +31,34 @@ function Timer({ isRunning }) {
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     }
 
+    const handleResendClick = () => {
+        if(isExpired) {
+            setSecondsLeft(300);
+            setIsExpired(false);
+            onResend();
+        }
+    };
+
     return (
         <>
-            {isRunning === true && formatTime(secondsLeft) }
-        </>
+            {!isExpired ? (
+             <p>Запросить новый код через {formatTime(secondsLeft)} </p>
+            ) : (
+                <button 
+                    type="button" 
+                    onClick={handleResendClick}
+                    style={{ 
+                        background: 'none',
+                        border: 'none',
+                        color: 'inherit',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}
+                >
+                    Отправить повторно
+                </button>
+            )}        </>
     )
 }
 
