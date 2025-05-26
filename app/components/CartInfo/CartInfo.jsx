@@ -11,7 +11,7 @@ import { useCartTotals } from '@/app/hooks/useCartTotals';
 export default function CartInfo({ onSubmit, forSubmit }) {
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
-    console.log('DeliveryData store ', storeData);
+    // console.log('DeliveryData store ', storeData);
 
     const [promocodSales, setPromocodSales] = useState(10)
     const { totalQuantity, totalSum } = useCartTotals();

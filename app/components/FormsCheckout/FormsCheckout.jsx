@@ -160,6 +160,16 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
         }
     }))
 
+    useEffect(() => {
+        if (user) {
+            reset({
+                name: user.username || '',
+                email: user.email || '',
+                tel: user.phone || '',
+            });
+        }
+    }, [user, reset]);
+
     /**
      * 
      * TODO: нужно сделать получение documentID пользователя, заказа
@@ -274,7 +284,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                 setError(undefined);
                 reset();
                 clearCart();
-                handleCreateCdekOrder();
+                // handleCreateCdekOrder();
             } else {
                 setError(data?.error?.message || 'Что-то пошло не так');
                 console.error('Статус ошибки:', response.status, data);
@@ -313,6 +323,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                     defaultValue={user?.username ?? ''}
                                 />
                             </div>
+                            <div className={styles.input_text_error}>{errors['name'] && errors['name'].message}</div>
                         </div>
 
                         <div className={styles.input_wrapper}>
@@ -331,9 +342,10 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                         },
                                     })} error={errors.name}
                                     defaultValue={user?.phone ?? ''}
-
                                 />
                             </div>
+                            <div className={styles.input_text_error}>{errors['tel'] && errors['tel'].message}</div>
+
                         </div>
 
                         <div className={styles.input_wrapper}>
@@ -355,9 +367,10 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                     defaultValue={user?.email ?? ''}
                                 />
                             </div>
+                            <div className={styles.input_text_error}>{errors['email'] && errors['email'].message}</div>
                         </div>
 
-                        <div className={styles.input_wrapper}>
+                        {/* <div className={styles.input_wrapper}>
                             <div className={styles.wrapper}>
                                 <label htmlFor="inn">ИНН*</label>
                                 <input
@@ -374,10 +387,10 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                     })}
                                     error={errors.name}
                                     defaultValue={user?.inn ?? ''}
-
                                 />
                             </div>
-                        </div>
+                            <div className={styles.input_text_error}>{errors['inn'] && errors['inn'].message}</div>
+                        </div> */}
                     </>
 
                     :
@@ -392,7 +405,6 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                                     placeholder='Название организации'
                                     className={`${errors.name ? styles.errors : ''}`}
                                     {...register('nameOrganization', { required: { value: true, message: 'Введите nameOrganization' } })}
-
                                 />
                             </div>
                         </div>
