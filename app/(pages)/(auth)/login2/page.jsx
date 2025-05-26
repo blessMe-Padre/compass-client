@@ -1,12 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import styles from './style.module.scss';
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Timer } from '@/app/components';
 import useUserStore from '@/app/store/userStore';
+import { useRef } from 'react';
 
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/`;
 // Иван
@@ -39,32 +40,84 @@ const PhoneStep = ({ register, errors }) => (
         })}
         placeholder="+79991234567"
       />
-      {/* {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>} */}
+      {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
     </div>
 )
   
-const CodeStep = ({ register, errors }) => (
-    <div className={styles.form_item}>
-      <input
-        id="code"
-        name="code"
-        type="text"
-        inputMode="numeric" 
-        // pattern="[0-9]"
-        className={errors.code ? styles.error : ''}
-        {...register('code', {
-          required: 'Введите код',
-          minLength: { value: 6, message: 'Код должен содержать 6 цифр' },
-          maxLength: { value: 6, message: 'Код должен содержать 6 цифр' }
-        })}
-        placeholder="123456"
-      />
-     
-      {/* {errors.code && <div className={styles.input_text_error}>{errors.code.message}</div>} */}
-    </div>
-  )
+const CodeStep = ({ register, errors }) => {
+    const [code, setCode] = useState(['', '', '', '', '', '']);
+    const inputs = useRef([]);
+    const [fullCode, setFullCode] = useState('');
 
-const PhoneForm = ({ onSubmit, register, errors, isSending, error }) => (
+    const handleChange = (e, index) => {
+        const value = e.target.value.replace(/\D/g, '');
+        
+        if (value) {
+            const newCode = [...code];
+            newCode[index] = value;
+            setCode(newCode);
+            
+            const combined = newCode.join('');
+            setFullCode(combined);
+
+            if (index < 5) inputs.current[index + 1].focus();
+        }
+    };
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === 'Backspace' && !code[index] && index > 0) {
+            inputs.current[index - 1].focus();
+        }
+    };
+
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        const newCode = pasted.split('').concat(Array(6).fill('')).slice(0, 6);
+        setCode(newCode);
+        setFullCode(pasted);
+    };
+
+    useEffect(() => {
+        if (code.every(num => num !== '')) {
+            setFullCode(code.join(''));
+        }
+    }, [code]);
+
+    return (
+        <div className={styles.form_item}>
+            <div className={styles.code_input_wrapper}>
+                {code.map((digit, index) => (
+                    <input
+                        key={index}
+                        type="text"
+                        maxLength="1"
+                        value={digit}
+                        onChange={(e) => handleChange(e, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onPaste={handlePaste}
+                        ref={(el) => (inputs.current[index] = el)}
+                        className={`${styles.code_input}`}
+                        autoFocus={index === 0}
+                    />
+                ))}
+                
+                {/* Скрытое поле с объединенным кодом */}
+                <input
+                    className='visually-hidden'
+                    type="text"
+                    {...register('code')}
+                    value={fullCode}
+                />
+
+                {errors.code && <div className={styles.input_text_error}>{errors.code.message}</div>}
+
+            </div>
+        </div>
+    )
+};
+
+const PhoneForm = ({ onSubmit, register, errors, isSending, error, step  }) => (
     <>
         <h1 className={styles.title}>Авторизация</h1>
         <p className={styles.sub_title}>Для входа на сайт введите ваш номер телефона</p>
@@ -104,39 +157,42 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error }) => (
                         <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><radialGradient id="a9" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)"><stop offset="0" stopColor="#000000"></stop><stop offset=".3" stopColor="#000000" stopOpacity=".9"></stop><stop offset=".6" stopColor="#000000" stopOpacity=".6"></stop><stop offset=".8" stopColor="#000000" stopOpacity=".3"></stop><stop offset="1" stopColor="#000000" stopOpacity="0"></stop></radialGradient><circle transformOrigin="center" fill="none" stroke="url(#a9)" strokeWidth="15" strokeLinecap="round" strokeDasharray="200 1000" strokeDashoffset="0" cx="100" cy="100" r="70"><animateTransform type="rotate" attributeName="transform" calcMode="spline" dur="2" values="360;0" keyTimes="0;1" keySplines="0 0 1 1" repeatCount="indefinite"></animateTransform></circle><circle transformOrigin="center" fill="none" opacity=".2" stroke="#000000" strokeWidth="15" strokeLinecap="round" cx="100" cy="100" r="70"></circle></svg>
                     }
                 </button>
-                {/* {error && <div className={styles.error_message}>{error}</div>} */}
+                {error && <div className={styles.error_message}>{error}</div>}
 
             </form>
         </div>
     </>
 )
   
-const CodeForm = ({ onSubmit, register, errors, isSending, error, phone  }) => (
+const CodeForm = ({ onSubmit, register, errors, isSending, phone, useWatch, handleChangePhone, step   }) => (
     <>
+        
         <h1 className={styles.title}>Введите код из sms</h1>
-        <p className={styles.sub_title}>Отправили на номер {phone}</p>
+        <p className={styles.sub_title}>Отправили на номер <span style={{ fontWeight: '700'}}>{phone}</span></p>
 
+        {step === 'verify' && (
+            <p 
+                onClick={handleChangePhone}
+                style={{ 
+                    marginBottom: '20px', 
+                    textAlign: 'center', 
+                    textDecoration: 'underline', 
+                    cursor: 'pointer'
+                }}>
+                Изменить номер
+            </p>
+        )}
         <div className={styles.form_wrapper}>
             <form onSubmit={onSubmit}>
-                <CodeStep register={register} errors={error} />
-                
-                <p>Запросить новый код через <Timer isRunning={true} /></p>
+                <CodeStep register={register} errors={errors} useWatch={useWatch} />
+                <Timer 
+                    isRunning={!isSending}
+                    onResend={() => sendCode(phone)}
+                />
 
                 <button type='submit' className={styles.form_button}>
                     Войти
-        {/* 
-                    {!isSending &&
-                        <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.05507 1.43907L17.1536 1.43888M17.1536 1.43888L17.1536 14.3511M17.1536 1.43888L1.93782 16.6546" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    }
-
-                    {isSending &&
-                        <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><radialGradient id="a9" cx=".66" fx=".66" cy=".3125" fy=".3125" gradientTransform="scale(1.5)"><stop offset="0" stopColor="#000000"></stop><stop offset=".3" stopColor="#000000" stopOpacity=".9"></stop><stop offset=".6" stopColor="#000000" stopOpacity=".6"></stop><stop offset=".8" stopColor="#000000" stopOpacity=".3"></stop><stop offset="1" stopColor="#000000" stopOpacity="0"></stop></radialGradient><circle transformOrigin="center" fill="none" stroke="url(#a9)" strokeWidth="15" strokeLinecap="round" strokeDasharray="200 1000" strokeDashoffset="0" cx="100" cy="100" r="70"><animateTransform type="rotate" attributeName="transform" calcMode="spline" dur="2" values="360;0" keyTimes="0;1" keySplines="0 0 1 1" repeatCount="indefinite"></animateTransform></circle><circle transformOrigin="center" fill="none" opacity=".2" stroke="#000000" strokeWidth="15" strokeLinecap="round" cx="100" cy="100" r="70"></circle></svg>
-                    }
-                        */}
                 </button>
-                {/* {errors && <div className={styles.error_message}>{errors}</div>} */}
             </form>
         </div>
   </>
@@ -165,6 +221,8 @@ const verifyCode = async (phone, code) => {
             body: JSON.stringify({ phone, code })
         });
 
+        res.status === 401 ? alert('Данный код уже был использован') : ''
+
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || 'Ошибка проверки кода');
@@ -178,15 +236,21 @@ const verifyCode = async (phone, code) => {
 
 
 const Login = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, useWatch, formState: { errors } } = useForm();
     const [step, setStep] = useState('phone');
     const [phone, setPhone] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState('');
     const [jwt, setJWT] = useState('');
 
-    const { setUserDocumentId, userData } = useUserStore();
+    const { userData } = useUserStore();
 
+    const handleChangePhone = () => {
+        setPhone('');
+        setStep('phone');
+        setError('');
+        setIsSending(false); 
+    };
 
     console.log(userData)
 
@@ -214,14 +278,14 @@ const Login = () => {
         setIsSending(true);
         setError('');
 
+        setPhone(data.phone)
+
         try {
             await sendCode(data.phone);
-            setPhone(data.phone);
             setStep('verify');
         } catch (err) {
             setError(err.message || 'Ошибка при отправке кода');
-                setStep('verify')
-
+            setStep('verify')
         } finally {
             setIsSending(false);
         }
@@ -257,6 +321,7 @@ const Login = () => {
                         errors={errors}
                         isSending={isSending}
                         error={error}
+                        step={step}
                     />
                 ) : (
                     <CodeForm
@@ -264,7 +329,10 @@ const Login = () => {
                         register={register}
                         errors={errors}
                         isSending={isSending}
+                        handleChangePhone={handleChangePhone}
+                        useWatch={useWatch}
                         error={error}
+                        step={step}
                         phone={phone}
                     />
                 )}
