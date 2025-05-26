@@ -42,7 +42,7 @@ function Timer({ isRunning = true, onResend }) {
     return (
         <>
             {!isExpired ? (
-             <p>Запросить новый код через {formatTime(secondsLeft)} </p>
+             <p style={{ textAlign: 'center'}}>Запросить новый код через {formatTime(secondsLeft)} </p>
             ) : (
                 <button 
                     type="button" 
