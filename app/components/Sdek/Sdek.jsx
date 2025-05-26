@@ -21,10 +21,8 @@ const localApiPvzUrl = '/api/cdek/pvz';
 export default function Sdek() {
     const { token, setToken } = useCdekTokenStore();
 
-    const data = useDeliveryStore((state) => state);
-    const { storeData, setDeliveryData } = useDeliveryStore();
-    console.log('store data', storeData);
-
+    // const data = useDeliveryStore((state) => state);
+    const { setDeliveryData } = useDeliveryStore();
     const [connectError, setConnectError] = useState(false);
 
     // работа с городами
@@ -41,7 +39,6 @@ export default function Sdek() {
     const [tariff, setTariff] = useState(null);
     const [query, setQuery] = useState('');
     const [filteredCities, setFilteredCities] = useState([]);
-
 
     const handleAuth = async () => {
         const res = await fetch(localApiUrl, {
@@ -76,7 +73,6 @@ export default function Sdek() {
         if (!res.ok) throw new Error(await res.text())
 
         const cities = await res.json();
-        console.log('CDEK города:', cities)
         setCities(cities);
     }
 
@@ -90,7 +86,6 @@ export default function Sdek() {
         if (!res.ok) throw new Error(await res.text())
 
         const pvz = await res.json();
-        console.log('пункты выдачи:', pvz)
         setPvz(pvz);
     }
 
@@ -112,6 +107,8 @@ export default function Sdek() {
         setCurrentCity(city.city);
         setIsSearch(false);
         setIsPvzList(true);
+
+        handleGetTariff(city.code);
     }
 
     const handleSetPvz = (pvz) => {
@@ -122,6 +119,27 @@ export default function Sdek() {
 
     const handleChangePvz = () => {
         setIsPvzList(true);
+    }
+
+    const handleGetTariff = async (city) => {
+        const res = await fetch('/api/cdek/tariff', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, city })
+        });
+
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+
+        ///фильтруем массив подходящих тарифов по имени */
+        const filteredTariffs = data.tariff_codes?.filter(tariff => tariff.tariff_name === "Экспресс склад-склад");
+        setTariff(filteredTariffs[0]);
+
+        setDeliveryData({
+            tariffName: filteredTariffs[0]?.tariff_name,
+            tariffCode: filteredTariffs[0]?.tariff_code,
+            deliveryPrice: filteredTariffs[0]?.delivery_sum
+        });
     }
 
     useEffect(() => {
@@ -161,48 +179,6 @@ export default function Sdek() {
         console.log('CDEK заказы:', order)
     }
 
-    const handleGetOrdersByUuid = async () => {
-        const res = await fetch('/api/cdek/order_uuid', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
-        })
-
-        if (!res.ok) throw new Error(await res.text())
-
-        const order = await res.json();
-        console.log('CDEK заказ по UUID: ', order)
-    }
-
-    const handleCreateOrder = async () => {
-        const res = await fetch('/api/cdek/create_order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
-        })
-
-        if (!res.ok) throw new Error(await res.text())
-
-        const order = await res.json();
-        console.log('создан CDEK заказ:', order)
-    }
-
-    const handleGetTariff = async () => {
-        const res = await fetch('/api/cdek/tariff', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
-        });
-
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
-
-        ///фильтруем массив подходящих тарифов по имени */
-        const filteredTariffs = data.tariff_codes?.filter(tariff => tariff.tariff_name === "Экспресс склад-склад");
-
-        setTariff(filteredTariffs[0]);
-    }
-
     return (
         <div>
             {connectError ? (<p>Ошибка получения данных от СДЭК</p>)
@@ -212,6 +188,7 @@ export default function Sdek() {
                         <div className={styles.city_wrapper}>
                             <p>{currentCity}</p>
                             <button
+                                type="button"
                                 className={styles.button}
                                 onClick={handleGetCities}
                             >
@@ -278,18 +255,16 @@ export default function Sdek() {
                             }
 
                         </div>
-
+                        {/* 
                         <p style={{ marginBottom: "10px" }}><button onClick={handleGetOrders}>получить все заказы</button></p>
-                        <p style={{ marginBottom: "10px" }}><button onClick={handleCreateOrder}>создать заказ</button></p>
+                        <p style={{ marginBottom: "10px" }}><button onClick={handleCreateCdekOrder}>создать заказ</button></p>
                         <p style={{ marginBottom: "10px" }}><button onClick={handleGetOrdersByUuid}>получить заказ по uuid</button></p>
                         <p style={{ marginBottom: "10px" }}><button onClick={handleGetTariff}>получить стоимость и код тарифа</button></p>
+ */}
 
                         {tariff && (
-                            <>
-                                <p>name: {tariff.tariff_name}</p>
-                                <p>code: {tariff.tariff_code}</p>
-                                <p>sum: {tariff.delivery_sum}</p>
-                            </>
+
+                            <p style={{ marginTop: "10px" }}>ориентировочная стоимость доставки: {tariff.delivery_sum}</p>
                         )}
 
                     </>

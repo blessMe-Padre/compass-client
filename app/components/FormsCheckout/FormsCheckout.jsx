@@ -12,6 +12,9 @@ import { format } from 'date-fns';
 import getUserById from '@/app/utils/getUserById';
 import { Sdek } from '@/app/components';
 
+import useCdekTokenStore from '@/app/store/cdekStore';
+import useDeliveryStore from '@/app/store/deliveryStore';
+
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/zakazies`;
 
 export function getCurrentDate() {
@@ -39,6 +42,10 @@ export async function sendOrderService(orderData) {
 }
 
 export default function FormsCheckout({ type, ref, setSubmitted }) {
+    const [user, setUser] = useState({});
+
+    const { token } = useCdekTokenStore();
+    const { storeData, setDeliveryData } = useDeliveryStore();
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -48,13 +55,13 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
      * TODO: вынести в кастомный хук
      */
 
-    const [user, setUser] = useState({});
-
     useEffect(() => {
         const loadData = async () => {
             try {
                 const response = await getUserById(documentId);
                 setUser(response[0]);
+                const userData = response[0];
+                setDeliveryData({ username: userData.username, phone: userData.phone, email: userData.email });
 
             } catch (error) {
                 console.error('Произошла ошибка', error);
@@ -98,6 +105,17 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
     const email = useWatch({ control, name: 'email' });
     const inn = useWatch({ control, name: 'inn' });
 
+    // следим за обновлением полей 
+    useEffect(() => {
+        setDeliveryData({ username: name });
+    }, [name]);
+    useEffect(() => {
+        setDeliveryData({ phone: phone });
+    }, [phone]);
+    useEffect(() => {
+        setDeliveryData({ email: email });
+    }, [email]);
+
     const nameOrganization = useWatch({ control, name: 'nameOrganization' });
 
     const fullAddress = useWatch({ control, name: 'fullAddress' });
@@ -107,7 +125,10 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
     const apartment = useWatch({ control, name: 'apartment' });
 
 
-    const orderText = useWatch({ control, name: 'orderText' })
+    const orderText = useWatch({ control, name: 'orderText' });
+    useEffect(() => {
+        setDeliveryData({ comment: orderText });
+    }, [orderText]);
 
     const deliveryMethodsWithFields = [
         'Доставка СДЭК',
@@ -146,6 +167,29 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
      * сделать динамическое получение данных из полей
      * 
      */
+
+    // Собираем данные из формы и создаем заказ СДЭК
+    const handleCreateCdekOrder = async () => {
+        const orderData = {
+            comment: storeData.comment,
+            email: storeData.email,
+            phone: storeData.phone,
+            username: storeData.username,
+            delivery_point: storeData.pvzCode,
+            tariffCode: storeData.tariffCode,
+        }
+
+        const res = await fetch('/api/cdek/create_order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, orderData })
+        })
+
+        if (!res.ok) throw new Error(await res.text())
+
+        const order = await res.json();
+        console.log('создан CDEK заказ:', order)
+    }
 
     const onSubmit = async () => {
         // Собираем данные доставки только если нужно
@@ -230,6 +274,7 @@ export default function FormsCheckout({ type, ref, setSubmitted }) {
                 setError(undefined);
                 reset();
                 clearCart();
+                handleCreateCdekOrder();
             } else {
                 setError(data?.error?.message || 'Что-то пошло не так');
                 console.error('Статус ошибки:', response.status, data);

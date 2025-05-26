@@ -3,11 +3,9 @@ import { NextResponse } from 'next/server'
 export async function POST(request) {
     const { token } = await request.json()
 
-    // 10120003926 - 9a497fa4-14f3-45be-8d39-6f1c3e70abd8
+    // f0dfd0e7-d0fd-4fac-b1a1-4c55cc55b1c4
 
-    // 23c1c87b-09a0-434b-ae18-8813ce4e24f9
-
-    const res = await fetch('https://api.cdek.ru/v2/orders/23c1c87b-09a0-434b-ae18-8813ce4e24f9', {
+    const res = await fetch('https://api.cdek.ru/v2/orders/f0dfd0e7-d0fd-4fac-b1a1-4c55cc55b1c4', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,

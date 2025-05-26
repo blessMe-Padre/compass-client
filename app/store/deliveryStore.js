@@ -10,7 +10,11 @@ const useDeliveryStore = create((set) => ({
         tariffName: '',
         tariffCode: null,
         deliveryPrice: 0,
-        orderUuid: ''
+        orderUuid: '',
+        username: '',
+        phone: '',
+        email: '',
+        comment: ''
     },
 
     setDeliveryData: (newData) =>
@@ -22,5 +26,7 @@ const useDeliveryStore = create((set) => ({
         })),
 
 }));
+
+// setDeliveryData({ city: city.city, cityCode: city.code });
 
 export default useDeliveryStore;

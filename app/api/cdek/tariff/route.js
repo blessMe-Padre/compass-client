@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
-    const { token } = await request.json();
+    const { token, city } = await request.json();
     const body = {
         type: 2,
         from_location: {
             "code": 288,
         },
         to_location: {
-            "code": 955,
+            "code": city,
         },
         packages: [
             {

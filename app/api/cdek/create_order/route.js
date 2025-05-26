@@ -1,18 +1,21 @@
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
-    const { token } = await request.json();
+    const { token, orderData } = await request.json();
+
+    console.log(orderData);
+
 
     const body = {
         type: 2,
-        tariff_code: 800,
+        tariff_code: orderData.tariffCode,
         shipment_point: "VLK37",
-        delivery_point: "USS18",
-        comment: "Заказ с сайта",
+        delivery_point: orderData.delivery_point,
+        comment: orderData.comment,
         recipient: {
-            name: "Иван Иванов",
-            email: "ivan@example.com",
-            phones: [{ number: "+79991234567" }]
+            name: orderData.username,
+            email: orderData.email,
+            phones: [{ number: orderData.phone }]
         },
         packages: [
             {
