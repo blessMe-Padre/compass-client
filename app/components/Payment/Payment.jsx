@@ -4,9 +4,6 @@ import { useRouter } from 'next/navigation';
 
 export default function Payment() {
     const [paymentData, setPaymentData] = useState(null);
-
-    console.log('paymentData', paymentData);
-
     const router = useRouter();
 
     useEffect(() => {

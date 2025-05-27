@@ -6,6 +6,7 @@ import { useForm, useWatch, Controller } from 'react-hook-form';
 import useCartStore from '@/app/store/cartStore';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 import { useImperativeHandle } from 'react';
 import { format } from 'date-fns';
@@ -15,6 +16,8 @@ import { Sdek } from '@/app/components';
 import useUserStore from '@/app/store/userStore';
 import useCdekTokenStore from '@/app/store/cdekStore';
 import useDeliveryStore from '@/app/store/deliveryStore';
+
+
 
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/zakazies`;
 
@@ -41,6 +44,39 @@ export async function sendOrderService(orderData) {
         throw error;
     }
 }
+
+const sendPaymentService = async () => {
+    try {
+        const payload = {
+            amountValue: '2.00',
+            currency: 'RUB',
+            returnUrl: window.location.href
+        };
+
+        const response = await fetch('/api/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        return result;
+
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.error || 'Ошибка при создании платежа');
+        }
+
+    } catch (err) {
+        console.log(err);
+
+    } finally {
+
+    }
+};
+
 
 function formatPhone(raw) {
     let digits = raw.replace(/\D/g, '');
@@ -70,6 +106,11 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
 
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
+
+    const [paymentData, setPaymentData] = useState(null);
+    console.log('paymentData', paymentData);
+
+    const router = useRouter();
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -111,8 +152,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
     ]
 
     const arrPaymentMethod = [
-        { id: 'pay1', label: 'Оплата онлайн банковской картой' },
-        { id: 'pay2', label: 'СБП' },
+        { id: 'pay1', label: 'Оплата онлайн на сайте' },
         { id: 'pay3', label: 'Оплата наличными при получении' }
     ]
 
@@ -194,15 +234,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
         }
     }, [user, reset]);
 
-    /**
-     * 
-     * TODO: нужно сделать получение documentID пользователя, заказа
-     * сделать проверку на то не существует ли данный заказ уже
-     * сделать динамическое получение данных из полей
-     * 
-     */
-
     // Собираем данные из формы и создаем заказ СДЭК
+    // раскомментировать вызов функции
     const handleCreateCdekOrder = async () => {
         const orderData = {
             comment: storeData.comment,
@@ -224,6 +257,12 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
         const order = await res.json();
         console.log('создан CDEK заказ:', order)
     }
+
+    // useEffect(() => {
+    //     if (paymentData) {
+    //         router.push(paymentData.confirmation.confirmation_url);
+    //     }
+    // }, [paymentData, router]);
 
     const onSubmit = async () => {
         // Собираем данные доставки только если нужно
@@ -301,7 +340,21 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
 
         isSending(true);
 
+        /**
+         * TODO: тут еще нужно дождаться ответа от http юкассы 
+         */
+
         try {
+            if (paymentMethod === "Оплата онлайн на сайте") {
+                const paymentResult = await sendPaymentService();
+                setPaymentData(paymentResult.data);
+
+                // if (!paymentResult.success) {
+                //     // throw new Error(paymentResult.error || "Оплата не прошла");
+                // }
+            }
+
+            // отправка заказа в страпи и в сдэк
             setIsSubmit(true);
             const { response, data } = await sendOrderService(formData);
             if (response.ok) {
@@ -314,14 +367,15 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
                 setError(data?.error?.message || 'Что-то пошло не так');
                 console.error('Статус ошибки:', response.status, data);
             }
-        } catch (err) {
+
             setError('Ошибка запроса, попробуйте позже');
             setIsSubmit(false);
-            console.error('Fetch error:', err);
-        } finally {
-            isSending(false);
-            setIsSubmit(false);
+            router.push(paymentData.confirmation.confirmation_url);
+        } catch (err) {
+            console.error('Общая ошибка отправки создания заказа:', err);
         }
+
+        // ===============================
     };
 
     return (
@@ -370,28 +424,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
                                     })} error={errors.name}
                                     defaultValue={user?.phone ?? ''}
                                 />
-
-                                {/* <Controller
-                                    name="phone"
-                                    control={control}
-                                    defaultValue={user?.phone ? formatPhone(user.phone) : ''}
-                                    rules={{ required: 'Телефон обязателен' }}
-                                    render={({ field: { value, onChange, onBlur, ref } }) => (
-                                        <input
-                                            type="tel"
-                                            id="phone"
-                                            placeholder="Телефон*"
-                                            readOnly
-                                            ref={ref}
-                                            value={value}
-                                            onChange={(e) => {
-                                                const formatted = formatPhone(e.target.value);
-                                                onChange(formatted);
-                                            }}
-                                            onBlur={onBlur}
-                                        />
-                                    )}
-                                /> */}
                             </div>
                             <div className={styles.input_text_error}>{errors['tel'] && errors['tel'].message}</div>
                         </div>
@@ -533,9 +565,12 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
                     )}
 
                 </div>
-                <p className={styles.delivery_address}>
-                    г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
-                </p>
+
+                {deliveryMethod === 'Самовывоз' &&
+                    <p className={styles.delivery_address}>
+                        г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
+                    </p>
+                }
 
                 <div className={styles.payment}>
                     <h3>Способ оплаты</h3>
@@ -565,6 +600,10 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
                         ))}
                     </div>
                 </div>
+
+                {paymentMethod === "Оплата онлайн на сайте" &&
+                    <p>выбран метод оплаты "Оплата онлайн на сайте"</p>
+                }
 
                 <div className={styles.comment}>
                     <h3>Комментарий к заказу</h3>
