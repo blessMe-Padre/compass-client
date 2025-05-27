@@ -42,6 +42,7 @@ export { default as StarRating } from './StarRating/StarRating';
 export { default as Clipboard } from './Clipboard/Clipboard';
 export { default as Cookies } from './Cookies/Cookies';
 export { default as Sdek } from './Sdek/Sdek';
+export { default as Payment } from './Payment/Payment';
 
 // микро компоненты
 // чекбоксы, input, btn
