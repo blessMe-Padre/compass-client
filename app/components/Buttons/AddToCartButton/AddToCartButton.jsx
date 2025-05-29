@@ -36,16 +36,16 @@ const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) 
             quantity: item?.amount !== 0 || item?.amount !== null ? 1 : 0,
         });
 
-
-
     const handleClick = () => {
+        localStorage.setItem('orderPlaced', false);
         if (many && items.length > 0) {
             const products = items.map(prepareProduct);
+
+            // удалить из localstore флаг 
             addManyToCart(products);
         } else if (item) {
             addToCart(prepareProduct(item));
         }
-
     }
 
     return (

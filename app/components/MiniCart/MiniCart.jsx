@@ -15,7 +15,6 @@ export default function MiniCart({ cartItems }) {
         return price.toLocaleString('ru-Ru')
     };
 
-
     return (
         <div>
             {cartItems.map((el, idx) => (

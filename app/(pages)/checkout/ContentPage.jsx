@@ -13,7 +13,9 @@ export default function ContentPage() {
     const [activeTab, setActiveTab] = useState('physical');
     const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
+    const [orderWasCreate, setOrderWasCreate] = useState(true);
     const { cartItems } = useCartStore();
+
 
     const formRef = useRef();
 
@@ -31,18 +33,27 @@ export default function ContentPage() {
         }
     };
 
+    let wasOrdered = false;
+    if (typeof window !== 'undefined') {
+        wasOrdered = localStorage.getItem('orderPlaced') === 'false';
+        console.log(wasOrdered);
+    }
+
     return (
         <section>
             <div className='container'>
                 <h2 className='page_title'>{isSubmitSuccessful ? <span>Спасибо!</span> : <span>Оформление </span>}</h2>
 
                 <div className={styles.wrapper}>
+                    {orderWasCreate && <p>Ожидайте, перенаправления на страницу оплату</p>}
+
                     {
-                        isSubmitSuccessful
+                        isSubmitSuccessful || wasOrdered || !orderWasCreate
                             ?
                             <div>
                                 <p style={{ marginBottom: '20px' }}>Ваш заказ № <span style={{ fontWeight: 700 }}> </span> оформлен, ожидайте смс о готовности</p>
-                                <LinkButton href='/dashboard' text={'Просмотреть заказ'} />
+                                <p style={{ marginBottom: '20px' }}><span style={{ fontWeight: 700 }}> </span>Посмотреть статус заказа вы можете в личном кабинете</p>
+                                <LinkButton href='/dashboard' text={'Перейти в личный кабинет'} />
                             </div>
                             : (
                                 <>

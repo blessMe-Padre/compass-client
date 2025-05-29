@@ -77,7 +77,6 @@ const sendPaymentService = async () => {
     }
 };
 
-
 function formatPhone(raw) {
     let digits = raw.replace(/\D/g, '');
     if (digits.startsWith('7')) {
@@ -115,10 +114,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
-
-    /**
-     * TODO: вынести в кастомный хук
-     */
 
     useEffect(() => {
         const loadData = async () => {
@@ -258,12 +253,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
         console.log('создан CDEK заказ:', order)
     }
 
-    // useEffect(() => {
-    //     if (paymentData) {
-    //         router.push(paymentData.confirmation.confirmation_url);
-    //     }
-    // }, [paymentData, router]);
-
     const onSubmit = async () => {
         // Собираем данные доставки только если нужно
         const deliveryData = deliveryMethodsWithFields.includes(deliveryMethod)
@@ -345,14 +334,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
          */
 
         try {
-            if (paymentMethod === "Оплата онлайн на сайте") {
-                const paymentResult = await sendPaymentService();
-                setPaymentData(paymentResult.data);
-
-                // if (!paymentResult.success) {
-                //     // throw new Error(paymentResult.error || "Оплата не прошла");
-                // }
-            }
 
             // отправка заказа в страпи и в сдэк
             setIsSubmit(true);
@@ -362,15 +343,35 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
                 setError(undefined);
                 reset();
                 clearCart();
+                localStorage.setItem('orderPlaced', 'true');
                 // handleCreateCdekOrder();
             } else {
                 setError(data?.error?.message || 'Что-то пошло не так');
                 console.error('Статус ошибки:', response.status, data);
             }
 
+
+            if (paymentMethod === "Оплата онлайн на сайте") {
+                setSubmitted(true);
+                const paymentResult = await sendPaymentService();
+                setPaymentData(paymentResult?.data);
+                const url = paymentResult.data?.confirmation?.confirmation_url;
+
+                if (url) {
+                    router.push(url);
+                } else {
+                    console.error('Нет confirmation_url в ответе сервиса');
+                }
+
+                if (!paymentResult.success) {
+                    // throw new Error(paymentResult.error || "Оплата не прошла");
+                }
+            }
+
             setError('Ошибка запроса, попробуйте позже');
             setIsSubmit(false);
-            router.push(paymentData.confirmation.confirmation_url);
+
+
         } catch (err) {
             console.error('Общая ошибка отправки создания заказа:', err);
         }
