@@ -100,15 +100,13 @@ function formatPhone(raw) {
     return result;
 }
 
-export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) {
+export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, setPaymentMessage }) {
     const [user, setUser] = useState({});
 
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
 
     const [paymentData, setPaymentData] = useState(null);
-    console.log('paymentData', paymentData);
-
     const router = useRouter();
 
     const [deliveryMethod, setDeliveryMethod] = useState('');
@@ -355,6 +353,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit }) 
                 setSubmitted(true);
                 const paymentResult = await sendPaymentService();
                 setPaymentData(paymentResult?.data);
+                // устанавливает сообщение о редирект 
+                setPaymentMessage(true);
                 const url = paymentResult.data?.confirmation?.confirmation_url;
 
                 if (url) {
