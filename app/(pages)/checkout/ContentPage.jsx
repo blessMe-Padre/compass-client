@@ -52,8 +52,6 @@ export default function ContentPage() {
             try {
                 const response = await getUserById(documentId);
                 setUser(response[0]);
-                const userData = response[0];
-                setDeliveryData({ username: userData.username, phone: userData.phone, email: userData.email });
 
             } catch (error) {
                 console.error('Произошла ошибка', error);

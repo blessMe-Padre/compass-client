@@ -14,7 +14,7 @@ import { AddToCartButton } from "@/app/components";
 import styles from './style.module.scss';
 
 const OrdersList = ({ orders = [] }) => {
-    // console.log(orders);
+    console.log(orders);
 
     const [productsByOrderId, setProductsByOrderId] = useState({});
     const [isLoading, setIsLoading] = useState(true);
@@ -69,6 +69,7 @@ const OrdersList = ({ orders = [] }) => {
             {orders.map(order => (
                 <li key={order.id} className={styles.item}>
                     <h3 className={styles.item_title}>{order.orderNumber}</h3>
+                    <p className={styles.item_text}>Статус оплаты: <span className={styles.red}>оплачено</span></p>
                     <p className={styles.item_text}>Ожидаемая дата доставки: 23 декабря</p>
                     <p className={styles.item_text}>{order.deliveryMethod}</p>
 
