@@ -28,14 +28,6 @@ const Dashboard = () => {
     const [user, setUser] = useState({});
     const { wishlist } = useWishlistStore();
 
-    // const { userData } = useUserStore();
-  
-    // useEffect(() => {
-    //     console.log('UserData updated:', userData);
-    // }, [userData]);
-
-    // const documentId = userData?.documentId
-
     const variants = {
         visible: {
             opacity: 1,

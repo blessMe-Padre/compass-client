@@ -4,11 +4,16 @@ import styles from './style.module.scss';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormsCheckout, CartInfo, LinkButton } from '@/app/components';
 
+import useUserStore from '@/app/store/userStore';
+import getUserById from '@/app/utils/getUserById';
+
 import { useRef } from 'react';
 import useCartStore from '@/app/store/cartStore';
 
 
 export default function ContentPage() {
+    const [user, setUser] = useState({});
+    const documentId = useUserStore.getState().userData?.documentId ?? '';
 
     const [activeTab, setActiveTab] = useState('physical');
     const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
@@ -16,8 +21,6 @@ export default function ContentPage() {
 
     const [orderWasCreate, setOrderWasCreate] = useState(false);
     const [paymentMessage, setPaymentMessage] = useState(false);
-    console.log('orderWasCreate', orderWasCreate);
-    console.log('paymentMessage', paymentMessage);
 
     const { cartItems } = useCartStore();
 
@@ -44,21 +47,46 @@ export default function ContentPage() {
         }, []);
     }
 
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const response = await getUserById(documentId);
+                setUser(response[0]);
+                const userData = response[0];
+                setDeliveryData({ username: userData.username, phone: userData.phone, email: userData.email });
+
+            } catch (error) {
+                console.error('Произошла ошибка', error);
+            }
+        };
+
+        loadData();
+    }, []);
+
+    const orders = user?.orders ?? [];
+    const lastOrder = orders.length > 0
+        ? orders.reduce((max, o) =>
+            Number(o.id) > Number(max.id) ? o : max
+            , orders[0])
+        : null;
+
     return (
         <section>
             <div className='container'>
                 <h2 className='page_title'>{isSubmitSuccessful ? <span>Спасибо!</span> : <span>Оформление </span>}</h2>
 
                 <div className={styles.wrapper}>
+
                     {paymentMessage && <p>Ожидайте, перенаправления на страницу оплату</p>}
 
-                    {orderWasCreate && !paymentMessage &&
+                    {orderWasCreate &&
                         < div >
-                            <p style={{ marginBottom: '20px' }}>Ваш заказ № <span style={{ fontWeight: 700 }}> </span> оформлен, ожидайте смс о готовности</p>
+                            <p style={{ marginBottom: '20px' }}>Ваш "{lastOrder?.orderNumber}" <span style={{ fontWeight: 700 }}> </span> оформлен, ожидайте смс о готовности</p>
                             <p style={{ marginBottom: '20px' }}><span style={{ fontWeight: 700 }}> </span>Посмотреть статус заказа вы можете в личном кабинете</p>
                             <LinkButton href='/dashboard' text={'Перейти в личный кабинет'} />
                         </div>
                     }
+
 
                     {
                         !isSubmitSuccessful && !paymentMessage && !orderWasCreate &&
@@ -116,6 +144,7 @@ export default function ContentPage() {
                                                                 setSubmitted={setIsSubmitSuccessful}
                                                                 setIsSubmit={setIsSubmit}
                                                                 setPaymentMessage={setPaymentMessage}
+                                                                setOrderWasCreate={setOrderWasCreate}
                                                             />
                                                         </motion.div>
                                                     )}
@@ -129,7 +158,11 @@ export default function ContentPage() {
                                                             exit="exit"
                                                             className={styles.legal_tab}
                                                         >
-                                                            <FormsCheckout ref={formRef} type={'legal'} setSubmitted={setIsSubmitSuccessful} />
+                                                            <FormsCheckout
+                                                                ref={formRef}
+                                                                type={'legal'}
+                                                                setSubmitted={setIsSubmitSuccessful}
+                                                            />
                                                         </motion.div>
                                                     )}
                                                 </AnimatePresence>

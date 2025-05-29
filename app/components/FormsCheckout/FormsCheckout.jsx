@@ -100,7 +100,7 @@ function formatPhone(raw) {
     return result;
 }
 
-export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, setPaymentMessage }) {
+export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, setPaymentMessage, setOrderWasCreate }) {
     const [user, setUser] = useState({});
 
     const { token } = useCdekTokenStore();
@@ -285,8 +285,13 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 }
             }]
 
+        const ts = Date.now().toString();         // "1654678234567"
+        const last8 = ts.slice(-8);               // "78234567"
+        const orderNumber = last8;
+
         const formData = {
-            orderNumber: `Заказ №${crypto.randomUUID()}`,
+            // orderNumber: `Заказ № ${crypto.randomUUID()}`,
+            orderNumber: `Заказ № ${orderNumber}`,
             orderText: orderText,
             dateOrder: getCurrentDate(),
             dateDelivery: getCurrentDate() + 10,
@@ -341,6 +346,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 setError(undefined);
                 reset();
                 clearCart();
+                setOrderWasCreate(true);
                 localStorage.setItem('orderPlaced', 'true');
                 // handleCreateCdekOrder();
             } else {
