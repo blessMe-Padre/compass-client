@@ -15,7 +15,8 @@ const useDeliveryStore = create((set) => ({
         phone: '',
         email: '',
         comment: '',
-        deliveryDateMax: ''
+        deliveryDateMax: '',
+        totalSum: null
     },
 
     setDeliveryData: (newData) =>

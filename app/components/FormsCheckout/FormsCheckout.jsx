@@ -43,13 +43,14 @@ export async function sendOrderService(orderData) {
     }
 }
 
-const sendPaymentService = async (orderUniqNumber) => {
+const sendPaymentService = async (orderUniqNumber, totalSum) => {
     try {
         const payload = {
             amountValue: '2.00',
             currency: 'RUB',
             returnUrl: window.location.href,
             metadata: orderUniqNumber,
+            sum: totalSum,
         };
 
         const response = await fetch('/api/payment', {
@@ -287,8 +288,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
         const last8 = ts.slice(-8);               // "78234567"
         const orderNumber = last8;
 
-        // формирование уникального id заказа для оплаты  
-
         const formData = {
             orderPaymentId: orderUniqNumber,
             orderNumber: `Заказ № ${orderNumber}`,
@@ -334,10 +333,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
 
         isSending(true);
 
-        /**
-         * TODO: тут еще нужно дождаться ответа от http юкассы 
-         */
-
         try {
             // отправка заказа в страпи и в сдэк
             setIsSubmit(true);
@@ -357,7 +352,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
 
             if (paymentMethod === "Оплата онлайн на сайте") {
                 setSubmitted(true);
-                const paymentResult = await sendPaymentService(orderUniqNumber);
+                const paymentResult = await sendPaymentService(orderUniqNumber, storeData.totalSum);
                 setPaymentData(paymentResult?.data);
 
                 // устанавливает сообщение о редирект 

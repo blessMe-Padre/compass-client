@@ -1,5 +1,5 @@
 'use client'
-import useCdekTokenStore from '@/app/store/cdekStore';
+
 import useDeliveryStore from '@/app/store/deliveryStore';
 
 import styles from './style.module.scss'
@@ -9,12 +9,16 @@ import Link from 'next/link';
 import { useCartTotals } from '@/app/hooks/useCartTotals';
 
 export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit }) {
-    const { token } = useCdekTokenStore();
-    const { storeData, setDeliveryData } = useDeliveryStore();
-    // console.log('DeliveryData store ', storeData);
 
     const [promocodSales, setPromocodSales] = useState(10)
     const { totalQuantity, totalSum } = useCartTotals();
+    const { storeData, setDeliveryData } = useDeliveryStore();
+
+    const sum = totalSum;
+    useEffect(() => {
+        setDeliveryData({ totalSum: sum });
+    }, [])
+
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('ru-RU').format(price);
@@ -22,19 +26,6 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
 
     // Проверка на авторизацию
     const [auth, setAuth] = useState(false);
-
-    const handleGetOrdersByUuid = async () => {
-        const res = await fetch('/api/cdek/order_uuid', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
-        })
-
-        if (!res.ok) throw new Error(await res.text())
-
-        const order = await res.json();
-        console.log('CDEK заказ по UUID: ', order)
-    }
 
     useEffect(() => {
         const getCookie = (name) => {

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { YooCheckout } from '@a2seven/yoo-checkout';
 
 export async function POST(request) {
-    const { metadata } = await request.json()
+    const { metadata, sum } = await request.json()
 
     const checkout = new YooCheckout(
         {
@@ -15,7 +15,7 @@ export async function POST(request) {
 
     const createPayload = {
         amount: {
-            value: '2.00',
+            value: `${sum}.00`,
             currency: 'RUB'
         },
         payment_method_data: {
