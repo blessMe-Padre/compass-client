@@ -17,8 +17,6 @@ import useUserStore from '@/app/store/userStore';
 import useCdekTokenStore from '@/app/store/cdekStore';
 import useDeliveryStore from '@/app/store/deliveryStore';
 
-
-
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/zakazies`;
 
 export function getCurrentDate() {
@@ -45,12 +43,13 @@ export async function sendOrderService(orderData) {
     }
 }
 
-const sendPaymentService = async () => {
+const sendPaymentService = async (orderUniqNumber) => {
     try {
         const payload = {
             amountValue: '2.00',
             currency: 'RUB',
-            returnUrl: window.location.href
+            returnUrl: window.location.href,
+            metadata: orderUniqNumber,
         };
 
         const response = await fetch('/api/payment', {
@@ -105,13 +104,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
 
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
-
-    console.log(storeData);
-
-
     const [paymentData, setPaymentData] = useState(null);
     const router = useRouter();
-
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
@@ -184,7 +178,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const code = useWatch({ control, name: 'code' });
     const apartment = useWatch({ control, name: 'apartment' });
 
-
     const orderText = useWatch({ control, name: 'orderText' });
     useEffect(() => {
         setDeliveryData({ comment: orderText });
@@ -255,6 +248,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     }
 
     const onSubmit = async () => {
+        const orderUniqNumber = crypto.randomUUID();
+
         // Собираем данные доставки только если нужно
         const deliveryData = deliveryMethodsWithFields.includes(deliveryMethod)
             ? [
@@ -292,8 +287,10 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
         const last8 = ts.slice(-8);               // "78234567"
         const orderNumber = last8;
 
+        // формирование уникального id заказа для оплаты  
+
         const formData = {
-            // orderNumber: `Заказ № ${crypto.randomUUID()}`,
+            orderPaymentId: orderUniqNumber,
             orderNumber: `Заказ № ${orderNumber}`,
             orderText: orderText,
             dateOrder: getCurrentDate(),
@@ -329,6 +326,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             deliveryMethod: deliveryMethod || 'Самовывоз',
             paymentMethod: paymentMethod || 'Оплата наличными при получении',
             deliveryDateMax: storeData?.deliveryDateMax || null,
+            paymentstatus: 'не оплачен',
 
             // Контактные данные
             dataCustomer: dataCustomer
@@ -341,7 +339,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
          */
 
         try {
-
             // отправка заказа в страпи и в сдэк
             setIsSubmit(true);
             const { response, data } = await sendOrderService(formData);
@@ -358,19 +355,19 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 console.error('Статус ошибки:', response.status, data);
             }
 
-
             if (paymentMethod === "Оплата онлайн на сайте") {
                 setSubmitted(true);
-                const paymentResult = await sendPaymentService();
+                const paymentResult = await sendPaymentService(orderUniqNumber);
                 setPaymentData(paymentResult?.data);
+
                 // устанавливает сообщение о редирект 
                 setPaymentMessage(true);
                 const url = paymentResult.data?.confirmation?.confirmation_url;
 
                 if (url) {
-                    router.push(url);
-                } else {
-                    console.error('Нет confirmation_url в ответе сервиса');
+                    setTimeout(() => {
+                        router.push(url);
+                    }, 2000);
                 }
 
                 if (!paymentResult.success) {

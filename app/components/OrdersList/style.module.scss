@@ -16,6 +16,10 @@
     @include adaptiv-value("padding", 40, 20);
     background-color: var(--super-light-gray);
     color: var(--black);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .item_title {
@@ -27,8 +31,8 @@
 
 .item_text {
     font-weight: 700;
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 16px;
+    margin-bottom: 5px;
 }
 
 .item_row {

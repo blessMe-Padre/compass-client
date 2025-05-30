@@ -14,8 +14,6 @@ import { AddToCartButton } from "@/app/components";
 import styles from './style.module.scss';
 
 const OrdersList = ({ orders = [] }) => {
-    console.log(orders);
-
     const [productsByOrderId, setProductsByOrderId] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
@@ -79,54 +77,63 @@ const OrdersList = ({ orders = [] }) => {
         <ul className={styles.list}>
             {orders.map(order => (
                 <li key={order.id} className={styles.item}>
-                    <h3 className={styles.item_title}>{order.orderNumber}</h3>
-                    <p className={styles.item_text}>Статус оплаты: <span className={styles.red}>оплачено</span></p>
+                    <div>
+                        <h3 className={styles.item_title}>{order.orderNumber}</h3>
+                        <p className={styles.item_text}>Статус оплаты:
+                            <span
+                                className={order?.paymentstatus === 'оплачен' ? styles.green : styles.red}>
+                                &nbsp;{order?.paymentstatus}
+                            </span>
+                        </p>
 
-                    <p className={styles.item_text}>{order.deliveryMethod}</p>
-                    {order?.deliveryMethod !== 'Самовывоз' && (
-                        <>
-                            {order?.deliveryDateMax &&
-                                <p className={styles.item_text}>
-                                    Ожидаемая дата доставки: {reverseDate(order?.deliveryDateMax)}
-                                </p>
-                            }
+                        <p className={styles.item_text}>{order.deliveryMethod}</p>
+                        {order?.deliveryMethod !== 'Самовывоз' && (
+                            <>
+                                {order?.deliveryDateMax &&
+                                    <p className={styles.item_text}>
+                                        Ожидаемая дата доставки: {reverseDate(order?.deliveryDateMax)}
+                                    </p>
+                                }
 
-                            {order?.delivery_status &&
-                                <p className={styles.item_text}>
-                                    статус доставки :
-                                    <span
-                                        className={`${order?.delivery_status === 'Доставлен' ? styles.green : styles.orange}`}
-                                    >
-                                        &nbsp;{order?.delivery_status}
-                                    </span>
-                                </p>
-                            }
-                        </>
-                    )}
-
-
-                    <div className={styles.item_row}>
-                        {productsByOrderId[order.id] && (
-                            <p>
-                                {productsByOrderId[order.id].length}{" "}
-                                {getProductWordForm(productsByOrderId[order.id].length)}
-                            </p>
+                                {order?.delivery_status &&
+                                    <p className={styles.item_text}>
+                                        статус доставки :
+                                        <span
+                                            className={`${order?.delivery_status === 'Доставлен' ? styles.green : styles.orange}`}
+                                        >
+                                            &nbsp;{order?.delivery_status}
+                                        </span>
+                                    </p>
+                                }
+                            </>
                         )}
 
-                        <p className={styles.item_text}>
-                            {calculateTotalPrice(productsByOrderId[order.id]).toLocaleString('ru-Ru')} ₽
-                        </p>
-                    </div>
-                    {isLoading && <Preloader width={40} height={40} />}
-                    {(productsByOrderId[order.id] || []).map(product => (
-                        <CartItem key={product.id} el={product} location="orderPage" />
-                    ))}
 
-                    <AddToCartButton
-                        items={productsByOrderId[order.id]}
-                        many
-                        text={'Повторить заказ'}
-                    />
+                        <div className={styles.item_row}>
+                            {productsByOrderId[order.id] && (
+                                <p>
+                                    {productsByOrderId[order.id].length}{" "}
+                                    {getProductWordForm(productsByOrderId[order.id].length)}
+                                </p>
+                            )}
+
+                            <p className={styles.item_text}>
+                                {calculateTotalPrice(productsByOrderId[order.id]).toLocaleString('ru-Ru')} ₽
+                            </p>
+                        </div>
+                        {isLoading && <Preloader width={40} height={40} />}
+                        {(productsByOrderId[order.id] || []).map(product => (
+                            <CartItem key={product.id} el={product} location="orderPage" />
+                        ))}
+                    </div>
+
+                    <div>
+                        <AddToCartButton
+                            items={productsByOrderId[order.id]}
+                            many
+                            text={'Повторить заказ'}
+                        />
+                    </div>
                 </li>
             ))}
 

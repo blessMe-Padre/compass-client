@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { YooCheckout } from '@a2seven/yoo-checkout';
 
 export async function POST(request) {
-    // const { } = await request.json()
+    const { metadata } = await request.json()
 
     const checkout = new YooCheckout(
         {
@@ -25,7 +25,10 @@ export async function POST(request) {
         confirmation: {
             type: 'redirect',
             return_url: 'http://localhost:3000/checkout'
-        }
+        },
+        metadata: {
+            orderId: metadata,
+        },
     };
 
     try {
