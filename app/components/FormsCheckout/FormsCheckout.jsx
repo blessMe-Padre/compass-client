@@ -106,6 +106,9 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
 
+    console.log(storeData);
+
+
     const [paymentData, setPaymentData] = useState(null);
     const router = useRouter();
 
@@ -325,6 +328,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             // Методы оплаты и доставки
             deliveryMethod: deliveryMethod || 'Самовывоз',
             paymentMethod: paymentMethod || 'Оплата наличными при получении',
+            deliveryDateMax: storeData?.deliveryDateMax || null,
 
             // Контактные данные
             dataCustomer: dataCustomer

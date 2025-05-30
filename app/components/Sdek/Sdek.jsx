@@ -138,7 +138,8 @@ export default function Sdek() {
         setDeliveryData({
             tariffName: filteredTariffs[0]?.tariff_name,
             tariffCode: filteredTariffs[0]?.tariff_code,
-            deliveryPrice: filteredTariffs[0]?.delivery_sum
+            deliveryPrice: filteredTariffs[0]?.delivery_sum,
+            deliveryDateMax: filteredTariffs[0]?.delivery_date_range.max,
         });
     }
 
@@ -263,8 +264,10 @@ export default function Sdek() {
  */}
 
                         {tariff && (
-
-                            <p style={{ marginTop: "10px" }}>ориентировочная стоимость доставки: {tariff.delivery_sum}</p>
+                            <>
+                                <p style={{ marginTop: "10px" }}>ориентировочная стоимость доставки: {tariff.delivery_sum}</p>
+                                <p style={{ marginTop: "10px" }}>максимальная дата доставки: {tariff.delivery_date_range.max}</p>
+                            </>
                         )}
 
                     </>

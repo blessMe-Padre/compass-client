@@ -64,14 +64,46 @@ const OrdersList = ({ orders = [] }) => {
         }
     }, [orders]);
 
+    function reverseDate(str) {
+        // проверяем строго формат четыре цифры-два-два через дефисы
+        const regex = /^(\d{4})-(\d{2})-(\d{2})$/;
+        const match = str.match(regex);
+        if (match) {
+            const [, year, month, day] = match;
+            return `${day}.${month}.${year}`;
+        }
+        return str;
+    }
+
     return (
         <ul className={styles.list}>
             {orders.map(order => (
                 <li key={order.id} className={styles.item}>
                     <h3 className={styles.item_title}>{order.orderNumber}</h3>
                     <p className={styles.item_text}>Статус оплаты: <span className={styles.red}>оплачено</span></p>
-                    <p className={styles.item_text}>Ожидаемая дата доставки: 23 декабря</p>
+
                     <p className={styles.item_text}>{order.deliveryMethod}</p>
+                    {order?.deliveryMethod !== 'Самовывоз' && (
+                        <>
+                            {order?.deliveryDateMax &&
+                                <p className={styles.item_text}>
+                                    Ожидаемая дата доставки: {reverseDate(order?.deliveryDateMax)}
+                                </p>
+                            }
+
+                            {order?.delivery_status &&
+                                <p className={styles.item_text}>
+                                    статус доставки :
+                                    <span
+                                        className={`${order?.delivery_status === 'Доставлен' ? styles.green : styles.orange}`}
+                                    >
+                                        &nbsp;{order?.delivery_status}
+                                    </span>
+                                </p>
+                            }
+                        </>
+                    )}
+
 
                     <div className={styles.item_row}>
                         {productsByOrderId[order.id] && (

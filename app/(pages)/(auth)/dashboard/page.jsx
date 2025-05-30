@@ -11,17 +11,7 @@ import { Discounts, RelativeProducts } from '@/app/section';
 import useWishlistStore from '@/app/store/wishlistStore';
 import useUserStore from '@/app/store/userStore';
 
-
-// const documentId = 'bxgol3fvr7ei2e5522yrqpp6';
-
-/**
- * Здесь получаем юзера по его documentId => getUserById(documentId)
- * Устанавливаем объект юзера в state => user
- * Прокидываем юзера дальше вниз по табам 
- */
-
 const documentId = useUserStore.getState().userData?.documentId ?? 'f9bh8d19a9ij1gg5zegvposx';
-
 
 const Dashboard = () => {
     const router = useRouter();
