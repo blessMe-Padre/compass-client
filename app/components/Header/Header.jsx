@@ -635,7 +635,10 @@ const Header = () => {
                                                 className={styles.mini_cart}>
                                                 {cartItems.length > 0
                                                     ? (
-                                                        <MiniCart cartItems={cartItems} />
+                                                        <MiniCart
+                                                            cartItems={cartItems}
+                                                            setModalMiniCartOpened={setModalMiniCartOpened}
+                                                        />
                                                     )
                                                     : 'В вашей корзине пусто'
                                                 }

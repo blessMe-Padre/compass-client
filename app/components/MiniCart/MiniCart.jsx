@@ -3,7 +3,7 @@ import styles from './style.module.scss';
 import { CartItem } from "..";
 import Link from "next/link";
 
-export default function MiniCart({ cartItems }) {
+export default function MiniCart({ cartItems, setModalMiniCartOpened }) {
 
     const totalSum = cartItems.reduce((sum, item) => {
         const price = item?.priceSales || item?.price;
@@ -31,13 +31,13 @@ export default function MiniCart({ cartItems }) {
 
                 <div className={styles.btn_link_wrapper}>
 
-                    <Link href={'/cart'} className={styles.btn_link_cart}>Перейти в  корзину</Link>
-                    <Link href={'/checkout'} className={styles.btn_link_checkout}> Оформить заказ</Link>
+                    <Link href={'/cart'} onClick={() => setModalMiniCartOpened(false)} className={styles.btn_link_cart}>Перейти в  корзину</Link>
+                    <Link href={'/checkout'} onClick={() => setModalMiniCartOpened(false)} className={styles.btn_link_checkout}> Оформить заказ</Link>
                 </div>
             </div>
 
             <div className={styles.more_about_delivery}>
-                <Link href={'/delivery'}>Подробнее о доставке</Link>
+                <Link href={'/delivery'} onClick={() => setModalMiniCartOpened(false)}>Подробнее о доставке</Link>
             </div>
         </div>
     )

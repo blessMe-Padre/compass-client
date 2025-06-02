@@ -371,7 +371,7 @@ export default function ContentPage({ data }) {
               */}
 
               <div className={styles.stock} onClick={() => handleCheckboxStatus()}>
-                <input type="checkbox" name="checkboxStatus" id="checkboxStatus" />
+                <input type="checkbox" name="checkboxStatus" id="checkboxStatus" className={styles.checkbox} />
                 <label htmlFor="checkboxStatus">В наличии</label>
               </div>
             </div>
