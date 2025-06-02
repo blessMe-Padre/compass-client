@@ -11,6 +11,8 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { LinkButton } from '@/app/components';
 
+import fetchData from '@/app/utils/fetchData';
+
 const slides = [
     {
         image: '/remove/slide.webp',
@@ -20,18 +22,14 @@ const slides = [
         image: '/remove/slide.webp',
         text: 'Скидки 50% на зимнюю коллекцию',
     },
-    {
-        image: '/remove/slide.webp',
-        text: 'Скидки 60% на зимнюю коллекцию',
-    },
-    {
-        image: '/remove/slide.webp',
-        text: 'Скидки 70% на зимнюю коллекцию',
-    },
 ]
+
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/glavnyj-slajder?populate[slide][populate]=*`
+const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 const MainSlider = () => {
     const [headerHeight, setHeaderHeight] = useState(0);
+    const [slides, setSlides] = useState([]);
 
     useEffect(() => {
         // Получаем высоту хедера после монтирования компонента
@@ -50,6 +48,20 @@ const MainSlider = () => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    useEffect(() => {
+        try {
+            const getCategories = async () => {
+                const response = await fetchData(url);
+                const data = response.data;
+                setSlides(data?.slide);
+            }
+            getCategories();
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }, [])
 
     return (
         <section className={styles.main_slider} style={{ marginTop: `-${headerHeight}px` }}>
@@ -72,7 +84,7 @@ const MainSlider = () => {
                                 <div className={styles.image_wrapper}>
                                     <Image
                                         className={styles.slide}
-                                        src={slide?.image}
+                                        src={`${domain}${slide?.image?.url}`}
                                         alt="logo"
                                         width={1920}
                                         height={910}
@@ -89,7 +101,6 @@ const MainSlider = () => {
                                 </div>
                             </div>
                         </SwiperSlide>
-
                     )
                 })}
                 <div className={`custom-pagination ${styles.custom_pagination}`} />

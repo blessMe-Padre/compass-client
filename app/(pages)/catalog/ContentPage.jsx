@@ -222,8 +222,6 @@ export default function ContentPage({ data }) {
         <Breadcrumbs
           secondLabel="Каталог"
         />
-
-
         <motion.h2
           initial='hidden'
           animate="visible"
@@ -398,7 +396,7 @@ export default function ContentPage({ data }) {
 
 
       <Popup activePopup={activePopup} setActivePopup={setActivePopup} data={products} handleChange={handleSubmitForm} statusForm={sendingForm} />
-      <Notification text={`Вы успешно добавили товар в корзину`} active={notificationActive} setActive={setNotificationActive} />
+      {/* <Notification text={`Вы успешно добавили товар в корзину`} active={notificationActive} setActive={setNotificationActive} /> */}
     </>
   );
 }
