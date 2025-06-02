@@ -4,11 +4,14 @@ import { useState } from 'react';
 import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
+import { Range } from "react-range";
 
-export default function FilterForm({ data, handleChangwe, statusForm}) {    
+export default function FilterForm({ data, handleChangwe, statusForm }) {
 
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
+
+    const [values, setValues] = useState([20, 80]);
 
     const arrPrice = data?.map(el => parseInt(el?.price) || [])
 
@@ -69,10 +72,45 @@ export default function FilterForm({ data, handleChangwe, statusForm}) {
 
     return (
         <form className={styles.form}>
-            {/* <div className={styles.form_filter_wrapper_price}>
+            <div className={styles.form_filter_wrapper_price}>
                 <label>Цена</label>
-                <input type='range'></input>
-            </div> */}
+                {/* <input type='range'></input> */}
+            </div>
+
+            <Range
+                label="Select your value"
+                step={0.1}
+                min={0}
+                max={100}
+                values={values}
+                onChange={(values) => setValues(values)}
+                renderTrack={({ props, children }) => (
+                    <div
+                        {...props}
+                        style={{
+                            ...props.style,
+                            height: "6px",
+                            width: "100%",
+                            backgroundColor: "#ccc",
+                        }}
+                    >
+                        {children}
+                    </div>
+                )}
+                renderThumb={({ props }) => (
+                    <div
+                        {...props}
+                        key={props.key}
+                        style={{
+                            ...props.style,
+                            height: "15px",
+                            width: "15px",
+                            backgroundColor: "#007cc2",
+                            borderRadius: "100%",
+                        }}
+                    />
+                )}
+            />
 
             <div className={styles.form_filter_wrapper_select}>
                 <div>
