@@ -1,11 +1,13 @@
 @use '@/app/mixins' as *;
 
-.tel, .email {
+.tel,
+.email {
     transition: all 0.3s ease-in-out;
 
     &:hover {
         color: var(--blue);
     }
+
     &:active {
         color: var(--orange);
     }
@@ -32,4 +34,33 @@
     cursor: pointer;
 
     margin-bottom: 30px;
+}
+
+.contact_row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.contact_column {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+
+    @media (max-width: 767px) {
+        flex-wrap: wrap;
+
+        a {
+            flex: 0 0 auto;
+            margin-bottom: 5px;
+        }
+    }
+}
+
+.contact_span {
+    @media (max-width: 767px) {
+        display: flex;
+        flex-wrap: wrap;
+    }
 }

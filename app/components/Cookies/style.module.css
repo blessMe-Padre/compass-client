@@ -15,6 +15,8 @@
 
     box-shadow: 0 0 24px 0 rgba(80, 80, 80, 0.25);
     background: #fff;
+
+    color: var(--black);
 }
 
 
@@ -77,6 +79,7 @@
     .popup {
         display: flex;
         flex-direction: column;
+        width: 90%;
     }
 }
 

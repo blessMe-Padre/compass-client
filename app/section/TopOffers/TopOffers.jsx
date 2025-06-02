@@ -75,7 +75,7 @@ function TopOffers() {
 
                                 breakpoints={{
                                     320: { slidesPerView: 1 },
-                                    375: { slidesPerView: 1.5 },
+                                    375: { slidesPerView: 1.2 },
                                     560: { slidesPerView: 2.5 },
                                 }}
 

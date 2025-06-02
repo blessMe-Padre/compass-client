@@ -91,7 +91,7 @@ const CategoryList = () => {
                                                 />
                                             }
                                         </div>
-                                        <h3 className={styles.text}>{slide?.text}</h3>
+                                        <h3 className={styles.text}>{slide?.name}</h3>
                                     </div>
                                 </SwiperSlide>
 

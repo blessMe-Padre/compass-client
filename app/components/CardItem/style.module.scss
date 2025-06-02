@@ -10,7 +10,10 @@
     border: 1px solid #C4C4C4B2;
 
     transition: all .3s ease-in;
+
+    height: 100%;
 }
+
 .card:hover {
     border: 1px solid var(--orange);
 }
@@ -99,7 +102,7 @@
 .favorite {
     position: absolute;
     top: 10px;
-    right: 0;
+    right: 6px;
     padding: 10px;
 
     display: flex;
@@ -118,6 +121,11 @@
     &.active svg path {
         fill: var(--white)
     }
+
+    @media (max-width: 560px) {
+
+        transform: scale(0.8);
+    }
 }
 
 .hit_badge {
@@ -126,6 +134,10 @@
     color: var(--white);
 
     padding: 6px 10px;
+
+    @media (max-width: 560px) {
+        font-size: 14px;
+    }
 }
 
 .price_container {

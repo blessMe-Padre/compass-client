@@ -27,12 +27,12 @@ export default function ContentPage({ data }) {
 
                 <h2 className='page_title'>{data?.title}</h2>
 
-                <div className='flex gap-10' style={{ marginBottom: '40px' }}>
-                    <div className='flex-column'>
+                <div className={styles.contact_row}>
+                    <div className={styles.contact_column}>
                         ТЕЛЕФОН:
                         <div>
                             {contacts[0]?.phones?.map((contact, index) => (
-                                <span key={index}>
+                                <span key={index} className={styles.contact_span}>
                                     <Link key={`${contact.id}-${index}`}
                                         href={`tel:+${contact.tel_for_robot}`} className={styles.tel}>
                                         {contact.tel}
@@ -44,7 +44,7 @@ export default function ContentPage({ data }) {
                         </div>
                     </div>
 
-                    <div className='flex-column'>
+                    <div className={styles.contact_column}>
                         E-MAIL
                         {contacts.map((item, i) => <Link key={i} className={styles.email} href={`mailto:+${item.email}`}>{item.email}</Link>)}
                     </div>
