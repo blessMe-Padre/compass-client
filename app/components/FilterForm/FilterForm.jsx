@@ -1,26 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
 import { Range } from "react-range";
 
-export default function FilterForm({ data, handleChangwe, statusForm }) {
+export default function FilterForm({ data, handleChange, statusForm }) {
+    const [values, setValues] = useState([0, 10]);
+    const [bounds, setBounds] = useState([0, 10]);
 
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
 
-    const [values, setValues] = useState([20, 80]);
+    // перерисовка range слайдера при получении данных 
+    useEffect(() => {
+        const arrPrice = data.map(el => parseInt(el?.price, 10)).filter(n => !isNaN(n));
 
-    const arrPrice = data?.map(el => parseInt(el?.price) || [])
+        if (arrPrice.length === 0) {
+            setBounds([0, 0]);
+            setValues([0, 0]);
+            return;
+        }
 
-    const maxPrice = parseInt(Math.max.apply(null, arrPrice));
-    const minPrice = parseInt(Math.min.apply(null, arrPrice));
+        const maxPrice = Math.max(...arrPrice);
+        const minPrice = Math.min(...arrPrice);
 
-
-    // TODO: 04.05.2025 - нужно доделать фильтрацию - по кнопке грузится форма, сейчас через useEffect
-
+        setBounds([minPrice, maxPrice]);
+        setValues([minPrice, maxPrice]);
+    }, [data])
 
     const attributes = data !== undefined && data
         .flatMap(el => el?.attributes || []) // "Расплющиваем" массивы, изначально map возвращает [[]] - что неудобно (flatMap убирает пустые массивы)
@@ -74,14 +82,13 @@ export default function FilterForm({ data, handleChangwe, statusForm }) {
         <form className={styles.form}>
             <div className={styles.form_filter_wrapper_price}>
                 <label>Цена</label>
-                {/* <input type='range'></input> */}
             </div>
 
             <Range
-                label="Select your value"
-                step={0.1}
-                min={0}
-                max={100}
+                label="Выберите диапазон цен"
+                step={100}
+                min={bounds[0]}
+                max={bounds[1]}
                 values={values}
                 onChange={(values) => setValues(values)}
                 renderTrack={({ props, children }) => (
@@ -113,26 +120,25 @@ export default function FilterForm({ data, handleChangwe, statusForm }) {
             />
 
             <div className={styles.form_filter_wrapper_select}>
-                <div>
+                <div className='flex'>
                     <label>От</label>
                     <input
                         type="number"
                         name="priceFrom"
-                        value={filters.price?.from || ''}
+                        value={values[0]}
                         onChange={(e) => handlePriceChange('from', e.target.value)}
-                        // placeholder={minPrice !== NaN ? minPrice : 0 }
                         min={0}
+                        step={100}
                     />
                 </div>
-                <div>
+                <div className='flex'>
                     <label>До</label>
                     <input
                         type="number"
                         name="priceTo"
-                        value={filters.price?.to || ''}
+                        value={values[1]}
                         onChange={(e) => handlePriceChange('to', e.target.value)}
-                        // placeholder={maxPrice !== NaN ? maxPrice : 0 }
-                        max={0}
+                        step={100}
                     />
                 </div>
             </div>

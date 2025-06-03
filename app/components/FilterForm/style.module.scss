@@ -19,13 +19,22 @@
     justify-content: space-between;
     align-items: center;
 
-    border-top: 1px solid var(--blue);
-    padding: 10px 0;
+    gap: 20px;
 
-}
-
-.form_filter_wrapper_select:last-child {
     border-bottom: 1px solid var(--blue);
+    padding: 10px 0;
+    margin: 10px 0;
+
+    label {
+        margin-right: 20px;
+    }
+
+    input {
+        display: flex;
+        width: 100%;
+        border: none;
+        background-color: transparent;
+    }
 }
 
 .wrapper_btns {
