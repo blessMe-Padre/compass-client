@@ -10,6 +10,9 @@ export default function FilterForm({ data, handleChange, statusForm }) {
     const [values, setValues] = useState([0, 10]);
     const [bounds, setBounds] = useState([0, 10]);
 
+    console.log('values', values);
+
+
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
 
@@ -61,11 +64,24 @@ export default function FilterForm({ data, handleChange, statusForm }) {
      * https://www.dns-shop.ru/catalog/search/filters/?q=5070 rtx&category=17a89aab16404e77&order=new&stock=now-today-tomorrow-later-out_of_stock&f[4rw]=1cst&f[9z]=2n4
     */
 
+    const [localAttrs, setLocalAttrs] = useState(
+        attrFilters.reduce((acc, el) => {
+            acc[el.name] = '';
+            return acc;
+        }, {})
+    );
+    console.log(localAttrs);
+
     const handleFilterChange = (filterName, value) => {
-        setFilters(({
-            ...filters,
-            [filterName]: value
-        }))
+        setLocalAttrs(prev => ({
+            ...prev,
+            [filterName]: value,
+        }));
+
+        // setFilters(({
+        //     ...filters,
+        //     [filterName]: value
+        // }))
     }
 
     const handlePriceChange = (type, value) => {
@@ -75,6 +91,19 @@ export default function FilterForm({ data, handleChange, statusForm }) {
                 ...filters.price,
                 [type]: Number(value) || 0
             }
+        });
+    };
+
+    const handleFilterSubmit = (e) => {
+        e.preventDefault();
+
+        setFilters({
+            ...filters,
+            price: {
+                'from': values[0],
+                'to': values[1],
+            },
+            ...localAttrs,
         });
     };
 
@@ -165,7 +194,10 @@ export default function FilterForm({ data, handleChange, statusForm }) {
             ))}
 
             <div className={styles.wrapper_btns}>
-                <button className={styles.form_btn_submit}>
+                <button
+                    className={styles.form_btn_submit}
+                    onClick={handleFilterSubmit}
+                >
                     Применить
                 </button>
 
