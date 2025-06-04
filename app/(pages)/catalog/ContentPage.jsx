@@ -84,26 +84,32 @@ export default function ContentPage({ data }) {
   const buildStrapiFilters = (filters) => {
     const params = [];
 
-    if (filters.price) {
+    if (filters.priceSales) {
+      if (filters.priceSales.from) {
+        params.push(`filters[priceSales][$gte]=${encodeURIComponent(filters.priceSales.from)}`);
+      }
+      if (filters.priceSales.to) {
+        params.push(`filters[priceSales][$lte]=${encodeURIComponent(filters.priceSales.to)}`);
+      }
+    } else if (filters.price) {
       if (filters.price.from) {
-        params.push(`filters[price][$gte]=${filters.price.from}`);
+        params.push(`filters[price][$gte]=${encodeURIComponent(filters.price.from)}`);
       }
       if (filters.price.to) {
-        params.push(`filters[price][$lte]=${filters.price.to}`);
+        params.push(`filters[price][$lte]=${encodeURIComponent(filters.price.to)}`);
       }
     }
 
     Object.entries(filters).forEach(([key, value]) => {
-      if (key !== 'price' && value) {
+      if (key !== 'price' && key !== 'priceSales' && value) {
         params.push(
           `filters[attributes][name][$eq]=${encodeURIComponent(key)}` +
-          `&filters[attributes][value][$eq]=${encodeURIComponent(value)}&`
-        )
+          `&filters[attributes][value][$eq]=${encodeURIComponent(value)}`
+        );
       }
     });
 
-    return params.join('&');
-
+    return params.length > 0 ? params.join('&') + '&' : '';
   }
 
 
@@ -394,8 +400,14 @@ export default function ContentPage({ data }) {
       </div>
 
 
-      <Popup activePopup={activePopup} setActivePopup={setActivePopup} data={products} handleChange={handleSubmitForm} statusForm={sendingForm} />
-      {/* <Notification text={`Вы успешно добавили товар в корзину`} active={notificationActive} setActive={setNotificationActive} /> */}
+      <Popup
+        activePopup={activePopup}
+        setActivePopup={setActivePopup}
+        data={products}
+        handleChange={handleSubmitForm}
+        statusForm={sendingForm}
+        filteredCount={products?.length}
+      />
     </>
   );
 }

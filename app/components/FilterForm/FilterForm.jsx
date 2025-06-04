@@ -6,7 +6,7 @@ import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
 import { Range } from "react-range";
 
-export default function FilterForm({ data, handleChange, statusForm }) {
+export default function FilterForm({ data, handleChange, statusForm, filteredCount }) {
     const [values, setValues] = useState([0, 10]);
     const [bounds, setBounds] = useState([0, 10]);
     const { filters, setFilters } = useFilterStore();
@@ -15,7 +15,10 @@ export default function FilterForm({ data, handleChange, statusForm }) {
 
     // перерисовка range слайдера при получении данных
     useEffect(() => {
-        const arrPrice = data.map(el => parseInt(el?.price, 10)).filter(n => !isNaN(n));
+        const arrPrice = data.map(el => {
+            const price = el?.priceSales ? parseInt(el.priceSales, 10) : parseInt(el?.price, 10);
+            return isNaN(price) ? null : price;
+        }).filter(n => n !== null);
 
         if (arrPrice.length === 0) {
             setBounds([0, 0]);
@@ -67,7 +70,7 @@ export default function FilterForm({ data, handleChange, statusForm }) {
             return acc;
         }, {})
     );
-    console.log(localAttrs);
+    // console.log(localAttrs);
 
     const handleFilterChange = (filterName, value) => {
         setLocalAttrs(prev => ({
@@ -82,26 +85,50 @@ export default function FilterForm({ data, handleChange, statusForm }) {
     }
 
     const handlePriceChange = (type, value) => {
-        setFilters({
-            ...filters,
-            price: {
-                ...filters.price,
-                [type]: Number(value) || 0
-            }
-        });
+        const numValue = Number(value) || 0;
+        const clampedValue = Math.max(bounds[0], Math.min(bounds[1], numValue));
+
+        const newValues = type === 'from'
+            ? [clampedValue, values[1]]
+            : [values[0], clampedValue];
+
+        setValues(newValues);
     };
 
     const handleFilterSubmit = (e) => {
         e.preventDefault();
 
-        setFilters({
-            ...filters,
-            price: {
-                'from': values[0],
-                'to': values[1],
-            },
-            ...localAttrs,
+        // Формируем фильтры для API
+        const apiFilters = {
+            ...localAttrs
+        };
+
+        // Добавляем фильтр по цене только если значения отличаются от границ
+        if (values[0] !== bounds[0] || values[1] !== bounds[1]) {
+            apiFilters.priceSales = {
+                from: values[0],
+                to: values[1]
+            };
+            // Добавляем fallback на обычную цену
+            apiFilters.price = {
+                from: values[0],
+                to: values[1]
+            };
+        }
+
+        // Удаляем пустые фильтры
+        Object.keys(apiFilters).forEach(key => {
+            if (apiFilters[key] === '' || apiFilters[key] === undefined) {
+                delete apiFilters[key];
+            }
         });
+
+        setFilters(apiFilters);
+
+        // Вызываем обработчик изменения, если он передан
+        if (handleChange) {
+            handleChange(apiFilters);
+        }
     };
 
     const handleFilterReset = (e) => {
@@ -130,7 +157,6 @@ export default function FilterForm({ data, handleChange, statusForm }) {
             handleChange();
         }
     };
-
 
     return (
         <form className={styles.form}>
@@ -234,6 +260,12 @@ export default function FilterForm({ data, handleChange, statusForm }) {
                     Сбросить фильтр
                 </button>
             </div>
+
+            {filteredCount !== undefined && filteredCount !== null && (
+                <div className={styles.filtered_count_wrapper}>
+                    Найдено товаров: {filteredCount}
+                </div>
+            )}
         </form>
     )
 }

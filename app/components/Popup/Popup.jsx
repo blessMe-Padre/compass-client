@@ -2,7 +2,7 @@ import Form from '../';
 import { FilterForm, AskForm } from '../'
 import styles from './style.module.css';
 
-export default function Popup({ activePopup, setActivePopup, data, handleChange, statusForm, forAsk }) {
+export default function Popup({ activePopup, setActivePopup, data, handleChange, statusForm, forAsk, filteredCount }) {
 
     const handleKeyDown = (event) => {
         if (event.key === 'Escape' || event.key === 'Esc') {
@@ -42,8 +42,8 @@ export default function Popup({ activePopup, setActivePopup, data, handleChange,
                         subtitle="Оставьте контакты и квалифицированные специалисты за 5 минут рассчитают цену"
                     /> */}
 
-                  
-                    {forAsk ? <AskForm /> : <FilterForm data={data} handleChange={handleChange} statusForm={statusForm} />}                
+
+                    {forAsk ? <AskForm /> : <FilterForm data={data} handleChange={handleChange} statusForm={statusForm} filteredCount={filteredCount} />}
                 </div>
             </div>
         </div>
