@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './style.module.scss';
 import useCategorySlug from '@/app/store/categorySlug';
 import useFilterStore from '@/app/store/filterStore';
@@ -9,14 +9,11 @@ import { Range } from "react-range";
 export default function FilterForm({ data, handleChange, statusForm }) {
     const [values, setValues] = useState([0, 10]);
     const [bounds, setBounds] = useState([0, 10]);
-
-    console.log('values', values);
-
-
     const { filters, setFilters } = useFilterStore();
     const [selectedFilters, setSelectedFilters] = useState({});
+    const selectRefs = useRef([]);
 
-    // перерисовка range слайдера при получении данных 
+    // перерисовка range слайдера при получении данных
     useEffect(() => {
         const arrPrice = data.map(el => parseInt(el?.price, 10)).filter(n => !isNaN(n));
 
@@ -50,10 +47,10 @@ export default function FilterForm({ data, handleChange, statusForm }) {
         values: Array.from(values)
     }));
 
-    /** TODO: 
-     * 
+    /** TODO:
+     *
      * Тут для начала нужно получить соответсвующие атрибуты для фильтрации
-     * 
+     *
      * ориентироваться на dns
      * можно выбрать много пунктов, пункты будут приходить
      * из атрибутов, при нажатии на Применить будеsт 1 запрос
@@ -106,6 +103,34 @@ export default function FilterForm({ data, handleChange, statusForm }) {
             ...localAttrs,
         });
     };
+
+    const handleFilterReset = (e) => {
+        e.preventDefault();
+
+        // Сброс цен к начальным значениям
+        setValues([bounds[0], bounds[1]]);
+
+        // Сброс локальных атрибутов
+        const resetAttrs = attrFilters.reduce((acc, el) => {
+            acc[el.name] = '';
+            return acc;
+        }, {});
+        setLocalAttrs(resetAttrs);
+
+        // Очистка фильтров в хранилище
+        setFilters({});
+
+        // Сброс выбранных option
+        selectRefs.current.forEach(select => {
+            if (select) select.value = '';
+        });
+
+        // Обновление данных (если handleChange передан)
+        if (handleChange) {
+            handleChange();
+        }
+    };
+
 
     return (
         <form className={styles.form}>
@@ -172,13 +197,14 @@ export default function FilterForm({ data, handleChange, statusForm }) {
                 </div>
             </div>
 
-            {attrFilters.map((el) => (
+            {attrFilters.map((el, index) => (
                 <div
                     key={el.name}
                     className={styles.form_filter_wrapper_select}
                 >
                     <label htmlFor={el.name}>{el.name}</label>
                     <select
+                        ref={el => selectRefs.current[index] = el}
                         name={el.name}
                         id={el.name}
                         onChange={(e) => handleFilterChange(el.name, e.target.value)}
@@ -201,7 +227,10 @@ export default function FilterForm({ data, handleChange, statusForm }) {
                     Применить
                 </button>
 
-                <button className={styles.form_reset}>
+                <button
+                    className={styles.form_reset}
+                    onClick={handleFilterReset}
+                >
                     Сбросить фильтр
                 </button>
             </div>
