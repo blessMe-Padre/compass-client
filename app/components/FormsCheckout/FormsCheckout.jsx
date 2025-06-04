@@ -23,7 +23,7 @@ export function getCurrentDate() {
     return format(new Date(), 'yyyy-MM-dd');
 }
 
-const documentId = useUserStore.getState().userData?.documentId ?? '';
+const documentId = useUserStore.getState().userData?.documentId ?? 'bxgol3fvr7ei2e5522yrqpp6';
 
 export async function sendOrderService(orderData) {
     try {
@@ -102,7 +102,6 @@ function formatPhone(raw) {
 
 export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, setPaymentMessage, setOrderWasCreate }) {
     const [user, setUser] = useState({});
-
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
     const [paymentData, setPaymentData] = useState(null);
@@ -110,6 +109,10 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const [deliveryMethod, setDeliveryMethod] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
+
+
+    console.log('storeData', storeData);
+
 
     useEffect(() => {
         const loadData = async () => {
@@ -160,7 +163,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const email = useWatch({ control, name: 'email' });
     const inn = useWatch({ control, name: 'inn' });
 
-    // следим за обновлением полей 
+    // следим за обновлением полей
     useEffect(() => {
         setDeliveryData({ username: name });
     }, [name]);
@@ -319,7 +322,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             // Статус и цены
             orderStatus: "pending",
             priceOrder: `${totalSum}` || "0",
-            priceDelivery: `${deliveryData}` ? "500" : "0",
+            priceDelivery: `${storeData?.deliveryPrice ?? "0"}`,
 
             // Методы оплаты и доставки
             deliveryMethod: deliveryMethod || 'Самовывоз',
@@ -328,9 +331,10 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             paymentstatus: 'не оплачен',
 
             // Контактные данные
-            dataCustomer: dataCustomer
+            dataCustomer: dataCustomer,
         };
 
+        console.log(formData);
         isSending(true);
 
         try {
@@ -355,7 +359,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 const paymentResult = await sendPaymentService(orderUniqNumber, storeData.totalSum);
                 setPaymentData(paymentResult?.data);
 
-                // устанавливает сообщение о редирект 
+                // устанавливает сообщение о редирект
                 setPaymentMessage(true);
                 const url = paymentResult.data?.confirmation?.confirmation_url;
 
