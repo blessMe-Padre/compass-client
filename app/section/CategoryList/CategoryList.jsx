@@ -101,36 +101,38 @@ const CategoryList = () => {
                 ) : (
                     <ul className={styles.list}>
                         {slides.map((slide, index) => {
-                            return (
-                                <Link href={'/catalog'} className={styles.item} key={index}>
-                                    <div className={styles.image_wrapper}>
-                                        {slide?.image?.url
-                                            ? (
-                                                <Image
+                            if(index < 20) {
+                                return (
+                                    <Link href={'/catalog'} className={styles.item} key={index}>
+                                        <div className={styles.image_wrapper}>
+                                            {slide?.image?.url
+                                                ? (
+                                                    <Image
+                                                        className={styles.slide}
+                                                        src={`${domain}${slide?.image?.url}`}
+                                                        alt="logo"
+                                                        width={345}
+                                                        height={223}
+                                                        placeholder="blur"
+                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                    />
+                                                )
+                                                : <Image
+                                                    src={placeholder}
                                                     className={styles.slide}
-                                                    src={`${domain}${slide?.image?.url}`}
-                                                    alt="logo"
                                                     width={345}
                                                     height={223}
+                                                    alt='logo'
                                                     placeholder="blur"
                                                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                                 />
-                                            )
-                                            : <Image
-                                                src={placeholder}
-                                                className={styles.slide}
-                                                width={345}
-                                                height={223}
-                                                alt='logo'
-                                                placeholder="blur"
-                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                            />
-                                        }
-                                    </div>
-
-                                    <h3 className={styles.text}>{slide?.name}</h3>
-                                </Link>
-                            )
+                                            }
+                                        </div>
+    
+                                        <h3 className={styles.text}>{slide?.name}</h3>
+                                    </Link>
+                                )
+                            }
                         })}
                     </ul>
                 )}

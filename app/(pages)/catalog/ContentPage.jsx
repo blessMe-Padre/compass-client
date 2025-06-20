@@ -44,7 +44,7 @@ export default function ContentPage({ data }) {
 
 
   const handleSubmitForm = () => {
-    sendingForm === true ? setSendingForm(false) : setCheckboxStatus(setSendingForm)
+    setSendingForm(!sendingForm);
   }
 
   const handleCategoryClick = (e, categorySlug, categoryId, categoryName) => {
@@ -62,6 +62,7 @@ export default function ContentPage({ data }) {
 
     setActiveCategoryId(categoryId);
   }
+  
 
   const isCategoryActive = (categoryId) => {
     return activeCategoryId === categoryId;
@@ -146,7 +147,9 @@ export default function ContentPage({ data }) {
       try {
         setLoading(true);
         const data = await getAllCategories();
+        console.log('КАТЕГОРИИ', data)
         setCategories(data);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -162,6 +165,8 @@ export default function ContentPage({ data }) {
       try {
         setLoading(true);
         const data = await getAllProducts();
+        console.log(data);
+        
         setProducts(data);
       } catch (err) {
         setError(err.message);
@@ -173,6 +178,9 @@ export default function ContentPage({ data }) {
     fetchData();
   }, []);
 
+  console.log(currentSlug);
+  
+
   useEffect(() => {
     const fetchProducts = async () => {
       if (!currentSlug) return;
@@ -182,6 +190,9 @@ export default function ContentPage({ data }) {
         const stockFilter = checkboxStatus ? 'filters[statusProduct][$eq]=stock&' : '';
         // http://90.156.134.142:1337/api/products?pagination[page]=1&pagination[pageSize]=12&filters[statusProduct][$eq]=stock&populate=*
         const slugFilter = currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : ''
+
+
+        console.log(slugFilter, currentSlug)
         const sortFilter = sortedFilters ? `sort=${sortedFilters}&` : '';
         const optionsFilter = buildStrapiFilters(filters);
 
@@ -217,7 +228,7 @@ export default function ContentPage({ data }) {
     };
 
     fetchProducts();
-  }, [currentSlug, pageCount, checkboxStatus, sortedFilters, filters]);
+  }, [currentSlug, pageCount, checkboxStatus, sortedFilters, filters, setCurrentSlug]);
 
 
 
@@ -248,6 +259,7 @@ export default function ContentPage({ data }) {
               </div>
             </Link>
             <div className={styles.list_cat}>
+              {console.log(categories)}
               {categories?.map((parentCategory) => (
                 <div
                   key={parentCategory.id}

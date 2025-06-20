@@ -135,14 +135,26 @@ export default function Search() {
                                                 <Link href={`/products/${product.id}`}
                                                     className={styles.list_item}
                                                 >
-                                                    <Image
-                                                        src={`${domain}${product?.imgs[0]?.url}`}
-                                                        alt="logo"
-                                                        width={40}
-                                                        height={50}
-                                                        placeholder="blur"
-                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                    />
+                                                    {product?.imgs !== null ? (
+                                                            <Image
+                                                                src={`${domain}${product?.imgs?.[0]?.url}`} 
+                                                                alt="logo"
+                                                                width={40}
+                                                                height={50}
+                                                                placeholder="blur"
+                                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                            />
+                                                        ) : (
+                                                            <Image
+                                                                src={`/placeholder-image.jpg`}
+                                                                alt="logo"
+                                                                width={40}
+                                                                height={50}
+                                                                placeholder="blur"
+                                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                            />
+                                                        )
+                                                    }
                                                     <div>
                                                         <div>
                                                             <span className={styles.item_title}>{highlightText(product.title, inputValue)}</span>
