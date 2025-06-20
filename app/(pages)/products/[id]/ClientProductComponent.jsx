@@ -101,7 +101,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     650: { slidesPerView: 5 },
                                 }}
                             >
-                                {imageList.map((slide, index) => {
+                                {imageList !== null && imageList?.map((slide, index) => {
                                     return (
 
                                         <SwiperSlide key={`thumb-${index}`}>
@@ -136,7 +136,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 modules={[Thumbs]}
                                 thumbs={{ swiper: thumbsSwiper }}
                             >
-                                {imageList.map((slide, index) => (
+                                {imageList !== null && imageList?.map((slide, index) => (
                                     <SwiperSlide key={`main-${index}`}>
                                         <div className={styles.slide}>
                                             <div className={styles.image_wrapper}>
@@ -186,7 +186,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                     documentId={item.documentId}
                                                 />
                                             </div>
-                                            <div className={styles.price}>{item.price !== 0 ? <div> {item.price.toLocaleString('ru-RU')}  ₽</div> :
+                                            <div className={styles.price}>{item.price !== 0 ? <div> {item.price !== null ? item.price.toLocaleString('ru-RU') : 0}  ₽</div> :
                                                 <div className='flex'>
                                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <rect width="14" height="14" rx="7" fill="#F79410" />
