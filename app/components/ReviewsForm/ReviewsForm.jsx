@@ -55,7 +55,7 @@ const ReviewsForm = ({ data }) => {
     const [rating, setRating] = useState(5);
     const [user, setUser] = useState({});
 
-    const productDocumentId = data.documentId;
+    const productDocumentId = data?.documentId;
     const { register, watch, handleSubmit, formState: { errors }, control, reset, getValues } = useForm();
     const [sending, setSending] = useState(false); // отправка формы
     const [isSuccessSend, setIsSuccessSend] = useState(false); // успешная отправка формы
