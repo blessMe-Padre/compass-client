@@ -12,11 +12,40 @@ export async function generateMetadata({ params }) {
         description: product?.description,
     }
 }
+
+
+// Вспомогательная функция для получения "чистого" названия товара
+function getCleanTitle(fullTitle) {
+    if (typeof fullTitle !== 'string') {
+        return fullTitle || ''; // Возвращаем пустую строку, если название не строка или null/undefined
+    }
+
+    const sizeHeightPattern = /\s(?:[рp]\.\s*)?[\d-]+(?:\/[\d-]+)?$/i;
+
+    // Удаляем найденный паттерн
+    let cleanTitle = fullTitle.replace(sizeHeightPattern, '');
+
+    cleanTitle = cleanTitle.replace(/\s*,\s*$/, '').trim();
+    cleanTitle = cleanTitle.replace(/\s*\(\s*\)\s*$/, '').trim();
+    cleanTitle = cleanTitle.trim();
+
+    console.log(cleanTitle);
+
+
+    return cleanTitle;
+}
+
+
+
 export default async function Page({ params }) {
     const { id } = await params;
     const product = await getProductById(id);
     const productTitle = await product?.title;
-    const sameProducts = await getAllProductsByTitle(productTitle);
+    const titleUniq = getCleanTitle(productTitle);
+    const sameProducts = await getAllProductsByTitle(titleUniq);
+
+    console.log(sameProducts);
+    
 
     return (
         <ClientProductComponent

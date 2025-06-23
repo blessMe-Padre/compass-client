@@ -106,15 +106,28 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
                                         <SwiperSlide key={`thumb-${index}`}>
                                             <div className={styles.thumbnail_wrapper}>
-                                                <Image
-                                                    className={styles.image}
-                                                    src={`${domain}${slide?.url}`}
-                                                    alt={`thumb-${index}`}
-                                                    width={100}
-                                                    height={100}
-                                                    placeholder="blur"
-                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                />
+                                                {slide.img !== null ? (
+                                                    <Image
+                                                        className={styles.image}
+                                                        src={`${domain}${slide?.url}` ?? '/placeholder-image.jpg'}
+                                                        alt={`thumb-${index}`}
+                                                        width={100}
+                                                        height={100}
+                                                        placeholder="blur"
+                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                    />
+                                                    ) : 
+                                                        <Image
+                                                            src={`/placeholder-image.jpg`}
+                                                            alt={title}
+                                                            width={305}
+                                                            objectFit='contain'
+                                                            height={360}
+                                                            className={styles.card_image}
+                                                            placeholder="blur"
+                                                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                        />
+                                                    }
                                             </div>
                                         </SwiperSlide>
 
@@ -142,7 +155,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                             <div className={styles.image_wrapper}>
                                                 <Image
                                                     className={styles.image}
-                                                    src={`${domain}${slide?.url}`}
+                                                    src={`${domain}${slide?.url}` ?? '/placeholder-image.jpg'}
                                                     alt={`main-${index}`}
                                                     width={582}
                                                     height={730}
@@ -153,6 +166,19 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                         </div>
                                     </SwiperSlide>
                                 ))}
+
+                                {!imageList && (
+                                     <Image
+                                        src={`/placeholder-image.jpg`}
+                                        alt={'заглушка'}
+                                        width={500}
+                                        objectFit='contain'
+                                        height={500}
+                                        className={styles.card_image}
+                                        placeholder="blur"
+                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                    />
+                                )}
                             </Swiper>
                         </div>
                     </div>
