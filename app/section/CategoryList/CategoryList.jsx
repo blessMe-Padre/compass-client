@@ -11,7 +11,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?populate=*`
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&populate=*`
 const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 import fetchData from '@/app/utils/fetchData';
