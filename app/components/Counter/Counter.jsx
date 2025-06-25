@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import styles from './style.module.scss';
 
-const Counter = ({ onChange, documentId, disabled }) => {
+const Counter = ({ onChange, documentId, disabled, maxAmount }) => {
 
     /**
      * documentId - это в каждый счетчик прокидывается documentId для добавления в корзину

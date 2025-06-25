@@ -187,8 +187,13 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         <p className={styles.article}>{data?.sku}</p>
                         <ul className={styles.list}>
                             <li className={styles.list_header}>
-                                <div className={styles.list_header_text}>Размер:</div>
-                                <div className={styles.list_header_text}>Рост:</div>
+                                {data?.size && (
+                                    <div className={styles.list_header_text}>Размер:</div>
+                                )}
+                                {data?.height && (
+                                    <div className={styles.list_header_text}>Рост:</div>
+                                )}
+
                                 <div className={styles.list_header_text}>Кол-во:</div>
                                 <div className={styles.list_header_text}>Цена:</div>
                             </li>
@@ -197,10 +202,21 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 sameProducts.map((item, index) => {
                                     return (
                                         <li className={styles.list_item} key={index}>
-                                            <div className={`${styles.size} ${item.price === 0 ? `${styles.disabled}` : ""}`}>{item.size}</div>
-                                            <div className={`${styles.height} ${item.price === 0 ? `${styles.disabled}` : ""}`}>{item.height}</div>
+                                            {data?.size && (
+                                                <div className={`${styles.size} ${item.price === 0 ? `${styles.disabled}` : ""}`}>
+                                                    {item.size}
+                                                </div>
+                                                )
+                                            }
+
+                                            {data?.height && (
+                                                    <div className={`${styles.height} ${item.price === 0 ? `${styles.disabled}` : ""}`}>{item.height}</div>
+                                                )
+                                            }
+
                                             <div className={styles.qty}>
                                                 <Counter
+                                                    maxAmount={data?.amount}
                                                     disabled={item.price === 0 ? true : ''}
                                                     onChange={(newCount) => {
                                                         setQuantities(prev => ({
@@ -212,6 +228,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                     documentId={item.documentId}
                                                 />
                                             </div>
+                                            
                                             <div className={styles.price}>{item.price !== 0 ? <div> {item.price !== null ? item.price.toLocaleString('ru-RU') : 0}  ₽</div> :
                                                 <div className='flex'>
                                                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -223,9 +240,22 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                 </div>
                                             }
                                             </div>
+                                            
                                         </li>
                                     )
                                 })
+                            }
+
+                            {data?.amount > 0 ? 
+                                    <div>
+                                        В наличии {data?.amount} шт.
+                                    </div>
+                                : (
+                                    <div>
+                                        Нет в наличии
+                                    </div>
+
+                                )
                             }
 
                             {sameProducts.map((item, idx) => {
