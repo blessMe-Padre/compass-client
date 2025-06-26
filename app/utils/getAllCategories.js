@@ -15,7 +15,7 @@ const getAllCategories = async () => {
         */
 
         // const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[parent][$null]=true&filters[children][$notNull]=true&populate[children][populate][children][populate]=*`);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&populate=*`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&populate[children][populate][children][populate]=*&sort[0]=name:asc`);
         if (!res.ok) {
             throw new Error(`Ошибка HTTP: ${res.status}`);
         }
