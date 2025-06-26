@@ -62,7 +62,6 @@ export default function ContentPage({ data }) {
 
     setActiveCategoryId(categoryId);
   }
-  
 
   const isCategoryActive = (categoryId) => {
     return activeCategoryId === categoryId;
@@ -230,9 +229,6 @@ export default function ContentPage({ data }) {
     fetchProducts();
   }, [currentSlug, pageCount, checkboxStatus, sortedFilters, filters, setCurrentSlug]);
 
-
-
-
   return (
     <>
       <div className='container'>
@@ -259,7 +255,6 @@ export default function ContentPage({ data }) {
               </div>
             </Link>
             <div className={styles.list_cat}>
-              {console.log(categories)}
               {categories?.map((parentCategory) => (
                 <div
                   key={parentCategory.id}
@@ -291,51 +286,55 @@ export default function ContentPage({ data }) {
                       transition={{ duration: 0.3 }}
                     >
                       <div className={styles.child_cat}>
-                        {parentCategory.children.map((childCategory) => (
-                          <div
-                            key={childCategory.id}
-                            className={`${styles.child_item} ${isCategoryActive(childCategory.id) ? styles.active : ''}`}
-                          >
-                            <h4
-                              onClick={(e) => handleCategoryClick(e, childCategory.slug, childCategory.id, childCategory.name)}
+                        {[...parentCategory.children]
+                          .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                          .map((childCategory) => (
+                            <div
+                              key={childCategory.id}
+                              className={`${styles.child_item} ${isCategoryActive(childCategory.id) ? styles.active : ''}`}
                             >
-                              {childCategory.name}
-                              {childCategory.children?.length > 0 && (
-                                <motion.span
-                                  className={styles.arrow}
-                                  animate={{ rotate: expandedCategories[childCategory.id] ? 180 : 0 }}
-                                >
-                                  <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                                  </svg>
-
-                                </motion.span>
-                              )}
-                            </h4>
-
-                            {childCategory.children?.length > 0 && (
-                              <motion.div
-                                className={styles.grandchild_container}
-                                initial={{ height: 0 }}
-                                animate={{
-                                  height: expandedCategories[childCategory.id] ? "auto" : 0
-                                }}
+                              <h4
+                                onClick={(e) => handleCategoryClick(e, childCategory.slug, childCategory.id, childCategory.name)}
                               >
-                                <div className={styles.grandchild_cat}>
-                                  {childCategory.children.map((grandchildCategory) => (
-                                    <p
-                                      key={grandchildCategory.id}
-                                      className={`${styles.grandchild_item} ${isCategoryActive(grandchildCategory.id) ? styles.active : ''}`}
-                                      onClick={(e) => handleCategoryClick(e, grandchildCategory.slug, grandchildCategory.id, grandchildCategory.name)}
-                                    >
-                                      {grandchildCategory.name}
-                                    </p>
-                                  ))}
-                                </div>
-                              </motion.div>
-                            )}
-                          </div>
-                        ))}
+                                {/* Добавляем номер перед названием */}
+                                {childCategory.name}
+                                {childCategory.children?.length > 0 && (
+                                  <motion.span
+                                    className={styles.arrow}
+                                    animate={{ rotate: expandedCategories[childCategory.id] ? 180 : 0 }}
+                                  >
+                                    <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                    </svg>
+                                  </motion.span>
+                                )}
+                              </h4>
+
+                              {childCategory.children?.length > 0 && (
+                                <motion.div
+                                  className={styles.grandchild_container}
+                                  initial={{ height: 0 }}
+                                  animate={{
+                                    height: expandedCategories[childCategory.id] ? "auto" : 0
+                                  }}
+                                >
+                                  <div className={styles.grandchild_cat}>
+                                    {[...childCategory.children]
+                                      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                                      .map((grandchildCategory) => (
+                                        <p
+                                          key={grandchildCategory.id}
+                                          className={`${styles.grandchild_item} ${isCategoryActive(grandchildCategory.id) ? styles.active : ''}`}
+                                          onClick={(e) => handleCategoryClick(e, grandchildCategory.slug, grandchildCategory.id, grandchildCategory.name)}
+                                        >
+                                          {grandchildCategory.name}
+                                        </p>
+                                      ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </div>
+                          ))}
                       </div>
                     </motion.div>
                   )}

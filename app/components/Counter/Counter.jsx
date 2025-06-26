@@ -3,32 +3,26 @@ import { useState, useCallback } from "react";
 import styles from './style.module.scss';
 
 const Counter = ({ onChange, documentId, disabled, maxAmount }) => {
-
-    /**
-     * documentId - это в каждый счетчик прокидывается documentId для добавления в корзину
-     */
-
     const [count, setCount] = useState(0);
-    // Обновляем count и вызываем onChange
+
     const increment = useCallback(() => {
-        const newCount = count + 1;
+        const newCount = Math.min(count + 1, maxAmount ?? Infinity);
         setCount(newCount);
-        onChange?.(newCount);
-    }, [count, onChange]);
+        onChange?.(newCount, documentId);
+    }, [count, onChange, documentId, maxAmount]);
 
     const decrement = useCallback(() => {
         const newCount = Math.max(0, count - 1);
         setCount(newCount);
-        onChange?.(newCount);
-    }, [count, onChange]);
+        onChange?.(newCount, documentId);
+    }, [count, onChange, documentId]);
 
     return (
         <div className={styles.button_wrapper}>
             <button
-
                 onClick={decrement}
                 className={styles.button}
-                disabled={count === 0 && disabled}
+                disabled={disabled || count === 0}
             >
                 &ndash;
             </button>
@@ -36,7 +30,7 @@ const Counter = ({ onChange, documentId, disabled, maxAmount }) => {
             <button
                 onClick={increment}
                 className={styles.button}
-                disabled={count === 0 && disabled}
+                disabled={disabled || (maxAmount !== undefined && count >= maxAmount)}
             >
                 +
             </button>

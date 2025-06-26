@@ -9,73 +9,6 @@ import { useEffect, useState } from 'react';
 import { Cookies } from '@/app/components';
 
 const Footer = () => {
-    const menu_categories = [
-        {
-            'link': '/',
-            'title': 'Спецодежда'
-        },
-        {
-            'link': '/',
-            'title': 'Обувь'
-        },
-        {
-            'link': '/',
-            'title': 'Одежда'
-        },
-        {
-            'link': '/',
-            'title': 'Туризм и активный отдых'
-        },
-        {
-            'link': '/',
-            'title': 'Средства индивидуальной защиты'
-        },
-        {
-            'link': '/',
-            'title': 'Чулочно-носочные изделия'
-        },
-        {
-            'link': '/',
-            'title': 'Маскировка'
-        },
-        {
-            'link': '/',
-            'title': 'Детский камуфляж'
-        },
-        {
-            'link': '/',
-            'title': 'Очки с эффектом поляризации'
-        },
-        {
-            'link': '/',
-            'title': 'Репелленты'
-        },
-        {
-            'link': '/',
-            'title': 'Товары для рыбалки'
-        },
-        {
-            'link': '/',
-            'title': 'Фонари'
-        },
-        {
-            'link': '/',
-            'title': 'Флаги'
-        },
-        {
-            'link': '/',
-            'title': 'Сувениры'
-        },
-        {
-            'link': '/',
-            'title': 'Подарочные сертификаты'
-        },
-        {
-            'link': '/',
-            'title': 'Пневматика, средства по уходу за оружием'
-        },
-
-    ]
 
     const menu_clients = [
         {
@@ -116,6 +49,8 @@ const Footer = () => {
     const [linksCatalog, setLinksCatalog] = useState();
     const { contacts } = useContactStore();
 
+    console.log('asfsadfffas', contacts)
+
     useEffect(() => {
         const fetchLinks = async () => {
             try {
@@ -126,9 +61,10 @@ const Footer = () => {
                 if (!response?.data?.kategoriis) {
                     throw new Error('Invalid response structure');
                 }
-
+                
                 const data = response.data.kategoriis;
-
+                
+                {console.log(data)}
                 setLinksCatalog(data);
 
             } catch (error) {
