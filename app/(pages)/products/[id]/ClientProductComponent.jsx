@@ -246,17 +246,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 })
                             }
 
-                            {data?.amount > 0 ? 
-                                    <div>
-                                        В наличии {data?.amount} шт.
-                                    </div>
-                                : (
-                                    <div>
-                                        Нет в наличии
-                                    </div>
-
-                                )
-                            }
 
                             {sameProducts.map((item, idx) => {
                                 item.amount = quantities[idx]
@@ -267,13 +256,17 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
-
-                        <AddToCartButton
-                            many
-                            items={updatedItems.filter(i => i.amount > 0)}
-                            text={'Добавить в корзину'}
-                            afterCounter
-                        />
+                        
+                        {data?.statusProduct === 'stock' ?
+                            <AddToCartButton
+                                many
+                                items={updatedItems.filter(i => i.amount > 0)}
+                                text={'Добавить в корзину'}
+                                afterCounter
+                            /> :
+                            <div>Кажется данного товара нет в наличии</div>
+                            } 
+                        
 
                     </div>
                 </div>
