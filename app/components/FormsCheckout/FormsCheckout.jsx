@@ -111,7 +111,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const { cartItems } = useCartStore();
 
 
-    console.log('storeData', storeData);
+    // console.log('storeData', storeData);
 
 
     useEffect(() => {
@@ -248,7 +248,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
         if (!res.ok) throw new Error(await res.text())
 
         const order = await res.json();
-        console.log('создан CDEK заказ:', order)
+        // console.log('создан CDEK заказ:', order)
     }
 
     const onSubmit = async () => {
@@ -334,7 +334,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             dataCustomer: dataCustomer,
         };
 
-        console.log(formData);
+        // console.log(formData);
         isSending(true);
 
         try {

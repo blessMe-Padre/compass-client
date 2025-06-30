@@ -42,7 +42,6 @@ export async function sendReviewsService(reviewsData) {
             })
         });
         const data = await response.json();
-        console.log('отправка');
 
         return { response, data };
     } catch (error) {

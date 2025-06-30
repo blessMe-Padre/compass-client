@@ -49,7 +49,6 @@ const Footer = () => {
     const [linksCatalog, setLinksCatalog] = useState();
     const { contacts } = useContactStore();
 
-    console.log('asfsadfffas', contacts)
 
     useEffect(() => {
         const fetchLinks = async () => {
@@ -64,7 +63,6 @@ const Footer = () => {
                 
                 const data = response.data.kategoriis;
                 
-                {console.log(data)}
                 setLinksCatalog(data);
 
             } catch (error) {
@@ -157,7 +155,7 @@ const Footer = () => {
                                     {
                                         linksCatalog?.map((el, idx) =>
                                             <li key={idx} className={styles.menu_item}>
-                                                <Link href={'/catalog'}>
+                                                <Link href={`/catalog?slug=${el?.slug}`}>
                                                     {el.name}
                                                 </Link>
                                             </li>

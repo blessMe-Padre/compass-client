@@ -36,8 +36,7 @@ export default function Payment() {
 
             setPaymentData(result.data);
         } catch (err) {
-            console.log(err);
-
+            console.log(err)
         } finally {
 
         }

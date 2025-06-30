@@ -252,7 +252,6 @@ const Login = () => {
         setIsSending(false); 
     };
 
-    console.log(userData)
 
     useEffect(() => {
         if (jwt) {
