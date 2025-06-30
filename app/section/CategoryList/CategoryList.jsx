@@ -11,7 +11,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&populate=*`
+// const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&populate=*`
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&fields[0]=name&fields[1]=slug&populate[children][fields][0]=name&populate[children][fields][1]=slug&populate[children][populate][children][fields][0]=name&populate[children][populate][children][fields][1]=slug`
 const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 import fetchData from '@/app/utils/fetchData';
@@ -103,7 +104,7 @@ const CategoryList = () => {
                         {slides.map((slide, index) => {
                             if(index < 20) {
                                 return (
-                                    <Link href={'/catalog'} className={styles.item} key={index}>
+                                    <Link href={`/catalog?slug=${slide?.slug}`} className={styles.item} key={index}>
                                         <div className={styles.image_wrapper}>
                                             {slide?.image?.url
                                                 ? (
