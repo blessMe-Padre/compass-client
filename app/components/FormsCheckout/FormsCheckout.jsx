@@ -111,8 +111,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const { cartItems } = useCartStore();
 
     // console.log('storeData', storeData);
-    console.log('cartItems', cartItems);
-
+    // console.log('user', user);
 
     useEffect(() => {
         const loadData = async () => {
@@ -294,6 +293,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
         const formData = {
             orderPaymentId: orderUniqNumber,
             orderNumber: `Заказ № ${orderNumber}`,
+            UserDocumentId: user.documentId,
             orderText: orderText,
             dateOrder: getCurrentDate(),
             dateDelivery: getCurrentDate() + 10,
