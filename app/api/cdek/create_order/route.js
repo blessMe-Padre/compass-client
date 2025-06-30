@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request) {
     const { token, orderData } = await request.json();
-
-    console.log(orderData);
-
+    // console.log(orderData);
 
     const body = {
         type: 2,

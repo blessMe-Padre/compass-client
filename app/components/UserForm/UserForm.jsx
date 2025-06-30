@@ -105,7 +105,7 @@ const UserForm = ({ user }) => {
             setPending(false);
 
         } catch (error) {
-            console.log('Ошибка запроса, попробуйте позже', error);
+            console.error('Ошибка запроса, попробуйте позже', error);
             setError(true);
         } finally {
             setPending(false);

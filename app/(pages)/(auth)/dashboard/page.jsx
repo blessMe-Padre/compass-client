@@ -39,7 +39,6 @@ const Dashboard = () => {
         const loadData = async () => {
             try {
                 const response = await getUserById(`${documentId}`);
-                console.log(response)
                 setUser(response[0]);
 
             } catch (error) {

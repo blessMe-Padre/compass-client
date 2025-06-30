@@ -10,7 +10,7 @@ import { Controller } from 'react-hook-form';
 const url = 'http://90.156.134.142:1337/api/zayavki-na-obratnuyu-svyazs'
 
 export async function sendNewQuestion(orderData) {
-    console.log('orderData', orderData)
+    // console.log('orderData', orderData)
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -20,7 +20,7 @@ export async function sendNewQuestion(orderData) {
             body: JSON.stringify({ data: { ...orderData } }),
         });
 
-        console.log(response)
+        // console.log(response)
 
         const data = await response.json();
 

@@ -16,290 +16,14 @@ const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`
 import { MenuButton, PageMenu, Search, MiniCart } from './../index';
 import fetchData from '@/app/utils/fetchData';
 
-const catalogLinks = [
-    {
-        title: 'КАТАЛОГ',
-        link: '#',
-        subMenuLvl1: [
-            {
-                title: 'Новинки', link: '#', subMenuLvl2: [
-                    { title: 'меню2', link: '#' },
-                    { title: 'меню2', link: '#' },
-                    { title: 'меню2', link: '#' },
-                    { title: 'меню2', link: '#' },
-                ]
-            },
-            {
-                title: 'Спецодежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Обувь', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Одежда', link: '/catalog/category/11', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Туризм и активный отдых', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-        ]
-    },
-    {
-        title: 'СПЕЦОДЕЖДА',
-        link: '#',
-        subMenuLvl1: [
-            {
-                title: 'Новинки2', link: '#', subMenuLvl2: [
-                    { title: 'меню222', link: '#' },
-                    { title: 'меню2222', link: '#' },
-                    { title: 'меню2222', link: '#' },
-                    { title: 'меню22222', link: '#' },
-                ]
-            },
-            {
-                title: 'Спецодежда2', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Обувь2', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Одежда2', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Туризм и активный отдых2', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-        ]
-    },
-    {
-        title: 'ОБУВЬ',
-        link: '#',
-        subMenuLvl1: [
-            {
-                title: 'Новинки', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Спецодежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Обувь', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Одежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Туризм и активный отдых', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-        ]
-    },
-    {
-        title: 'МАСКИРОВКА',
-        link: '#',
-        subMenuLvl1: [
-            {
-                title: 'Новинки', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Спецодежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Обувь', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Одежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Туризм и активный отдых', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-        ]
-    },
-    {
-        title: 'ОЧКИ',
-        link: '#',
-        subMenuLvl1: [
-            {
-                title: 'Новинки', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Спецодежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Обувь', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Одежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Туризм и активный отдых', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-        ]
-    },
-    {
-        title: 'СУВЕНИРЫ',
-        link: '#',
-        subMenuLvl1: [
-            {
-                title: 'Новинки', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Спецодежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Обувь', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Одежда', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-            {
-                title: 'Туризм и активный отдых', link: '#', subMenuLvl2: [
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                    { title: 'меню3', link: '#' },
-                ]
-            },
-        ]
-    },
-]
+
 
 const Header = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [opened, setOpened] = useState(false);
     const [searchOpened, setSearchOpened] = useState(false);
     const [modalMiniCartOpened, setModalMiniCartOpened] = useState(false)
+    const [catalogLinks, setCatalogLinks] = useState([]);
 
     const { setContacts, contacts } = useContactStore();
 
@@ -314,6 +38,7 @@ const Header = () => {
     const { cartItems, removeFromCart } = useCartStore();
 
     const menuClick = (e) => {
+        e.preventDefault();
         document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
             link.classList.remove(`${styles.catalog_item_active}`);
         });
@@ -381,6 +106,15 @@ const Header = () => {
             setModalMiniCartOpened(false);
         }
     };
+
+    useEffect(() => {
+        const fetchTopMenu = async () => {
+            const response = await fetchData(`${domain}/api/header-menu-item?populate[item_menu][populate][kategoriis][fields][0]=name&populate[item_menu][populate][kategoriis][fields][1]=slug&populate[item_menu][populate][kategoriis][populate][children][fields][0]=name&populate[item_menu][populate][kategoriis][populate][children][fields][1]=slug`);
+            setCatalogLinks(response.data.item_menu || [])
+        }
+
+        fetchTopMenu();
+    }, [])
 
     useEffect(() => {
         if (isMobile) return;
@@ -504,16 +238,17 @@ const Header = () => {
                             />
                             <div className='relative'>
                                 <ul className={`${styles.catalog_list}`}>
-                                    {catalogLinks.map((item, index) => (
+                                    {[...catalogLinks]
+                                        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                                        .map((item, index) => (
                                         <li key={index} className={styles.catalog_list_item}>
                                             <Link
                                                 href={item.link}
                                                 onClick={menuClick}
                                                 className={`${isHome ? styles.link_homeColor : styles.link_otherColor}`}
                                             >
-                                                {item.title}
+                                                {item.name}
                                             </Link>
-                                            {/* subMenuLvl1 */}
                                             <ul className={styles.submenu}>
                                                 {isMobile &&
                                                     <div className={styles.menu_wrapper}>
@@ -529,7 +264,9 @@ const Header = () => {
                                                         </div>
                                                     </div>
                                                 }
-                                                {item.subMenuLvl1.map((subItem, subIndex) => (
+                                                    {[...item?.kategoriis]
+                                                        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                                                        .map((subItem, subIndex) => (
                                                     <li
                                                         key={subIndex}
                                                         onMouseEnter={() => {
@@ -538,7 +275,7 @@ const Header = () => {
                                                         }}
                                                         onMouseLeave={() => setHoveredSubmenuItem(null)}
                                                     >
-                                                        <Link href={subItem.link}>{subItem.title}</Link>
+                                                        <Link href={`/catalog?slug=${subItem?.slug}`}>{subItem?.name}</Link>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -546,7 +283,7 @@ const Header = () => {
                                     ))}
                                 </ul>
 
-                                {hoveredSubmenuItem?.subMenuLvl2?.length > 0 && (
+                                {hoveredSubmenuItem?.children?.length > 0 && (
                                     <div
                                         ref={submenuRef}
                                         className={`${styles.submenu_2} ${styles.active}`}
@@ -556,7 +293,7 @@ const Header = () => {
                                         {isMobile &&
                                             <div className={styles.menu_wrapper}>
                                                 <p onClick={returnToPrev} className={styles.text}>
-                                                    ← {hoveredSubmenuItem.title}
+                                                    ← {hoveredSubmenuItem.name}
                                                 </p>
                                                 <div onClick={closeMobileCatalogMenu}>
                                                     <Image
@@ -570,11 +307,13 @@ const Header = () => {
                                             </div>
                                         }
 
-                                        {hoveredSubmenuItem.subMenuLvl2.map((subItem, index) => (
-                                            <Link key={index} href={subItem.link}>
-                                                {subItem.title}
-                                            </Link>
-                                        ))}
+                                        {[...hoveredSubmenuItem.children]
+                                            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                                            .map((subItem, index) => (
+                                                <Link key={index} href={`/catalog?slug=${subItem.slug}`}>
+                                                    {subItem.name}
+                                                </Link>
+                                        ))} 
                                     </div>
                                 )}
 

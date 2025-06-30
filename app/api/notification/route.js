@@ -5,8 +5,8 @@ export async function POST(request) {
     const status = res.object.status;
     const orderId = res.object.metadata.orderId;
 
-    console.log(status);
-    console.log(orderId);
+    // console.log(status);
+    // console.log(orderId);
 
     const statusMap = {
         succeeded: 'оплачен',

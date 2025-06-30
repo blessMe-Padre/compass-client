@@ -57,7 +57,7 @@ export default function Sdek() {
             throw new Error(await res.text());
         }
         const data = await res.json()
-        console.log('CDEK token:', data)
+        // console.log('CDEK token:', data)
         setToken(data);
     }
 
@@ -177,7 +177,7 @@ export default function Sdek() {
         if (!res.ok) throw new Error(await res.text())
 
         const order = await res.json();
-        console.log('CDEK заказы:', order)
+        // console.log('CDEK заказы:', order)
     }
 
     return (

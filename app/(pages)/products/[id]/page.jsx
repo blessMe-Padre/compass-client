@@ -29,7 +29,7 @@ function getCleanTitle(fullTitle) {
     cleanTitle = cleanTitle.replace(/\s*\(\s*\)\s*$/, '').trim();
     cleanTitle = cleanTitle.trim();
 
-    console.log(cleanTitle);
+    // console.log(cleanTitle);
 
 
     return cleanTitle;
@@ -44,8 +44,7 @@ export default async function Page({ params }) {
     const titleUniq = getCleanTitle(productTitle);
     const sameProducts = await getAllProductsByTitle(titleUniq);
 
-    console.log(sameProducts);
-    
+    // console.log(sameProducts);
 
     return (
         <ClientProductComponent

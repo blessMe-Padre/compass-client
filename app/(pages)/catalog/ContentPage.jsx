@@ -2,6 +2,9 @@
 import { Breadcrumbs, ProductsList, LoadMoreButton, Popup, Notification } from '@/app/components';
 import { useEffect, useState } from 'react';
 import getAllCategories from '../../utils/getAllCategories';
+
+import { useSearchParams } from 'next/navigation';
+
 import getAllProducts from '@/app/utils/getAllProducts';
 import { motion } from "framer-motion";
 
@@ -13,9 +16,11 @@ import useFilterStore from '@/app/store/filterStore';
 import useCartStore from '@/app/store/cartStore';
 
 export default function ContentPage({ data }) {
-  const [categories, setCategories] = useState([]);
-  // const [currentSlug, setCurrentSlug] = useState(null);
 
+  // Для получения slug из GET параметра
+  const searchParams = useSearchParams();
+
+  const [categories, setCategories] = useState([]);
   const { currentSlug, setCurrentSlug } = useCategorySlug();
 
   const [categoryName, setCategoryName] = useState('Каталог');
@@ -41,7 +46,6 @@ export default function ContentPage({ data }) {
   // Для пагинации
   const PAGE_SIZE = 12;
   const [pageCount, setPageCount] = useState(1);
-
 
   const handleSubmitForm = () => {
     setSendingForm(!sendingForm);
@@ -80,7 +84,6 @@ export default function ContentPage({ data }) {
     setSortedFilters(value);
   };
 
-
   const buildStrapiFilters = (filters) => {
     const params = [];
 
@@ -112,7 +115,6 @@ export default function ContentPage({ data }) {
     return params.length > 0 ? params.join('&') + '&' : '';
   }
 
-
   const handleClickDefault = async () => {
 
     const apiUrl = [
@@ -138,6 +140,11 @@ export default function ContentPage({ data }) {
   }
 
   useEffect(() => {
+    const slug = searchParams.get('slug') || '';
+    setCurrentSlug(slug);
+  }, [searchParams]);
+
+  useEffect(() => {
     setNotificationActive(true)
   }, [cartItems])
 
@@ -146,7 +153,6 @@ export default function ContentPage({ data }) {
       try {
         setLoading(true);
         const data = await getAllCategories();
-        console.log('КАТЕГОРИИ', data)
         setCategories(data);
 
       } catch (err) {
@@ -164,7 +170,6 @@ export default function ContentPage({ data }) {
       try {
         setLoading(true);
         const data = await getAllProducts();
-        console.log(data);
         
         setProducts(data);
       } catch (err) {
@@ -175,10 +180,7 @@ export default function ContentPage({ data }) {
     };
 
     fetchData();
-  }, []);
-
-  console.log(currentSlug);
-  
+  }, []);  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -191,7 +193,7 @@ export default function ContentPage({ data }) {
         const slugFilter = currentSlug !== 'Каталог' ? `filters[categories][slug][$eq]=${currentSlug}&` : ''
 
 
-        console.log(slugFilter, currentSlug)
+        // console.log(slugFilter, currentSlug)
         const sortFilter = sortedFilters ? `sort=${sortedFilters}&` : '';
         const optionsFilter = buildStrapiFilters(filters);
 
