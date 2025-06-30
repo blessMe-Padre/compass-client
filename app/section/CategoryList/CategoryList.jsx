@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 // const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&populate=*`
-const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&fields[0]=name&fields[1]=slug&populate[children][fields][0]=name&populate[children][fields][1]=slug&populate[children][populate][children][fields][0]=name&populate[children][populate][children][fields][1]=slug`
+const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/categories?filters[isMainParent][$eq]=true&sort[0]=name:asc&populate=image`
 const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 import fetchData from '@/app/utils/fetchData';
