@@ -11,11 +11,11 @@ export default function ProductsList({ products, isLoading, count }) {
             className={`${styles.products_list} ${count === 4 ? styles.count : ''}`}
             >
                 {products?.length > 0 ? (
-                    products.map((product) => (
+                    products.map((product, index) => (
                         <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            key={product.id}
+                            key={`${product.id}-${index}`}
                         > 
                             <CardItem element={product} />
                         </motion.div>
