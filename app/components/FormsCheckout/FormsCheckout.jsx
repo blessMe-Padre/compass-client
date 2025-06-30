@@ -110,8 +110,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
 
-
     // console.log('storeData', storeData);
+    console.log('cartItems', cartItems);
 
 
     useEffect(() => {
@@ -312,7 +312,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 quantity: cartItems.map(item => ({
                     id: item.documentId,
                     НАЗВАНИЕ_ТОВАРА: item.title,
-                    КОЛИЧ_ВО: item.quantity
+                    КОЛИЧ_ВО: item.quantity,
+                    ЦЕНА: item.price
                 }))
             }],
 
