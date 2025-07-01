@@ -24,7 +24,7 @@ export async function POST(request) {
         capture: true,
         confirmation: {
             type: 'redirect',
-            return_url: 'http://localhost:3000/checkout'
+            return_url: `${process.env.NEXT_PUBLIC_DOMAIN}/checkout`
         },
         metadata: {
             orderId: metadata,

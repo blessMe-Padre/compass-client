@@ -367,7 +367,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 if (url) {
                     setTimeout(() => {
                         // router.push(url);
-                        window.location.href = paymentData.confirmation.confirmation_url;
+                        window.location.href = url;
                     }, 2000);
                 }
 
