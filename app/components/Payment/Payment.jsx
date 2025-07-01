@@ -8,7 +8,8 @@ export default function Payment() {
 
     useEffect(() => {
         if (paymentData) {
-            router.push(paymentData.confirmation.confirmation_url);
+            // router.push(paymentData.confirmation.confirmation_url);
+            window.location.href = paymentData.confirmation.confirmation_url;
         }
     }, [paymentData, router]);
 
