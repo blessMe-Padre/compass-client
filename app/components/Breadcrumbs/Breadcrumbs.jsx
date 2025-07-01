@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import styles from './style.module.scss';
 
-export default function Breadcrumbs({ secondLink, secondLabel, thirdLabel }) {
+export default function Breadcrumbs({ secondLink = '', secondLabel, thirdLabel }) {
     return (
         <nav className={styles.breadcrumbs}>
             <ul>
