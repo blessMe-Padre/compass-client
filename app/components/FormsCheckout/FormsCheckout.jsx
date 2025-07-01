@@ -609,9 +609,9 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                     </div>
                 </div>
 
-                {paymentMethod === "Оплата онлайн на сайте" &&
+                {/* {paymentMethod === "Оплата онлайн на сайте" &&
                     <p>выбран метод оплаты "Оплата онлайн на сайте"</p>
-                }
+                } */}
 
                 <div className={styles.comment}>
                     <h3>Комментарий к заказу</h3>

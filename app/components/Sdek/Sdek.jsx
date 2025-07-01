@@ -17,7 +17,6 @@ const cdekApiCitiesUrl = '';
 // получаем список городов
 const localApiPvzUrl = '/api/cdek/pvz';
 
-
 export default function Sdek() {
     const { token, setToken } = useCdekTokenStore();
 
@@ -57,7 +56,6 @@ export default function Sdek() {
             throw new Error(await res.text());
         }
         const data = await res.json()
-        // console.log('CDEK token:', data)
         setToken(data);
     }
 
@@ -164,8 +162,6 @@ export default function Sdek() {
             visibility: 'hidden',
         },
     };
-
-    // перенести в utils 
 
     const handleGetOrders = async () => {
         const res = await fetch('/api/cdek/orders', {

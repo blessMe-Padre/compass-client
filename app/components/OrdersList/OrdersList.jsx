@@ -24,7 +24,7 @@ const OrdersList = ({ orders = [] }) => {
             if (Array.isArray(item)) {
                 return sum + calculateTotalPrice(item); // рекурсивно
             }
-            const price = item.priceSales ?? 0;
+            const price = item?.priceSales ?? 0;
 
             return sum + price;
         }, 0);

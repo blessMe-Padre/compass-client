@@ -21,9 +21,8 @@ export default function ContentPage() {
 
     const [orderWasCreate, setOrderWasCreate] = useState(false);
     const [paymentMessage, setPaymentMessage] = useState(false);
-
+    const [lastOrder, setLastOrder] = useState();
     const { cartItems } = useCartStore();
-
     const formRef = useRef();
 
     const tabVariants = {
@@ -61,12 +60,16 @@ export default function ContentPage() {
         loadData();
     }, []);
 
-    const orders = user?.orders ?? [];
-    const lastOrder = orders.length > 0
-        ? orders.reduce((max, o) =>
-            Number(o.id) > Number(max.id) ? o : max
-            , orders[0])
-        : null;
+    useEffect(() => {
+        const orders = user?.orders ?? [];
+        const lastOrder = orders.length > 0
+            ? orders.reduce((max, o) =>
+                Number(o.id) > Number(max.id) ? o : max
+                , orders[0])
+            : null;
+
+        setLastOrder(lastOrder);
+    }, [isSubmitSuccessful, user?.orders]);
 
     return (
         <section>
