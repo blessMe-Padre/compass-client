@@ -27,7 +27,7 @@ export default function CartItem({ idx, el, location }) {
             ${location === 'orderPage' ? `${styles.orderPage}` : ''}
         `}>
             <div className={styles.img_wrapper}>
-                {el.mainImg ? (
+                {el?.mainImg ? (
                     <Image
                         src={`${domain}${el.mainImg}`}
                         alt={`${el?.title}`}
@@ -38,7 +38,7 @@ export default function CartItem({ idx, el, location }) {
                 )
                     : (
                         <Image
-                            src={`${domain}${el?.imgs[0]?.url}`}
+                            src={`/placeholder-image.jpg`}
                             alt={`${el?.title}`}
                             width={100}
                             height={100}

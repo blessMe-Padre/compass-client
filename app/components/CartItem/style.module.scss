@@ -70,6 +70,7 @@
 }
 
 .item_title {
+    max-width: 200px;
     font-weight: 700;
     color: var(--black);
     transition: color 0.3s ease-in;
