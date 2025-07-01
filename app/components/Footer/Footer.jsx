@@ -60,9 +60,9 @@ const Footer = () => {
                 if (!response?.data?.kategoriis) {
                     throw new Error('Invalid response structure');
                 }
-                
+
                 const data = response.data.kategoriis;
-                
+
                 setLinksCatalog(data);
 
             } catch (error) {
@@ -73,9 +73,6 @@ const Footer = () => {
 
         fetchLinks();
     }, []);
-
-
-
 
     return (
         <>

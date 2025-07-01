@@ -12,6 +12,7 @@ import fetchData from '@/app/utils/fetchData';
 
 function TopOffers() {
     const [isMobile, setIsMobile] = useState(false);
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         const checkIsMobile = () => {
@@ -26,9 +27,8 @@ function TopOffers() {
         };
     }, []);
 
-    const [products, setProducts] = useState([]);
 
-    const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?populate=*`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?filters[hit][$eq]=hit&populate=*`;
 
     useEffect(() => {
 
