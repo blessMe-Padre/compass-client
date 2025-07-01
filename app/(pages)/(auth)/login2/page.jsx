@@ -44,23 +44,19 @@ const PhoneStep = ({ register, errors }) => (
     </div>
 )
   
-const CodeStep = ({ register, errors }) => {
+const CodeStep = ({ register, errors, setValue }) => {
     const [code, setCode] = useState(['', '', '', '', '', '']);
     const inputs = useRef([]);
-    const [fullCode, setFullCode] = useState('');
 
     const handleChange = (e, index) => {
         const value = e.target.value.replace(/\D/g, '');
-        
-        if (value) {
-            const newCode = [...code];
-            newCode[index] = value;
-            setCode(newCode);
-            
-            const combined = newCode.join('');
-            setFullCode(combined);
+        const newCode = [...code];
+        newCode[index] = value;
+        setCode(newCode);
+        setValue('code', newCode.join(''), { shouldValidate: true });
 
-            if (index < 5) inputs.current[index + 1].focus();
+        if (value && index < 5) {
+            inputs.current[index + 1].focus();
         }
     };
 
@@ -75,14 +71,8 @@ const CodeStep = ({ register, errors }) => {
         const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
         const newCode = pasted.split('').concat(Array(6).fill('')).slice(0, 6);
         setCode(newCode);
-        setFullCode(pasted);
+        setValue('code', pasted, { shouldValidate: true });
     };
-
-    useEffect(() => {
-        if (code.every(num => num !== '')) {
-            setFullCode(code.join(''));
-        }
-    }, [code]);
 
     return (
         <div className={styles.form_item}>
@@ -93,8 +83,8 @@ const CodeStep = ({ register, errors }) => {
                         type="text"
                         maxLength="1"
                         value={digit}
-                        onChange={(e) => handleChange(e, index)}
-                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        onChange={e => handleChange(e, index)}
+                        onKeyDown={e => handleKeyDown(e, index)}
                         onPaste={handlePaste}
                         ref={(el) => (inputs.current[index] = el)}
                         className={`${styles.code_input}`}
@@ -102,12 +92,13 @@ const CodeStep = ({ register, errors }) => {
                     />
                 ))}
                 
-                {/* Скрытое поле с объединенным кодом */}
+                {/* Скрытое поле для react-hook-form */}
                 <input
                     className='visually-hidden'
                     type="text"
-                    {...register('code')}
-                    value={fullCode}
+                    {...register('code', { 
+                        required: 'Введите код', 
+                        minLength: { value: 6, message: 'Код должен состоять из 6 цифр' } })}
                 />
 
                 {errors.code && <div className={styles.input_text_error}>{errors.code.message}</div>}
@@ -164,7 +155,7 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step  }) => (
     </>
 )
   
-const CodeForm = ({ onSubmit, register, errors, isSending, phone, useWatch, handleChangePhone, step   }) => (
+const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, handleChangePhone, step   }) => (
     <>
         
         <h1 className={styles.title}>Введите код из sms</h1>
@@ -184,7 +175,7 @@ const CodeForm = ({ onSubmit, register, errors, isSending, phone, useWatch, hand
         )}
         <div className={styles.form_wrapper}>
             <form onSubmit={onSubmit}>
-                <CodeStep register={register} errors={errors} useWatch={useWatch} />
+                <CodeStep register={register} errors={errors} setValue={setValue} />
                 <Timer 
                     isRunning={!isSending}
                     onResend={() => sendCode(phone)}
@@ -236,7 +227,7 @@ const verifyCode = async (phone, code) => {
 
 
 const Login = () => {
-    const { register, handleSubmit, useWatch, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [step, setStep] = useState('phone');
     const [phone, setPhone] = useState('');
     const [isSending, setIsSending] = useState(false);
@@ -292,9 +283,8 @@ const Login = () => {
     
     const handleCodeSubmit = async (data) => {
         setIsSending(true)
-        setPhone(data.phone)
         try {
-            const response = await verifyCode(data.phone, data.code);
+            const response = await verifyCode(phone, data.code);
             
             useUserStore.getState().setUserDocumentId(response.user.documentId);
             setJWT(response.jwt);
@@ -329,7 +319,7 @@ const Login = () => {
                         errors={errors}
                         isSending={isSending}
                         handleChangePhone={handleChangePhone}
-                        useWatch={useWatch}
+                        setValue={setValue}
                         error={error}
                         step={step}
                         phone={phone}
