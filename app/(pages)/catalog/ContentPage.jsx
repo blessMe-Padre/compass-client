@@ -1,6 +1,6 @@
 'use client';
 import { Breadcrumbs, ProductsList, LoadMoreButton, Popup, Notification } from '@/app/components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import getAllCategories from '../../utils/getAllCategories';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
@@ -15,6 +15,14 @@ import Link from 'next/link';
 import useFilterStore from '@/app/store/filterStore';
 import useCartStore from '@/app/store/cartStore';
 
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 function CatalogContent() {
   
   // Для получения slug из GET параметра
@@ -22,6 +30,7 @@ function CatalogContent() {
 
   const [categories, setCategories] = useState([]);
   const { currentSlug, setCurrentSlug } = useCategorySlug();
+  const prevSlug = usePrevious(currentSlug);
 
   const [categoryName, setCategoryName] = useState('Каталог');
   const [products, setProducts] = useState([]);
@@ -44,7 +53,7 @@ function CatalogContent() {
   const [activePopup, setActivePopup] = useState(false);
 
   // Для пагинации
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 15;
   const [pageCount, setPageCount] = useState(1);
 
   const handleSubmitForm = () => {
@@ -129,6 +138,7 @@ function CatalogContent() {
       
       setProducts(prev => pageCount === 1 ? newProducts : [...prev, ...newProducts]);
       setLoadMoreHidden(newProducts.length < PAGE_SIZE);
+      setCategoryName('Каталог');
       
     } catch (error) {
       console.error('Ошибка:', error);
@@ -176,19 +186,25 @@ function CatalogContent() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!currentSlug) return;
-
       setLoading(true);
       try {
+        const slugChanged = prevSlug !== undefined && prevSlug !== currentSlug;
+
+        // Если изменился фильтр (а не категория), и на странице уже загружено больше товаров,
+        // чем стандартный размер страницы, то запрашиваем столько же товаров, сколько уже было.
+        const pageSize = (pageCount === 1 && !slugChanged && products.length > PAGE_SIZE)
+          ? products.length
+          : PAGE_SIZE;
+
         const optionsFilter = buildStrapiFilters(filters);
 
         const queryParams = [
           'populate=*',
           `pagination[page]=${pageCount}`,
-          `pagination[pageSize]=${PAGE_SIZE}`,
+          `pagination[pageSize]=${pageSize}`,
         ];
 
-        if (currentSlug) {
+        if (currentSlug && currentSlug !== 'Каталог') {
           queryParams.push(`filters[categories][slug][$eq]=${currentSlug}`);
         }
         if (checkboxStatus) {
@@ -210,13 +226,13 @@ function CatalogContent() {
           // setProducts(products);
           // setLoadMoreHidden(products.length < PAGE_SIZE);
           setProducts(newProducts);
-          setLoadMoreHidden(newProducts.length < PAGE_SIZE);
+          setLoadMoreHidden(newProducts.length < pageSize);
         } else {
           if (products.length === 0) {
             setLoadMoreHidden(true);
           } else {
-            setProducts(prev => [...prev, ...products]);
-            setLoadMoreHidden(newProducts.length < PAGE_SIZE);
+            setProducts(prev => [...prev, ...newProducts]);
+            setLoadMoreHidden(newProducts.length < PAGE_SIZE); // Для следующих страниц размер всегда PAGE_SIZE
          }
         }
       } catch (error) {
@@ -227,6 +243,8 @@ function CatalogContent() {
     };
 
     fetchProducts();
+    // `products.length` и `prevSlug` намеренно опущены из зависимостей, чтобы избежать бесконечных циклов.
+    // Их значения корректно захватываются при каждом запуске, вызванном другими зависимостями.
   }, [currentSlug, pageCount, checkboxStatus, sortedFilters, filters]);
 
   return (
@@ -234,6 +252,7 @@ function CatalogContent() {
         <div className='container'>
           <Breadcrumbs
             secondLabel="Каталог"
+            thirdLabel={categoryName !== 'Каталог' ? categoryName : ''}
           />
           <motion.h2
             initial='hidden'
@@ -385,7 +404,6 @@ function CatalogContent() {
 
           </motion.div>
         </div>
-  
 
         <Popup
           activePopup={activePopup}
@@ -394,7 +412,7 @@ function CatalogContent() {
           handleChange={handleSubmitForm}
           statusForm={sendingForm}
           filteredCount={products?.length}
-          />
+        />  
     </>
   )
 }
