@@ -155,10 +155,10 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step  }) => (
     </>
 )
   
-const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, handleChangePhone, step   }) => (
+const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, handleChangePhone, testCode, step   }) => (
     <>
         
-        <h1 className={styles.title}>Введите код из sms</h1>
+        <h1 className={styles.title}>Введите код {testCode} из sms</h1>
         <p className={styles.sub_title}>Отправили на номер <span style={{ fontWeight: '700'}}>{phone}</span></p>
 
         {step === 'verify' && (
@@ -189,7 +189,7 @@ const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, hand
   </>
 )
 
-const sendCode = async (phone) => {
+const sendCode = async (phone, setTestCode) => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/send-code`, {
             method: 'POST',
@@ -198,6 +198,8 @@ const sendCode = async (phone) => {
         });
 
         if (!res.ok) throw new Error('Ошибка отправки кода');
+        const data = await res.json();
+        setTestCode(data.code);
         setStep('code');
     } catch (err) {
         setError(err.message);
@@ -233,6 +235,8 @@ const Login = () => {
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState('');
     const [jwt, setJWT] = useState('');
+
+    const [ testCode, setTestCode ] = useState();
 
     const { userData } = useUserStore();
 
@@ -271,7 +275,7 @@ const Login = () => {
         setPhone(data.phone)
 
         try {
-            await sendCode(data.phone);
+            await sendCode(data.phone, setTestCode);     
             setStep('verify');
         } catch (err) {
             setError(err.message || 'Ошибка при отправке кода');
@@ -313,17 +317,18 @@ const Login = () => {
                         step={step}
                     />
                 ) : (
-                    <CodeForm
-                        onSubmit={handleSubmit(handleCodeSubmit)}
-                        register={register}
-                        errors={errors}
-                        isSending={isSending}
-                        handleChangePhone={handleChangePhone}
-                        setValue={setValue}
-                        error={error}
-                        step={step}
-                        phone={phone}
-                    />
+                       <CodeForm 
+                            testCode={testCode}
+                            onSubmit={handleSubmit(handleCodeSubmit)}
+                            register={register}
+                            errors={errors}
+                            isSending={isSending}
+                            handleChangePhone={handleChangePhone}
+                            setValue={setValue}
+                            error={error}
+                            step={step}
+                            phone={phone}
+                        />
                 )}
             </div>
         </div>
