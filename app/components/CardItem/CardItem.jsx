@@ -125,10 +125,10 @@ function CardItem({ element }) {
                 </div>
 
                 <div className={styles.btn_wrapper}>
-                    {!priceSales && !price || amount === 0
+                    {!price || amount === 0
                         ? (
 
-                            <p className={`${styles.item_outstore}`}>Нет в наличии</p>
+                            <p className={`${styles.item_outstore}`}>Нужно уточнять цену</p>
 
                         )
                         : (

@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Thumbs } from 'swiper/modules';
 
@@ -15,6 +15,61 @@ import { ReviewsSection } from "@/app/section";
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
 
+const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, maxAmount, status }) => {
+
+    
+    const isDisabled = item.price === 0 || item.amount === 0 || item.statusProduct === 'none';
+    
+    return (
+        <li className={styles.list_item}>
+            {item?.title && (
+                <div className={styles.title_small}>
+                    {item.title || 'Уточнить'}
+                </div>
+            )}
+            <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
+                {item.size ?? 'Уточнить'}
+            </div>
+            <div className={`${styles.height} ${isDisabled ? styles.disabled : ""}`}>
+                {item.height ?? 'Уточнить'}
+            </div>
+
+            <div className={styles.list_header_text}>{item.amount === null ? 'Нет в наличии' : item.amount}</div>
+
+            <div className={styles.qty}>
+            <Counter
+                maxAmount={maxAmount}
+                disabled={item.price === 0 ? true : ''}
+                    onChange={(newCount) => {
+                        setQuantities(prev => ({
+                            ...prev,
+                            [index]: newCount
+                        }))
+                    }
+                }
+                value={quantities[index] || 0}
+                documentId={item.documentId}
+            />
+            </div>
+            <div className={styles.price}>
+                {item.price !== 0 ? (
+                    <div> {item.price?.toLocaleString('ru-RU') ?? 0} ₽</div>
+                ) : (
+                    <div className='flex'>
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="14" height="14" rx="7" fill="#F79410" />
+                            <path d="M7.38094 5.45031C7.38094 6.01031 7.36094 6.52031 7.32094 6.98031C7.28094 7.43365 7.23094 7.88698 7.17094 8.34031H6.59094C6.53094 7.88698 6.48094 7.43365 6.44094 6.98031C6.40094 6.52031 6.38094 6.01031 6.38094 5.45031V3.57031H7.38094V5.45031ZM7.55094 9.96031C7.55094 10.1403 7.49094 10.297 7.37094 10.4303C7.25094 10.5636 7.0876 10.6303 6.88094 10.6303C6.67427 10.6303 6.51094 10.5636 6.39094 10.4303C6.27094 10.297 6.21094 10.1403 6.21094 9.96031C6.21094 9.78031 6.27094 9.62365 6.39094 9.49031C6.51094 9.35698 6.67427 9.29031 6.88094 9.29031C7.0876 9.29031 7.25094 9.35698 7.37094 9.49031C7.49094 9.62365 7.55094 9.78031 7.55094 9.96031Z" fill="white" />
+                        </svg>
+                        {status}
+                    </div>
+                )}
+            </div>
+        </li>
+
+    )
+})
+
+
 const ClientProductComponent = ({ data, sameProducts }) => {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -23,13 +78,42 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const openTab = e => setActive(+e.target.dataset.index);
 
     // расчет стоимости товара и его вариантов
-    const [quantities, setQuantities] = useState(0);
+    const [quantities, setQuantities] = useState({})
+
+    console.log(quantities);
 
     const [direction, setDirection] = useState('vertical');
 
     const imageList = data?.imgs;
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
+    const { total, totalSales } = useMemo(() => {
+        let total = Number(0);
+        let totalSales = Number(0);
+        
+        sameProducts.forEach((item, index) => {
+            const priceSales = Number(item.priceSales) || Number(item.price);
+            const price = Number(item.price);
+            
+            const quantity = quantities[index] || 0;
+            total += quantity * price;
+            totalSales += quantity * priceSales;
+            
+        });
+        
+        return { total, totalSales };
+    }, [sameProducts, quantities]);
+    
+
+    const updatedItems = useMemo(() => sameProducts.map((item, idx) => ({
+        ...item,
+        amount: quantities[idx] || 0
+    })), [sameProducts, quantities]);
+
+   const statusProductRussian = useMemo(() => updatedItems?.map(item =>
+        item.statusProduct == 'order' ? 'Под заказ' : 'В наличии'
+   ), [updatedItems])
+    
     useEffect(() => {
         const handleResize = () => {
             setDirection(window.innerWidth < 780 ? 'horizontal' : 'vertical');
@@ -40,45 +124,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const calculateTotal = () => {
-        let total = Number(0);
-        let totalSales = Number(0);
-
-        sameProducts.forEach((item, index) => {
-            const priceSales = Number(item.priceSales) || Number(item.price);
-            const price = Number(item.price);
-
-            const quantity = quantities[index] || 0;
-            total += quantity * price;
-            totalSales += quantity * priceSales;
-
-        });
-
-        return { total, totalSales };
-    };
-
-    {/* 
-        
-        TODO: тут нужно делать запрос к страпи с фиьтром по имени, поулчить все товары 
-        получать у них все атрибуты 
-        выводить их в сокращенном формате количество 
-        по нажатию на кнопку формировать массив с продуктами
-        и добавлять его в корзину, он будет парситься в конкретный продукт конкретный Item 
-        корзины, тогда не надо будет менять логику отрпавки формы и так далее
-
-
-    */}
-
-    const { total, totalSales } = calculateTotal();
-    const updatedItems = sameProducts.map((item, idx) => ({
-        ...item,
-        amount: quantities[idx] || 0
-    }))
-
-    const statusProductRussian = updatedItems?.map(item =>
-        item.statusProduct == 'order' ? 'Под заказ' : 'В наличии'
-    );
 
     return (
         <section className={styles.section}>
@@ -174,7 +219,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                         width={500}
                                         objectFit='contain'
                                         height={500}
-                                        className={styles.card_image}
+                                        className={styles.image}
                                         placeholder="blur"
                                         blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                     />
@@ -187,69 +232,36 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         <p className={styles.article}>{data?.sku}</p>
                         <ul className={styles.list}>
                             <li className={styles.list_header}>
-                                {data?.size && (
+                                {data?.title && (
+                                    <div className={styles.list_header_text}>Название:</div>
+                                )}
+                                {/* {data?.size && ( */}
                                     <div className={styles.list_header_text}>Размер:</div>
-                                )}
-                                {data?.height && (
+                                {/* )} */}
+                                
+                                {/* {data?.height && ( */}
                                     <div className={styles.list_header_text}>Рост:</div>
-                                )}
+                                {/* )} */}
+
+                                
+                                <div className={styles.list_header_text}>Кол-во на складе:</div>
+                                
 
                                 <div className={styles.list_header_text}>Кол-во:</div>
                                 <div className={styles.list_header_text}>Цена:</div>
                             </li>
-
-                            {
-                                sameProducts.map((item, index) => {
-                                    return (
-                                        <li className={styles.list_item} key={index}>
-                                            {data?.size && (
-                                                <div className={`${styles.size} ${item.price === 0 ? `${styles.disabled}` : ""}`}>
-                                                    {item.size}
-                                                </div>
-                                                )
-                                            }
-
-                                            {data?.height && (
-                                                    <div className={`${styles.height} ${item.price === 0 ? `${styles.disabled}` : ""}`}>{item.height}</div>
-                                                )
-                                            }
-
-                                            <div className={styles.qty}>
-                                                <Counter
-                                                    maxAmount={data?.amount}
-                                                    disabled={item.price === 0 ? true : ''}
-                                                    onChange={(newCount) => {
-                                                        setQuantities(prev => ({
-                                                            ...prev,
-                                                            [index]: newCount
-                                                        }));
-                                                    }}
-                                                    value={quantities[index] || 0}
-                                                    documentId={item.documentId}
-                                                />
-                                            </div>
-                                            
-                                            <div className={styles.price}>{item.price !== 0 ? <div> {item.price !== null ? item.price.toLocaleString('ru-RU') : 0}  ₽</div> :
-                                                <div className='flex'>
-                                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <rect width="14" height="14" rx="7" fill="#F79410" />
-                                                        <path d="M7.38094 5.45031C7.38094 6.01031 7.36094 6.52031 7.32094 6.98031C7.28094 7.43365 7.23094 7.88698 7.17094 8.34031H6.59094C6.53094 7.88698 6.48094 7.43365 6.44094 6.98031C6.40094 6.52031 6.38094 6.01031 6.38094 5.45031V3.57031H7.38094V5.45031ZM7.55094 9.96031C7.55094 10.1403 7.49094 10.297 7.37094 10.4303C7.25094 10.5636 7.0876 10.6303 6.88094 10.6303C6.67427 10.6303 6.51094 10.5636 6.39094 10.4303C6.27094 10.297 6.21094 10.1403 6.21094 9.96031C6.21094 9.78031 6.27094 9.62365 6.39094 9.49031C6.51094 9.35698 6.67427 9.29031 6.88094 9.29031C7.0876 9.29031 7.25094 9.35698 7.37094 9.49031C7.49094 9.62365 7.55094 9.78031 7.55094 9.96031Z" fill="white" />
-                                                    </svg>
-
-                                                    {statusProductRussian[index]}
-                                                </div>
-                                            }
-                                            </div>
-                                            
-                                        </li>
-                                    )
-                                })
-                            }
-
-
-                            {sameProducts.map((item, idx) => {
-                                item.amount = quantities[idx]
-                            })}
+                            
+                            {sameProducts.map((item, index) => (
+                                <ProductVariantRow
+                                    key={item.documentId || index}
+                                    item={item}
+                                    index={index}
+                                    quantities={quantities[index] || 0}
+                                    setQuantities={setQuantities}
+                                    maxAmount={data?.amount}
+                                    status={statusProductRussian[index]}
+                                />
+                            ))}
                         </ul>
 
                         <div className={styles.total}>
@@ -257,16 +269,13 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
                         
-                        {data?.statusProduct === 'stock' ?
-                            <AddToCartButton
-                                many
-                                items={updatedItems.filter(i => i.amount > 0)}
-                                text={'Добавить в корзину'}
-                                afterCounter
-                            /> :
-                            <div>Кажется данного товара нет в наличии</div>
-                            } 
-                        
+                      
+                        <AddToCartButton
+                            many
+                            items={updatedItems.filter(i => i.amount > 0)}
+                            text={'Добавить в корзину'}
+                            afterCounter
+                        />
 
                     </div>
                 </div>
@@ -317,4 +326,3 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 }
 
 export default ClientProductComponent
-

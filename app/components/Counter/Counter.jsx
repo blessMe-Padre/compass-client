@@ -1,12 +1,18 @@
 "use client"
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styles from './style.module.scss';
 
-const Counter = ({ onChange, documentId, disabled, maxAmount }) => {
-    const [count, setCount] = useState(0);
+const Counter = ({ value = 0, onChange, documentId, disabled, maxAmount }) => {
+    const [count, setCount] = useState(value);
+
+    // Синхронизация с внешним value
+    useEffect(() => {
+        setCount(value);
+    }, [value]);
 
     const increment = useCallback(() => {
-        const newCount = Math.min(count + 1, maxAmount ?? Infinity);
+        const upperLimit = typeof maxAmount === 'number' ? maxAmount : Infinity;
+        const newCount = Math.min(count + 1, upperLimit);
         setCount(newCount);
         onChange?.(newCount, documentId);
     }, [count, onChange, documentId, maxAmount]);
@@ -30,7 +36,7 @@ const Counter = ({ onChange, documentId, disabled, maxAmount }) => {
             <button
                 onClick={increment}
                 className={styles.button}
-                disabled={disabled || (maxAmount !== undefined && count >= maxAmount)}
+                disabled={disabled || (typeof maxAmount === 'number' && count >= maxAmount)}
             >
                 +
             </button>
