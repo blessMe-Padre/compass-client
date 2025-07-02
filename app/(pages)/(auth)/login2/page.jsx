@@ -26,24 +26,24 @@ response = 1179038981
 
 const PhoneStep = ({ register, errors }) => (
     <div className={styles.form_item}>
-      <input
-        id="phone"
-        name="phone"
-        type="tel"
-        className={errors.phone ? styles.error : ''}
-        {...register('phone', {
-          required: 'Введите номер',
-          pattern: {
-            value: /^\+7\d{10}$/,
-            message: 'Формат: +79991234567'
-          }
-        })}
-        placeholder="+79991234567"
-      />
-      {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
+        <input
+            id="phone"
+            name="phone"
+            type="tel"
+            className={errors.phone ? styles.error : ''}
+            {...register('phone', {
+                required: 'Введите номер',
+                pattern: {
+                    value: /^\+7\d{10}$/,
+                    message: 'Формат: +79991234567'
+                }
+            })}
+            placeholder="+79991234567"
+        />
+        {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
     </div>
 )
-  
+
 const CodeStep = ({ register, errors, setValue }) => {
     const [code, setCode] = useState(['', '', '', '', '', '']);
     const inputs = useRef([]);
@@ -91,14 +91,15 @@ const CodeStep = ({ register, errors, setValue }) => {
                         autoFocus={index === 0}
                     />
                 ))}
-                
+
                 {/* Скрытое поле для react-hook-form */}
                 <input
                     className='visually-hidden'
                     type="text"
-                    {...register('code', { 
-                        required: 'Введите код', 
-                        minLength: { value: 6, message: 'Код должен состоять из 6 цифр' } })}
+                    {...register('code', {
+                        required: 'Введите код',
+                        minLength: { value: 6, message: 'Код должен состоять из 6 цифр' }
+                    })}
                 />
 
                 {errors.code && <div className={styles.input_text_error}>{errors.code.message}</div>}
@@ -108,7 +109,7 @@ const CodeStep = ({ register, errors, setValue }) => {
     )
 };
 
-const PhoneForm = ({ onSubmit, register, errors, isSending, error, step  }) => (
+const PhoneForm = ({ onSubmit, register, errors, isSending, error, step }) => (
     <>
         <h1 className={styles.title}>Авторизация</h1>
         <p className={styles.sub_title}>Для входа на сайт введите ваш номер телефона</p>
@@ -154,20 +155,20 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step  }) => (
         </div>
     </>
 )
-  
-const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, handleChangePhone, testCode, step   }) => (
+
+const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, handleChangePhone, testCode, step }) => (
     <>
-        
-        <h1 className={styles.title}>Введите код {testCode} из sms</h1>
-        <p className={styles.sub_title}>Отправили на номер <span style={{ fontWeight: '700'}}>{phone}</span></p>
+
+        <h1 className={styles.title}>Введите код <mark>{testCode}</mark> из sms</h1>
+        <p className={styles.sub_title}>Отправили на номер <span style={{ fontWeight: '700' }}>{phone}</span></p>
 
         {step === 'verify' && (
-            <p 
+            <p
                 onClick={handleChangePhone}
-                style={{ 
-                    marginBottom: '20px', 
-                    textAlign: 'center', 
-                    textDecoration: 'underline', 
+                style={{
+                    marginBottom: '20px',
+                    textAlign: 'center',
+                    textDecoration: 'underline',
                     cursor: 'pointer'
                 }}>
                 Изменить номер
@@ -176,7 +177,7 @@ const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, hand
         <div className={styles.form_wrapper}>
             <form onSubmit={onSubmit}>
                 <CodeStep register={register} errors={errors} setValue={setValue} />
-                <Timer 
+                <Timer
                     isRunning={!isSending}
                     onResend={() => sendCode(phone)}
                 />
@@ -186,7 +187,7 @@ const CodeForm = ({ onSubmit, register, errors, isSending, phone, setValue, hand
                 </button>
             </form>
         </div>
-  </>
+    </>
 )
 
 const sendCode = async (phone, setTestCode) => {
@@ -236,7 +237,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [jwt, setJWT] = useState('');
 
-    const [ testCode, setTestCode ] = useState();
+    const [testCode, setTestCode] = useState();
 
     const { userData } = useUserStore();
 
@@ -244,7 +245,7 @@ const Login = () => {
         setPhone('');
         setStep('phone');
         setError('');
-        setIsSending(false); 
+        setIsSending(false);
     };
 
 
@@ -275,7 +276,7 @@ const Login = () => {
         setPhone(data.phone)
 
         try {
-            await sendCode(data.phone, setTestCode);     
+            await sendCode(data.phone, setTestCode);
             setStep('verify');
         } catch (err) {
             setError(err.message || 'Ошибка при отправке кода');
@@ -284,19 +285,19 @@ const Login = () => {
             setIsSending(false);
         }
     };
-    
+
     const handleCodeSubmit = async (data) => {
         setIsSending(true)
         try {
             const response = await verifyCode(phone, data.code);
-            
+
             useUserStore.getState().setUserDocumentId(response.user.documentId);
             setJWT(response.jwt);
-            
+
             await new Promise(resolve => setTimeout(resolve, 50));
-            
+
             window.location.href = '/dashboard';
-            
+
         } catch (err) {
             setError(err.message);
         } finally {
@@ -304,7 +305,7 @@ const Login = () => {
         }
     }
 
-   return (
+    return (
         <div className={styles.page_wrapper}>
             <div className="container">
                 {step === 'phone' ? (
@@ -317,22 +318,22 @@ const Login = () => {
                         step={step}
                     />
                 ) : (
-                       <CodeForm 
-                            testCode={testCode}
-                            onSubmit={handleSubmit(handleCodeSubmit)}
-                            register={register}
-                            errors={errors}
-                            isSending={isSending}
-                            handleChangePhone={handleChangePhone}
-                            setValue={setValue}
-                            error={error}
-                            step={step}
-                            phone={phone}
-                        />
+                    <CodeForm
+                        testCode={testCode}
+                        onSubmit={handleSubmit(handleCodeSubmit)}
+                        register={register}
+                        errors={errors}
+                        isSending={isSending}
+                        handleChangePhone={handleChangePhone}
+                        setValue={setValue}
+                        error={error}
+                        step={step}
+                        phone={phone}
+                    />
                 )}
             </div>
         </div>
-    ) 
+    )
 }
 
 export default Login;

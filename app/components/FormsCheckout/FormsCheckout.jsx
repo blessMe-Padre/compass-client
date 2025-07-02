@@ -53,7 +53,7 @@ const sendPaymentService = async (orderUniqNumber, totalSum) => {
             sum: totalSum,
         };
 
-        const response = await fetch('/api/payment', {
+        const response = await fetch('/api/payment/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
