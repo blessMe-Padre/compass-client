@@ -15,7 +15,7 @@ export default function ContentPage({ data }) {
                 <h2 className='page_title'>Список желаемого</h2>
 
                 {/* TODO: тут будет запрос по пользователю к его списку желаемого */}
-                <ProductsList products={wishlist} />
+                <ProductsList products={wishlist} isWishlist={true} />
                 
             </div>
         </>
