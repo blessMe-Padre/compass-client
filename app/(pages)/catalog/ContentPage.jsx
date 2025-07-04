@@ -298,68 +298,32 @@ function CatalogContent() {
                       )}
                     </h3>
 
-                    {parentCategory.children?.length > 0 && (
-                      <motion.div
-                        className={styles.child_container}
-                        initial={{ height: 0 }}
-                        animate={{
-                          height: expandedCategories[parentCategory.id] ? "auto" : 0
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className={styles.child_cat}>
-                          {[...parentCategory.children]
-                            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                            .map((childCategory, index) => (
-                              <div
-                                key={`${childCategory.id}-${index}`}
-                                className={`${styles.child_item} ${isCategoryActive(childCategory.id) ? styles.active : ''}`}
-                              >
-                                <h4
-                                  onClick={(e) => handleCategoryClick(e, childCategory.slug, childCategory.id, childCategory.name)}
-                                >
-                                  {/* Добавляем номер перед названием */}
-                                  {childCategory.name}
-                                  {childCategory.children?.length > 0 && (
-                                    <motion.span
-                                      className={styles.arrow}
-                                      animate={{ rotate: expandedCategories[childCategory.id] ? 180 : 0 }}
-                                    >
-                                      <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                                      </svg>
-                                    </motion.span>
-                                  )}
-                                </h4>
-
-                                {childCategory.children?.length > 0 && (
-                                  <motion.div
-                                    className={styles.grandchild_container}
-                                    initial={{ height: 0 }}
-                                    animate={{
-                                      height: expandedCategories[childCategory.id] ? "auto" : 0
-                                    }}
-                                  >
-                                    <div className={styles.grandchild_cat}>
-                                      {[...childCategory.children]
-                                        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                                        .map((grandchildCategory, index) => (
-                                          <p
-                                            key={`${grandchildCategory.id}-${index}`}
-                                            className={`${styles.grandchild_item} ${isCategoryActive(grandchildCategory.id) ? styles.active : ''}`}
-                                            onClick={(e) => handleCategoryClick(e, grandchildCategory.slug, grandchildCategory.id, grandchildCategory.name)}
-                                          >
-                                            {grandchildCategory.name}
-                                          </p>
-                                        ))}
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </div>
-                            ))}
-                        </div>
-                      </motion.div>
-                    )}
+                  {parentCategory.children?.length > 0 && (
+                    <motion.div
+                      className={styles.child_container}
+                      initial={{ height: 0 }}
+                      animate={{
+                        height: expandedCategories[parentCategory.id] ? "auto" : 0
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className={styles.child_cat}>
+                        {[...parentCategory.children]
+                          .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                          .map((childCategory) => (
+                            <RecursiveCategoryItem
+                              key={childCategory.id}
+                              category={childCategory}
+                              level={1}
+                              expandedCategories={expandedCategories}
+                              handleCategoryClick={handleCategoryClick}
+                              isCategoryActive={isCategoryActive}
+                              styles={styles}
+                            />
+                          ))}
+                      </div>
+                    </motion.div>
+                  )}
                   </div>
                 ))}
               </div>
@@ -377,7 +341,7 @@ function CatalogContent() {
                 <div className={styles.sort}>
                   Сортировка:
                   <select value={sortedFilters} onChange={handleSelectSort}>
-                    {/* <option value="opinion">рекомендуем</option> */}
+                    <option value="opinion">рекомендуем</option>
                     <option value="price:desc">Сначала дорогие</option>
                     <option value="price:asc">Сначала дешевые</option>
                   </select>
@@ -420,6 +384,60 @@ function CatalogContent() {
     </>
   )
 }
+
+const RecursiveCategoryItem = ({ category, level, expandedCategories, handleCategoryClick, isCategoryActive, styles }) => {
+  const hasChildren = category.children?.length > 0;
+  const isExpanded = expandedCategories[category.id];
+
+  const Tag = level === 1 ? 'h4' : 'p';
+  const itemClassName = level === 1 ? styles.child_item : styles.grandchild_item;
+
+  return (
+    <div className={`${itemClassName} ${isCategoryActive(category.id) ? styles.active : ''}`}>
+      <Tag onClick={(e) => handleCategoryClick(e, category.slug, category.id, category.name)}>
+        {category.name}
+        {hasChildren && (
+          <motion.span
+            className={styles.arrow}
+            animate={{ rotate: isExpanded ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </motion.span>
+        )}
+      </Tag>
+
+      {hasChildren && (
+        <motion.div
+          className={styles.grandchild_container} // Все дочерние списки используют стили grandchild
+          initial={{ height: 0 }}
+          animate={{ height: isExpanded ? "auto" : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className={styles.grandchild_cat}>
+            {[...category.children]
+              .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+              .map((child) => (
+                <RecursiveCategoryItem
+                  key={child.id} // Используем ID для ключа - это лучшая практика
+                  category={child}
+                  level={level + 1}
+                  expandedCategories={expandedCategories}
+                  handleCategoryClick={handleCategoryClick}
+                  isCategoryActive={isCategoryActive}
+                  styles={styles}
+                />
+              ))}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+
 
 export default function ContentPage({ data }) {
   return (

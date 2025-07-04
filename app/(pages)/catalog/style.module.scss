@@ -143,13 +143,13 @@
 /* Анимация hover */
 .child_item:hover,
 .grandchild_item:hover {
-  color: var(--orange);
+  // color: var(--orange);
 }
 
-.child_item:active,
-.grandchild_item:active {
-  color: var(--blue);
-}
+// .child_item:active,
+// .grandchild_item:active {
+//   color: var(--blue);
+// }
 
 
 .catalog_options svg path {
