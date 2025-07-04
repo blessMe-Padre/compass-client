@@ -30,7 +30,7 @@
     display: grid;
     grid-template-columns: 20% 78%; 
     gap: 2%; 
-    align-items: start; 
+    align-items: flex-start; 
 
     
     @media (max-width: 480px) {

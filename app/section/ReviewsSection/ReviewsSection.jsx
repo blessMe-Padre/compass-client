@@ -15,6 +15,7 @@ const ReviewsSection = ({ data }) => {
     const [activePopup, setActivePopup] = useState(false);
     const [activePopupText, setActivePopupText] = useState(false);
     const [reviews, setReviews] = useState([]);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
@@ -38,7 +39,6 @@ const ReviewsSection = ({ data }) => {
         if (auth) {
             setActivePopup(!activePopup);
         } else {
-            // alert('зарегистрируйтесь');
             setActivePopupText(!activePopupText);
         }
     }
@@ -106,34 +106,59 @@ const ReviewsSection = ({ data }) => {
                                     </div>
                                     <div className="pswp-gallery">
                                         <ul className={styles.gallery_list}>
-                                            {item?.file.map((image, index) => {
-                                                return (
-                                                    <li key={index}>
-                                                        <a
-                                                            href={`${domain}${image?.url}`}
-                                                            data-pswp-width={image.width}
-                                                            data-pswp-height={image.height}
-                                                            target='_blank'
-                                                            rel="noreferrer"
-                                                            key={index}
-                                                            className={`${styles.img_wrapper} dsv-image`}
-                                                        >
-                                                            <Image
-                                                                src={`${domain}${image?.url}`}
-                                                                alt="фото отзыва"
-                                                                width={200}
-                                                                height={200}
-                                                                placeholder="blur"
-                                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                            />
-                                                        </a>
-                                                    </li>
-                                                )
-                                            })
+                                            {item?.file !== null ? 
+                                                item?.file.map((image, index) => {
+                                                    return (
+                                                        <li key={index}>
+                                                            <a
+                                                                href={`${domain}${image?.url}`}
+                                                                data-pswp-width={image.width}
+                                                                data-pswp-height={image.height}
+                                                                target='_blank'
+                                                                rel="noreferrer"
+                                                                key={index}
+                                                                className={`${styles.img_wrapper} dsv-image`}
+                                                            >
+                                                                <Image
+                                                                    src={`${domain}${image?.url}`}
+                                                                    alt="фото отзыва"
+                                                                    width={200}
+                                                                    height={200}
+                                                                    placeholder="blur"
+                                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                                />
+                                                                
+                                                            </a>
+                                                        </li>
+                                                    )
+                                                })
+
+                                                : <Image
+                                                    src={`/placeholder-image.jpg`}
+                                                    alt={'Заглушка'}
+                                                    width={80}
+                                                    objectFit='contain'
+                                                    height={80}
+                                                    className={styles.card_image}
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                />
                                             }
                                         </ul>
                                     </div>
-                                    <p className={styles.review_text}>{item?.fullText}</p>
+                                    <div>
+                                        <p className={`${styles.review_text} ${isExpanded ? styles.expanded : ''}`}>
+                                            {item?.fullText}
+                                        </p>
+                                        {item?.fullText && (
+                                            <span 
+                                                className={styles.read_more_btn}
+                                                onClick={() => setIsExpanded(!isExpanded)}
+                                            >
+                                                {isExpanded ? 'Свернуть' : 'Читать далее...'}
+                                            </span>
+                                        )}
+                                    </div>
                                     <div className={styles.review_footer}>
                                         <div>
                                             {

@@ -198,10 +198,14 @@ function CatalogContent() {
 
         const optionsFilter = buildStrapiFilters(filters);
 
+        // Если нет выбранной сортировки, применяем сортировку по умолчанию
+        const sortParam = sortedFilters ? sortedFilters : 'title:asc';
+
         const queryParams = [
           'populate=*',
           `pagination[page]=${pageCount}`,
           `pagination[pageSize]=${pageSize}`,
+          `sort=${sortParam}`
         ];
 
         if (currentSlug && currentSlug !== 'Каталог') {
@@ -373,7 +377,7 @@ function CatalogContent() {
                 <div className={styles.sort}>
                   Сортировка:
                   <select value={sortedFilters} onChange={handleSelectSort}>
-                    <option value="opinion">рекомендуем</option>
+                    {/* <option value="opinion">рекомендуем</option> */}
                     <option value="price:desc">Сначала дорогие</option>
                     <option value="price:asc">Сначала дешевые</option>
                   </select>

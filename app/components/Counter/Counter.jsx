@@ -23,8 +23,8 @@ const Counter = ({ value = 0, onChange, documentId, disabled, maxAmount }) => {
         onChange?.(newCount, documentId);
     }, [count, onChange, documentId]);
 
-    return (
-        <div className={styles.button_wrapper}>
+    return ( 
+        <div className={`${disabled === true ? styles.disabled : ''} ${styles.button_wrapper}`}>
             <button
                 onClick={decrement}
                 className={styles.button}
