@@ -17,8 +17,7 @@ const tabButtons = [{ title: 'Характеристики' }, { title: 'Отз�
 
 const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, maxAmount, status }) => {
 
-    
-    const isDisabled = item.price === 0 || item.amount === 0 || item.statusProduct === 'none';
+    const isDisabled = item.price === 0 || item.amount === 0 || item.amount === null || item.statusProduct === 'none';
     
     return (
         <li className={styles.list_item}>
@@ -37,19 +36,19 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
             <div className={styles.list_header_text}>{item.amount === null ? 'Нет в наличии' : item.amount}</div>
 
             <div className={styles.qty}>
-            <Counter
-                maxAmount={maxAmount}
-                disabled={item.price === 0 ? true : ''}
-                    onChange={(newCount) => {
-                        setQuantities(prev => ({
-                            ...prev,
-                            [index]: newCount
-                        }))
+                <Counter
+                    maxAmount={maxAmount}
+                    disabled={item.price === 0 || item.amount === 0 || item.amount === null ? true : ''}
+                        onChange={(newCount) => {
+                            setQuantities(prev => ({
+                                ...prev,
+                                [index]: newCount
+                            }))
+                        }
                     }
-                }
-                value={quantities[index] || 0}
-                documentId={item.documentId}
-            />
+                    value={quantities[index] || 0}
+                    documentId={item.documentId}
+                />
             </div>
             <div className={styles.price}>
                 {item.price !== 0 ? (
@@ -258,7 +257,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     index={index}
                                     quantities={quantities[index] || 0}
                                     setQuantities={setQuantities}
-                                    maxAmount={data?.amount}
+                                    maxAmount={item?.amount}
                                     status={statusProductRussian[index]}
                                 />
                             ))}

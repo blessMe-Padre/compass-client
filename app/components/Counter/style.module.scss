@@ -10,6 +10,10 @@
     justify-content: center;
     gap: 10px;
     max-width: 88px;
+
+    &.disabled {
+        opacity: 0.6;
+    }
 }
 
 .button {
