@@ -122,7 +122,7 @@
 .child_item.active,
 .grandchild_item.active {
   color: var(--primary-color);
-  font-weight: bold;
+  // font-weight: bold;
 }
 
 /* Стрелки */
@@ -202,7 +202,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
     color: white;
     margin: 0;
   }
@@ -222,7 +221,7 @@
   transition: max-height 0.3s ease;
   
   &.expanded {
-    max-height: 1000px;
+    max-height: 100%;
   }
 }
 
