@@ -10,7 +10,7 @@ const LinkButton = ({ href = '/', text, ...props }) => {
 
         forClick === true ?
             (
-                <button onClick={onClick} className={`${styles.link}`}>Оформить заказ</button>
+                <button onClick={onClick} className={`${styles.link}`}>{text}</button>
             )
             :
             (
