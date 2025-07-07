@@ -21,11 +21,11 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
     
     return (
         <li className={styles.list_item}>
-            {item?.title && (
+            {/* {item?.title && (
                 <div className={styles.title_small}>
                     {item.title || 'Уточнить'}
                 </div>
-            )}
+            )} */}
             <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
                 {item.size ?? 'Уточнить'}
             </div>
@@ -33,7 +33,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                 {item.height ?? 'Уточнить'}
             </div>
 
-            <div className={styles.list_header_text}>{item.amount === null ? 'Нет в наличии' : item.amount}</div>
+            {/* <div className={styles.list_header_amount_sklad}>{item.amount === null ? 'Нет в наличии' : item.amount}</div> */}
 
             <div className={styles.qty}>
                 <Counter
@@ -228,12 +228,14 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                     </div>
 
                     <div className={styles.description}>
-                        <p className={styles.article}>{data?.sku}</p>
+                        {data?.sku !== null && (
+                            <p className={styles.article}>{data?.sku}</p>
+                        )}
                         <ul className={styles.list}>
                             <li className={styles.list_header}>
-                                {data?.title && (
+                                {/* {data?.title && (
                                     <div className={styles.list_header_text}>Название:</div>
-                                )}
+                                )} */}
                                 {/* {data?.size && ( */}
                                     <div className={styles.list_header_text}>Размер:</div>
                                 {/* )} */}
@@ -243,7 +245,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 {/* )} */}
 
                                 
-                                <div className={styles.list_header_text}>Кол-во на складе:</div>
+                                {/* <div className={styles.list_header_text}>Склад:</div> */}
                                 
 
                                 <div className={styles.list_header_text}>Кол-во:</div>

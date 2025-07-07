@@ -116,7 +116,7 @@
 .list_header,
 .list_item {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     margin-bottom: 20px;
 
@@ -136,6 +136,7 @@
 
 .size,
 .height {
+    min-width: 100%;
     font-size: 16px;
     color: var(--gray);
     border-radius: 6px;
@@ -148,6 +149,10 @@
     justify-content: center;
     height: max-content;
     width: max-content;
+}
+
+.list_header_amount_sklad { 
+    text-align: center;
 }
 
 .list {
