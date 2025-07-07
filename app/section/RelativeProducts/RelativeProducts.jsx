@@ -17,7 +17,7 @@ import fetchData from '@/app/utils/fetchData';
 
 const RelativeProducts = () => {
     const [products, setProducts] = useState([]);
-    const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?populate=*`;
+    const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?filters[hit][$eq]=true&populate=*`;
 
     const swiperRef = useRef(null);
     const [current, setCurrent] = useState(1);
