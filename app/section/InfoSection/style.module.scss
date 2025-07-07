@@ -12,6 +12,7 @@
 .info_section_content {
     position: relative;
     z-index: 1;
+    text-shadow: 1px 1px 2px black;
 
     padding: 80px 50px;
 
@@ -19,18 +20,14 @@
 
     @media (max-width:500px) {
         padding: 40px 20px;
-
     }
-
 }
-
 
 .info_section {
     background-image: url('../../../public/info.png');
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
-
 
     @media (max-width:800px) {
         background-image: url('../../../public/info2.png');

@@ -69,16 +69,18 @@ function CardItem({ element }) {
                         <div className={`custom-pagination2 ${styles.custom_pagination}`} />
                     </Swiper>
                     :
-                    <Image
-                        src={`/placeholder-image.jpg`}
-                        alt={title}
-                        width={305}
-                        objectFit='contain'
-                        height={360}
-                        className={styles.card_image}
-                        placeholder="blur"
-                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                    />
+                    <div className={styles.img_wrapper}>
+                        <Image
+                            src={`/placeholder-image.jpg`}
+                            alt={title}
+                            width={305}
+                            objectFit='contain'
+                            height={360}
+                            className={styles.card_image}
+                            placeholder="blur"
+                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                        />
+                    </div>
                 }
 
                 <Link href={`products/${id}`} className={styles.name}>
@@ -126,9 +128,7 @@ function CardItem({ element }) {
             <div className={styles.btn_wrapper}>
                 {!price || amount === 0
                     ? (
-
-                        <p className={`${styles.item_outstore}`}>Нужно уточнять цену</p>
-
+                        <p className={`${styles.item_outstore}`}>Нет в наличии</p>
                     )
                     : (
                         <AddToCartButton item={element} text={'В корзину'} />

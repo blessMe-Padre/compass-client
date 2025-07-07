@@ -81,9 +81,11 @@
     left: 0;
 
     width: 50%;
-    min-height: 60vh;
+    // min-height: 60vh;
+    max-height: 70vh;
     overflow-x: auto;
     z-index: 1;
+    box-sizing: border-box;
 
     background-color: var(--white);
     box-shadow: rgba(0, 0, 0, .3) 0px 2px 15px, rgba(0, 0, 0, .22) 0px 5px 5px;
@@ -123,7 +125,7 @@
     visibility: hidden;
     position: absolute;
     top: 55px;
-    right: 0;
+    right: 20px;
     width: 50%;
     z-index: 20;
 

@@ -186,7 +186,7 @@ const Footer = () => {
 
                         <div className={styles.footer_info_other}>
                             <div>
-                                <p>Разработки сайта <a href='https://inside360.ru'>INSIDE360</a></p>
+                                <p>Разработки сайта <a className={styles.inside_link} href='https://inside360.ru' target='_blank'>INSIDE360</a></p>
                             </div>
 
                             <div>

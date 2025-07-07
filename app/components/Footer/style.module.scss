@@ -73,6 +73,7 @@
     margin-bottom: 20px;
     margin-top: 20px;
     transition: all 0.3s ease-in-out;
+    align-items: center;
 
     @media (max-width: 480px) {
         font-size: 12px;
@@ -227,4 +228,12 @@
 .menu_clients li:active,
 .menu_categories li:active {
     color: var(--orange);
+}
+
+.inside_link {
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: red;
+    }
 }
