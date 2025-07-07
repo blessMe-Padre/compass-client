@@ -110,8 +110,11 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const [paymentMethod, setPaymentMethod] = useState('');
     const { cartItems } = useCartStore();
 
-    // console.log('storeData', storeData);
-    // console.log('user', user);
+    /**
+     * true - если СДЕК нужен 
+     * false - если СДЕК не нужен
+     */
+    const IS_NEED_CDEK = false;
 
     useEffect(() => {
         const loadData = async () => {
@@ -379,9 +382,9 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             setError('Ошибка запроса, попробуйте позже');
             setIsSubmit(false);
 
-
         } catch (err) {
             console.error('Общая ошибка отправки создания заказа:', err);
+            setIsSubmit(false);
         }
 
         // ===============================
@@ -559,26 +562,41 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                         </div>
                     )}
 
+
                     {deliveryMethod === 'Доставка СДЭК' && (
-                        <div className={styles.address}>
-                            <h3>Выберите пункт выдачи СДЭК</h3>
-                            <motion.div
+                        IS_NEED_CDEK ? (
+                            <div className={styles.address}>
+                                <h3>Выберите пункт выдачи СДЭК</h3>
+                                <motion.div
+                                    variants={addressVariants}
+                                    className={styles.input_wrapper}
+                                >
+                                    <div className={styles.wrapper}>
+                                        <Sdek />
+                                    </div>
+                                </motion.div>
+                            </div>
+                        ) : (
+                            <motion.p
                                 variants={addressVariants}
                                 className={styles.input_wrapper}
+                                style={{ marginTop: '20px' }}
                             >
-                                <div className={styles.wrapper}>
-                                    <Sdek />
-                                </div>
-                            </motion.div>
-                        </div>
+                                Выбран способ доставки "Доставка СДЭК"
+                            </motion.p>
+                        )
                     )}
-
                 </div>
 
                 {deliveryMethod === 'Самовывоз' &&
-                    <p className={styles.delivery_address}>
+
+                    <motion.p
+                        variants={addressVariants}
+                        className={styles.delivery_address}
+                        style={{ marginTop: '20px' }}
+                    >
                         г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
-                    </p>
+                    </motion.p>
                 }
 
                 <div className={styles.payment}>
@@ -626,6 +644,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 </div>
             </div>
 
-        </form>
+        </form >
     )
 }

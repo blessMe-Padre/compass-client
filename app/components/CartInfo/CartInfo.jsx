@@ -13,12 +13,10 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
     const [promocodSales, setPromocodSales] = useState(10)
     const { totalQuantity, totalSum } = useCartTotals();
     const { storeData, setDeliveryData } = useDeliveryStore();
-
     const sum = totalSum;
     useEffect(() => {
         setDeliveryData({ totalSum: sum });
     }, [])
-
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('ru-RU').format(price);
@@ -38,7 +36,7 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
         setAuth(!!jwt);
     }, []);
 
-    const buttonText = isSubmit ? 'Отправка...' : 'Оформить заказ';
+    const buttonText = isSubmit ? 'Создание заказа...' : 'Оформить заказ';
     return (
 
         <div className={styles.cart_info}>
@@ -73,7 +71,12 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
                     {auth ?
                         forSubmit === true
                             ?
-                            <LinkButton onClick={onSubmit} forClick={true} href={'/checkout'} text={buttonText} />
+                            <LinkButton
+                                onClick={onSubmit}
+                                forClick={true}
+                                href={'/checkout'}
+                                text={buttonText}
+                            />
                             :
                             <LinkButton href={'/checkout'} text={buttonText} />
 
