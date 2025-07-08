@@ -33,10 +33,6 @@
   }
 }
 
-
-
-
-
 .categories_list {
   position: sticky;
   top: 20px;
@@ -112,7 +108,7 @@
 
 .child_item>* {
   font-weight: 400;
-  color: var(--light-gray);
+  color: var(--gray);
   margin-bottom: 10px;
   margin-left: 5px;
 }
@@ -132,6 +128,10 @@
   display: inline-block;
   margin-left: 8px;
   transition: transform 0.2s ease;
+
+  svg path {
+    stroke: var(--black) !important;
+  }
 }
 
 /* Контейнеры вложенных категорий */
@@ -139,18 +139,6 @@
 .grandchild_container {
   overflow: hidden;
 }
-
-/* Анимация hover */
-.child_item:hover,
-.grandchild_item:hover {
-  // color: var(--orange);
-}
-
-// .child_item:active,
-// .grandchild_item:active {
-//   color: var(--blue);
-// }
-
 
 .catalog_options svg path {
   fill: var(--toggle-color);
@@ -168,7 +156,6 @@
   accent-color: var(--blue);
 }
 
-
 .catalog_wrapper {
   display: flex;
   gap: 30px;
@@ -177,7 +164,7 @@
 
 .dop_wrapper {
   flex: 1;
-  
+
   &:first-child {
     max-width: 300px;
   }
@@ -191,25 +178,26 @@
   margin-bottom: 10px;
   border-radius: 4px;
   overflow: hidden;
-  
+  color: var(--dark);
+
   &.active {
     // background-color: #f5f5f5;
   }
-  
+
   h3 {
     padding: 10px 15px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: var(--dark);
     margin: 0;
   }
 }
 
 .arrow {
   transition: transform 0.3s ease;
-  
+
   &.rotated {
     transform: rotate(180deg);
   }
@@ -219,7 +207,7 @@
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.3s ease;
-  
+
   &.expanded {
     max-height: 100%;
   }
@@ -248,7 +236,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  
+
   select {
     padding: 5px;
     border: 1px solid #ddd;
@@ -260,7 +248,7 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  
+
   .checkbox {
     margin-right: 5px;
   }
