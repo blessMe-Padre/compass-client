@@ -69,6 +69,10 @@ const MainSlider = () => {
                 spaceBetween={20}
                 loop={true}
                 modules={[Navigation, Pagination]}
+                navigation={{
+                    nextEl: '.custom-navigation .swiper-button-next',
+                    prevEl: '.custom-navigation .swiper-button-prev',
+                }}
                 pagination={{
                     clickable: true,
                     el: '.custom-pagination',
@@ -104,6 +108,11 @@ const MainSlider = () => {
                     )
                 })}
                 <div className={`custom-pagination ${styles.custom_pagination}`} />
+
+                <div className={`custom-navigation ${styles.custom_navigation}`}>
+                    <button className="swiper-button-next" />
+                    <button className="swiper-button-prev" />
+                </div>
             </Swiper>
         </section>
     );

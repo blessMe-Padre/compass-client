@@ -14,11 +14,6 @@
   gap: 2%;
   align-items: flex-start;
 
-  // .dop_wrapper {
-  //   position: sticky;
-  //   top: 0;
-  // }
-
   @media (max-width: 600px) {
     display: flex;
     flex-direction: column;
@@ -166,7 +161,9 @@
   flex: 1;
 
   &:first-child {
-    max-width: 300px;
+    max-width: 330px;
+    background-color: var(--toggle-black);
+    padding: 20px;
   }
 }
 

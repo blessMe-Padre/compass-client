@@ -49,6 +49,7 @@ export { default as Payment } from './Payment/Payment';
 export { default as PromocodComponent } from './PromocodComponent/PromocodComponent';
 export { default as CartInfo } from './CartInfo/CartInfo';
 export { default as Preloader } from './Preloader/Preloader';
+export { default as FavoriteBtn } from './Favorite/FavoriteBtn';
 
 
 // timer

@@ -36,6 +36,8 @@
 }
 
 .slider {
+    position: relative;
+
     display: grid;
     grid-template-columns: 100px 1fr;
     gap: 20px;
@@ -132,7 +134,13 @@
     color: var(--toggle-color);
     margin-bottom: 10px;
     // text-align: center;
+
+    &.blue_color {
+        color: var(--blue);
+    }
 }
+
+
 
 .size,
 .height {
@@ -149,6 +157,12 @@
     justify-content: center;
     height: max-content;
     width: max-content;
+
+
+    &.blue_bg {
+        background-color: var(--blue);
+        color: var(--white);
+    }
 }
 
 .list_header_amount_sklad { 

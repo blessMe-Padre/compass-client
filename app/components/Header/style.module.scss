@@ -54,11 +54,13 @@
     flex-wrap: wrap;
 
     a {
+        font-weight: 500;
         display: block;
         padding: 10px 20px;
     }
 
     a:hover {
+        // background-color: var(--blue);
         color: var(--blue);
     }
 }
@@ -92,8 +94,14 @@
 
     a {
         display: block;
+        font-weight: 500;
         color: var(--black);
         padding: 10px 20px;
+    }
+
+    a:hover {
+        background-color: var(--blue);
+        color: var(--white) !important;
     }
 
     @media (max-width: 768px) {
@@ -110,6 +118,7 @@
     visibility: visible;
 
     a {
+        font-weight: 500;
         display: block;
         color: var(--black);
         padding: 10px 20px;
@@ -127,6 +136,8 @@
     top: 55px;
     right: 20px;
     width: 50%;
+    height: 624px;
+    overflow: auto; 
     z-index: 20;
 
     background-color: var(--white);
@@ -134,8 +145,14 @@
 
     a {
         display: block;
+        font-weight: 500;
         color: var(--black);
         padding: 10px 20px;
+    }
+
+    :hover {
+        background-color: var(--blue);
+        color: var(--white) !important;
     }
 
     &.active {
