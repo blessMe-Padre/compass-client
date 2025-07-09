@@ -10,8 +10,10 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import { AddToCartButton, Counter, ReviewsForm, TableSize } from "@/app/components";
+import { AddToCartButton, Counter, ReviewsForm, TableSize, FavoriteBtn } from "@/app/components";
 import { ReviewsSection } from "@/app/section";
+import useWishlistStore from '@/app/store/wishlistStore';
+
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
 
@@ -26,7 +28,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                     {item.title || 'Уточнить'}
                 </div>
             )} */}
-            <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
+            <div className={`${styles.size} ${styles.blue_bg} ${isDisabled ? styles.disabled : ""}`}>
                 {item.size ?? 'Уточнить'}
             </div>
             <div className={`${styles.height} ${isDisabled ? styles.disabled : ""}`}>
@@ -51,7 +53,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                 />
             </div>
             <div className={styles.price}>
-                {item.price !== 0 ? (
+                {item.amount !== 0 && item.price !== 0 ? (
                     <div> {item.price?.toLocaleString('ru-RU') ?? 0} ₽</div>
                 ) : (
                     <div className='flex'>
@@ -59,7 +61,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                             <rect width="14" height="14" rx="7" fill="#F79410" />
                             <path d="M7.38094 5.45031C7.38094 6.01031 7.36094 6.52031 7.32094 6.98031C7.28094 7.43365 7.23094 7.88698 7.17094 8.34031H6.59094C6.53094 7.88698 6.48094 7.43365 6.44094 6.98031C6.40094 6.52031 6.38094 6.01031 6.38094 5.45031V3.57031H7.38094V5.45031ZM7.55094 9.96031C7.55094 10.1403 7.49094 10.297 7.37094 10.4303C7.25094 10.5636 7.0876 10.6303 6.88094 10.6303C6.67427 10.6303 6.51094 10.5636 6.39094 10.4303C6.27094 10.297 6.21094 10.1403 6.21094 9.96031C6.21094 9.78031 6.27094 9.62365 6.39094 9.49031C6.51094 9.35698 6.67427 9.29031 6.88094 9.29031C7.0876 9.29031 7.25094 9.35698 7.37094 9.49031C7.49094 9.62365 7.55094 9.78031 7.55094 9.96031Z" fill="white" />
                         </svg>
-                        {status}
+                        Под заказ
                     </div>
                 )}
             </div>
@@ -75,12 +77,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
     const openTab = e => setActive(+e.target.dataset.index);
-
-    // расчет стоимости товара и его вариантов
     const [quantities, setQuantities] = useState({})
-
-    console.log(quantities);
-
     const [direction, setDirection] = useState('vertical');
 
     const imageList = data?.imgs;
@@ -117,7 +114,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         const handleResize = () => {
             setDirection(window.innerWidth < 780 ? 'horizontal' : 'vertical');
         };
-
         handleResize();
         window.addEventListener('resize', handleResize);
 
@@ -225,6 +221,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 )}
                             </Swiper>
                         </div>
+
+                        <FavoriteBtn element={data} />
                     </div>
 
                     <div className={styles.description}>
@@ -236,9 +234,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 {/* {data?.title && (
                                     <div className={styles.list_header_text}>Название:</div>
                                 )} */}
-                                {/* {data?.size && ( */}
-                                    <div className={styles.list_header_text}>Размер:</div>
-                                {/* )} */}
+                                {data?.size && ( 
+                                    <div className={`${styles.list_header_text} ${styles.blue_color}`}>Размер:</div>
+                                )}
                                 
                                 {/* {data?.height && ( */}
                                     <div className={styles.list_header_text}>Рост:</div>

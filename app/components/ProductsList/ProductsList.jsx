@@ -1,6 +1,7 @@
 import styles from './style.module.scss';
 import { motion } from 'framer-motion';
-import { CardItem } from '..';
+import { CardItem, Preloader,  } from '..';
+
 
 
 export default function ProductsList({ products, isLoading, count, isWishlist = false }) {
@@ -23,9 +24,7 @@ export default function ProductsList({ products, isLoading, count, isWishlist = 
                     ) : (
                     <div>
                         {isLoading ? (
-                            <div className={styles.loading_placeholder}>
-                                
-                            </div>
+                          <Preloader width={50} height={50} />
                         ) : (
                         'Товары не найдены'
                         )}

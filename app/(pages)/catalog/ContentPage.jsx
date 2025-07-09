@@ -15,6 +15,7 @@ import Link from 'next/link';
 import useFilterStore from '@/app/store/filterStore';
 import useCartStore from '@/app/store/cartStore';
 import { getAllCategoriesGraphQL } from '../../utils/graphql/getAllCategoriesGraphQL';
+import { Preloader } from '@/app/components'
 
 function usePrevious(value) {
   const ref = useRef();
@@ -149,17 +150,10 @@ function CatalogContent() {
   }
 
   useEffect(() => {
-    // Получаем параметр slug из URL
     const slug = searchParams.get('slug') || '';
     console.log('22', slug)
     setCurrentSlug(slug);
   }, [searchParams, setCurrentSlug]);
-
-  // useEffect(() => {
-  //   if (!currentSlug) {
-  //     handleClickDefault();
-  //   }
-  // }, [currentSlug]);
 
   useEffect(() => {
     setPageCount(1);
@@ -177,6 +171,7 @@ function CatalogContent() {
         const data = await getAllCategoriesGraphQL();
         console.log(data)
         setCategories(data);
+        setLoading(false);
 
       } catch (err) {
         setError(err.message);
@@ -190,7 +185,7 @@ function CatalogContent() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const slugChanged = prevSlug !== undefined && prevSlug !== currentSlug;
 
@@ -223,7 +218,6 @@ function CatalogContent() {
         }
 
         if (optionsFilter) {
-          // buildStrapiFilters добавляет '&' в конец, убираем его.
           queryParams.push(optionsFilter.slice(0, -1));
         }
 
@@ -231,8 +225,7 @@ function CatalogContent() {
         const newProducts = await getAllProducts(apiUrl);
 
         if (pageCount === 1) {
-          // setProducts(products);
-          // setLoadMoreHidden(products.length < PAGE_SIZE);
+         
           setProducts(newProducts);
           setLoadMoreHidden(newProducts.length < pageSize);
         } else {
@@ -240,7 +233,7 @@ function CatalogContent() {
             setLoadMoreHidden(true);
           } else {
             setProducts(prev => [...prev, ...newProducts]);
-            setLoadMoreHidden(newProducts.length < PAGE_SIZE); // Для следующих страниц размер всегда PAGE_SIZE
+            setLoadMoreHidden(newProducts.length < PAGE_SIZE); 
           }
         }
       } catch (error) {
@@ -251,8 +244,7 @@ function CatalogContent() {
     };
 
     fetchProducts();
-    // `products.length` и `prevSlug` намеренно опущены из зависимостей, чтобы избежать бесконечных циклов.
-    // Их значения корректно захватываются при каждом запуске, вызванном другими зависимостями.
+
   }, [currentSlug, pageCount, checkboxStatus, sortedFilters, filters]);
 
   return (
@@ -262,122 +254,7 @@ function CatalogContent() {
           secondLabel="Каталог"
           thirdLabel={categoryName !== 'Каталог' ? categoryName : ''}
         />
-        {/* <motion.h2
-            initial='hidden'
-            animate="visible"
-            className='page_title'
-          >
-            {categoryName}
-          </motion.h2>
 
-          <motion.div
-            initial='hidden'
-            animate="visible"
-            className={styles.catalog_wrapper}
-          >
-            <div className={styles.dop_wrapper}>
-              <Link href={'/catalog'}>
-                <div className={styles.catalog_btn} onClick={() => handleClickDefault()}>
-                  Каталог
-                </div>
-              </Link>
-              <div className={styles.list_cat}>
-                {categories?.map((parentCategory, index) => (
-                  <div key={`${parentCategory.id1c}-${index}`}
-                    className={`${styles.parent_cat} ${isCategoryActive(parentCategory.id) ? styles.active : ''}`}
-                  >
-                    <h3
-                      onClick={(e) => handleCategoryClick(e, parentCategory.slug, parentCategory.id1c, parentCategory.name)}
-                    >
-                      {parentCategory.name}
-                      {parentCategory.children?.length > 0 && (
-                        <motion.span
-                          className={styles.arrow}
-                          animate={{ rotate: expandedCategories[parentCategory.id1c] ? 180 : 0 }}
-                        >
-                          <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                          </svg>
-                        </motion.span>
-                      )}
-                    </h3>
-
-                  {parentCategory.children?.length > 0 && (
-                    <motion.div
-                      className={styles.child_container}
-                      initial={{ height: 0 }}
-                      animate={{
-                        height: expandedCategories[parentCategory.id1c] ? "auto" : 0
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div className={styles.child_cat}>
-                          {[...parentCategory.children]
-                          .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                            .map((childCategory) => {
-                              return (
-                                <RecursiveCategoryItem
-                                  key={childCategory.id1c}
-                                  category={childCategory}
-                                  level={1}
-                                  expandedCategories={expandedCategories}
-                                  handleCategoryClick={handleCategoryClick}
-                                  isCategoryActive={isCategoryActive}
-                                  styles={styles}
-                                />
-                            )
-                          }
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.dop_wrapper}>
-              <div className={styles.catalog_options}>
-                <div className='flex gap-5' onClick={() => setActivePopup(true)} style={{ cursor: 'pointer' }}>
-                  <svg width="20" height="17" viewBox="0 0 20 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.625 3.71984H10.8013C11.082 4.85398 12.1079 5.69746 13.3276 5.69746C14.5472 5.69746 15.5732 4.85398 15.8539 3.71984H19.375C19.7202 3.71984 20 3.44 20 3.09484C20 2.74969 19.7202 2.46984 19.375 2.46984H15.8538C15.5732 1.3357 14.5472 0.492188 13.3275 0.492188C12.1079 0.492188 11.0819 1.3357 10.8012 2.46984H0.625C0.279844 2.46984 0 2.74969 0 3.09484C0 3.44 0.279844 3.71984 0.625 3.71984ZM13.3276 1.74219C14.0734 1.74219 14.6802 2.34898 14.6802 3.0948C14.6802 3.84066 14.0734 4.44746 13.3276 4.44746C12.5817 4.44746 11.9749 3.84066 11.9749 3.0948C11.9749 2.34898 12.5817 1.74219 13.3276 1.74219ZM0.625 9.12562H4.14617C4.42688 10.2598 5.45277 11.1032 6.67246 11.1032C7.89215 11.1032 8.91805 10.2598 9.19875 9.12562H19.375C19.7202 9.12562 20 8.84578 20 8.50062C20 8.15547 19.7202 7.87562 19.375 7.87562H9.19871C8.91801 6.74148 7.89211 5.89797 6.67242 5.89797C5.45273 5.89797 4.42684 6.74148 4.14613 7.87562H0.625C0.279844 7.87562 0 8.15547 0 8.50062C0 8.84578 0.279805 9.12562 0.625 9.12562ZM6.67242 7.14797C7.41828 7.14797 8.02508 7.75477 8.02508 8.50062C8.02508 9.24644 7.41828 9.85324 6.67242 9.85324C5.92656 9.85324 5.31977 9.24644 5.31977 8.50062C5.31977 7.75477 5.92656 7.14797 6.67242 7.14797ZM19.375 13.2814H15.8538C15.5731 12.1473 14.5472 11.3038 13.3275 11.3038C12.1079 11.3038 11.082 12.1473 10.8012 13.2814H0.625C0.279844 13.2814 0 13.5612 0 13.9064C0 14.2516 0.279844 14.5314 0.625 14.5314H10.8013C11.082 15.6655 12.1079 16.5091 13.3276 16.5091C14.5473 16.5091 15.5732 15.6655 15.8539 14.5314H19.375C19.7202 14.5314 20 14.2516 20 13.9064C20 13.5612 19.7202 13.2814 19.375 13.2814ZM13.3276 15.2591C12.5817 15.2591 11.9749 14.6523 11.9749 13.9064C11.9749 13.1605 12.5817 12.5538 13.3276 12.5538C14.0734 12.5538 14.6802 13.1605 14.6802 13.9064C14.6802 14.6523 14.0734 15.2591 13.3276 15.2591Z" fill="#1B1B1B" />
-                  </svg>
-                  Фильтры
-              </div>
-              
-                <div className={styles.sort}>
-                  Сортировка:
-                  <select value={sortedFilters} onChange={handleSelectSort}>
-                    <option value="opinion">рекомендуем</option>
-                    <option value="price:desc">Сначала дорогие</option>
-                    <option value="price:asc">Сначала дешевые</option>
-                  </select>
-                </div>
-
-                <div className={styles.stock} onClick={() => handleCheckboxStatus()}>
-                  <input type="checkbox" name="checkboxStatus" id="checkboxStatus" className={styles.checkbox} />
-                  <label htmlFor="checkboxStatus">В наличии</label>
-                </div>
-              </div>
-
-              <ProductsList products={products} isLoading={isLoading} />
-
-              {!isLoading && products.length > 0 && !loadMoreHidden && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <LoadMoreButton
-                    text={'Показать еще'}
-                    loading={isLoading}
-                    onLoadMore={handleLoadMore}
-                  />
-                </motion.div>
-              )}
-            </div>
-
-          </motion.div> */}
 
         <h2 className='page_title'>
           {categoryName}
@@ -391,7 +268,7 @@ function CatalogContent() {
               </div>
             </Link>
             <div className={styles.list_cat}>
-              {categories?.map((parentCategory) => (
+              {isLoading === false ? categories?.map((parentCategory) => (
                 <div key={parentCategory.id1c}
                   className={`${styles.parent_cat} ${isCategoryActive(parentCategory.id1c) ? styles.active : ''}`}
                 >
@@ -432,7 +309,11 @@ function CatalogContent() {
                     </div>
                   )}
                 </div>
-              ))}
+              ))
+                : (
+                   <Preloader width={40} height={40} />  
+                )
+            }
             </div>
           </div>
 

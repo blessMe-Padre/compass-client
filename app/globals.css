@@ -3,6 +3,7 @@
   --blue: #007cc2;
   --black: #1b1b1b;
   --black2: #262626;
+  --black3: #17171A;
   --white: #ffffff;
   --gray: #6b6b6b;
   --light-gray: #c4c4c4;
@@ -21,6 +22,7 @@
   --anim-function: 0.3s ease;
 
   --toggle-color: #1b1b1b;
+  --toggle-black: #f6f6f6;
   --toggle-color-gray: #6b6b6b;
   --reverse-color: #ffffff;
 }
@@ -29,6 +31,7 @@
   :root {
     --background: #2e2e2e;
     --toggle-color: #ffffff;
+    --toggle-black: #1b1b1b;
     --reverse-color: #1b1b1b;
     --toggle-color-gray: #ffffff;
   }
@@ -139,6 +142,63 @@ svg path {
 .custom-pagination2 .swiper-pagination-bullet {
   width: 50px !important;
 } 
+
+/* Общие стили для обеих кнопок */
+.custom-navigation .swiper-button-next,
+.custom-navigation .swiper-button-prev {
+  width: 40px;
+  height: 40px;
+  background: var(--white);
+  border-radius: 50%;
+  border: none;
+  transition: all 0.3s ease;
+  margin-top: 0;
+}
+
+.custom-navigation .swiper-button-next {
+  margin-right: 200px;
+}
+
+.custom-navigation .swiper-button-prev {
+  margin-left: 200px;
+}
+
+@media screen and (max-width: 780px) {
+  .custom-navigation .swiper-button-next {
+    margin-right: 20px;
+  }
+  
+  .custom-navigation .swiper-button-prev {
+    margin-left: 20px;
+  }  
+}
+
+/* Стили при наведении */
+.custom-navigation .swiper-button-next:hover,
+.custom-navigation .swiper-button-prev:hover {
+  background-color: var(--blue);
+}
+
+/* Стили при нажатии */
+.custom-navigation .swiper-button-next:active,
+.custom-navigation .swiper-button-prev:active {
+  background-color: var(--orange);
+}
+
+/* Стили для стрелок (псевдоэлементов) */
+.custom-navigation .swiper-button-next::after,
+.custom-navigation .swiper-button-prev::after {
+  font-size: 20px;
+  color: var(--black);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Изменение цвета стрелки при наведении на кнопку */
+.custom-navigation .swiper-button-next:hover::after,
+.custom-navigation .swiper-button-prev:hover::after {
+  color: var(--white);
+}
 
 .swiper-pagination-bullet-active {
   background: var(--light-gray) !important;
