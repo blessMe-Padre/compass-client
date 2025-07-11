@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import getReviewsByProductId from '@/app/utils/getReviewsByProductId';
-import { PopupReviews, PopupText } from '@/app/components';
+import { PopupReviews, PopupText, Preloader } from '@/app/components';
+import { motion } from "framer-motion";
 
 import Image from 'next/image';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
@@ -16,9 +17,16 @@ const ReviewsSection = ({ data }) => {
     const [activePopupText, setActivePopupText] = useState(false);
     const [reviews, setReviews] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isEmptyReviewsList, setIsEmptyReviewsList] = useState(false);
 
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
     const PREVIEW_LIMIT = 160;
+
+    // для пагинации
+    const PAGE_SIZE = 4;
+    const [page, setPage] = useState(1);
 
     // Проверка на авторизацию
     const [auth, setAuth] = useState(false);
@@ -44,19 +52,36 @@ const ReviewsSection = ({ data }) => {
         }
     }
 
+    const handleLoadMore = () => {
+        setPage(prev => prev + 1);
+    }
+
     useEffect(() => {
+        setIsLoading(true);
         const loadData = async () => {
             try {
-                const response = await getReviewsByProductId(id);
-                setReviews(response?.otzyvy_tovaries);
+                const url =
+                    `/api/otzyvy-tovaries` +
+                    `?populate=*` +
+                    `&filters[product][documentId][$eq]=${id}` +
+                    `&filters[approved][$eq]=true` +
+                    `&pagination[page]=${page}&pagination[pageSize]=${PAGE_SIZE}` +
+                    `&sort=createdAt:desc`
+                    ;
+                const newReviews = await getReviewsByProductId(url);
+
+                setReviews(prev => [...prev, ...newReviews.data]);
+                setHasMore(page < newReviews.meta.pagination.pageCount);
+                setIsLoading(false);
+                if (newReviews.data.length === 0) setIsEmptyReviewsList(true);
 
             } catch (error) {
-                console.error('Произошла ошибка', error);
+                console.error('Произошла ошибка загрузки отзывов', error);
             }
         };
 
         loadData();
-    }, []);
+    }, [page]);
 
     useEffect(() => {
         if (!reviews) return;
@@ -94,13 +119,20 @@ const ReviewsSection = ({ data }) => {
                     Оставить отзыв
                 </button>
 
+
                 <ul className={styles.list}>
-                    {
-                        reviews.filter(item => item.approved).map((item, index) => {
+                    {reviews && reviews.length > 0 && (
+                        reviews?.filter(item => item.approved).map((item, index) => {
                             const date = new Date(item.publishedAt);
 
                             return (
-                                <li key={index} className={styles.review_item}>
+                                <motion.li
+                                    key={index}
+                                    className={styles.review_item}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                                >
                                     <div className={styles.review_header}>
                                         <div className={styles.review_ava}>{getInitials(item?.name)}</div>
                                         <div className={styles.review_name}>{item?.name}</div>
@@ -174,12 +206,24 @@ const ReviewsSection = ({ data }) => {
                                             })}
                                         </div>
                                     </div>
-                                </li>
+                                </motion.li>
                             )
-                        })
+                        }))
                     }
-
                 </ul>
+
+                {isEmptyReviewsList && <p>На данный товар еще нет отзывов</p>}
+
+                {
+                    hasMore &&
+                    <button
+                        onClick={handleLoadMore}
+                        className={styles.load_more_button}
+                    >
+                        {isLoading && <Preloader />}
+                        {isLoading ? 'загрузка...' : 'показать еще'}
+                    </button>
+                }
             </section >
 
             <PopupReviews
@@ -193,26 +237,6 @@ const ReviewsSection = ({ data }) => {
                 activePopupText={activePopupText}
                 setActivePopupText={setActivePopupText}
             />
-
-            {/* <div className="pswp-gallery2">
-                <a
-                    href='/info2.png'
-                    data-pswp-width={200}
-                    data-pswp-height={200}
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    <Image
-                        className='3333'
-                        src='/info2.png'
-                        alt="фото отзыва"
-                        width={200}
-                        height={200}
-                        placeholder="blur"
-                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                    />
-                </a>
-            </div> */}
         </>
     )
 }

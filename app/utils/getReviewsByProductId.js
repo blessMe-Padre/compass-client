@@ -1,11 +1,11 @@
-const getReviewsByProductId = async (id) => {
+const getReviewsByProductId = async (url) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/products?filters[documentId][$containsi]=${id}&populate[otzyvy_tovaries][populate]=*`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}${url}`);
         if (!res.ok) {
             throw new Error(`Ошибка HTTP: ${res.status}`);
         }
         const result = await res.json();
-        return result.data[0];
+        return result;
     } catch (error) {
         console.error("Ошибка при загрузке:", error);
         return [];

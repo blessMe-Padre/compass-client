@@ -158,3 +158,30 @@
         object-fit: cover;
     }
 }
+
+.load_more_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-top: 30px;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--white);
+    background-color: var(--blue);
+    width: 100%;
+    max-width: 256px;
+    transition: all var(--anim-function);
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    margin-bottom: 30px;
+    padding: 20px 10px;
+    font-size: clamp(.875em, .173611vw + .791667em, 1em);
+    font-weight: 500;
+
+    &:hover {
+        background-color: var(--hover-blue);
+    }
+}
