@@ -18,6 +18,7 @@ const ReviewsSection = ({ data }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
+    const PREVIEW_LIMIT = 160;
 
     // Проверка на авторизацию
     const [auth, setAuth] = useState(false);
@@ -104,10 +105,11 @@ const ReviewsSection = ({ data }) => {
                                         <div className={styles.review_ava}>{getInitials(item?.name)}</div>
                                         <div className={styles.review_name}>{item?.name}</div>
                                     </div>
-                                    <div className="pswp-gallery">
-                                        <ul className={styles.gallery_list}>
-                                            {item?.file !== null ? 
-                                                item?.file.map((image, index) => {
+                                    {item?.file && (
+                                        <div className="pswp-gallery">
+                                            <ul className={styles.gallery_list}>
+
+                                                {item?.file?.map((image, index) => {
                                                     return (
                                                         <li key={index}>
                                                             <a
@@ -127,38 +129,31 @@ const ReviewsSection = ({ data }) => {
                                                                     placeholder="blur"
                                                                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                                                 />
-                                                                
+
                                                             </a>
                                                         </li>
                                                     )
                                                 })
+                                                }
+                                            </ul>
+                                        </div>
+                                    )}
 
-                                                : <Image
-                                                    src={`/placeholder-image.jpg`}
-                                                    alt={'Заглушка'}
-                                                    width={80}
-                                                    objectFit='contain'
-                                                    height={80}
-                                                    className={styles.card_image}
-                                                    placeholder="blur"
-                                                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                />
-                                            }
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <p className={`${styles.review_text} ${isExpanded ? styles.expanded : ''}`}>
-                                            {item?.fullText}
-                                        </p>
-                                        {item?.fullText && (
-                                            <span 
+                                    <p className={`${styles.review_text} ${isExpanded ? styles.expanded : ''}`}>
+                                        {item?.fullText}
+                                    </p>
+                                    {
+
+                                        item?.fullText && item?.fullText.length > PREVIEW_LIMIT && (
+                                            <span
                                                 className={styles.read_more_btn}
                                                 onClick={() => setIsExpanded(!isExpanded)}
                                             >
                                                 {isExpanded ? 'Свернуть' : 'Читать далее...'}
                                             </span>
-                                        )}
-                                    </div>
+                                        )
+                                    }
+
                                     <div className={styles.review_footer}>
                                         <div>
                                             {

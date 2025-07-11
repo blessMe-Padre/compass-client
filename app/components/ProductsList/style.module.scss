@@ -1,81 +1,75 @@
-
 .products_list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 
-    width: 0;
-    min-width: 100%;
-    position: relative;
+  width: 0;
+  min-width: 100%;
+  position: relative;
 
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 
-    
-
-    
-    @media (max-width: 780px) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: 480px) {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    &.count {
-      grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.products_list.wishlist {  
-  grid-template-columns: repeat(4, 1fr);
-
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-    
   @media (max-width: 780px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 480px) {
-      grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  &.count {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.products_list.wishlist {
+  grid-template-columns: repeat(4, 1fr);
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 780px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 
 }
 
-
-
-
 .loading_placeholder {
-   width: 48px;
-    height: 48px;
-    border: 3px solid #6ebeff;
-    border-radius: 50%;
-    display: inline-block;
-    position: relative;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+  width: 48px;
+  height: 48px;
+  border: 3px solid #6ebeff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
 
 .loading_placeholder::after {
-    content: '';  
+  content: '';
   box-sizing: border-box;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    border-bottom-color: #337AB7;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-bottom-color: #337AB7;
 }
-    
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
-} 
+}
