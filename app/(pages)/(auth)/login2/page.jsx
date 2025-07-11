@@ -24,25 +24,53 @@ const api = https://sms.targetsms.ru/sendsms.php?user=root&pwd=password&name_del
 response = 1179038981
 */
 
-const PhoneStep = ({ register, errors }) => (
-    <div className={styles.form_item}>
-        <input
-            id="phone"
-            name="phone"
-            type="tel"
-            className={errors.phone ? styles.error : ''}
-            {...register('phone', {
-                required: 'Введите номер',
-                pattern: {
-                    value: /^\+7\d{10}$/,
-                    message: 'Формат: +79991234567'
-                }
-            })}
-            placeholder="+79991234567"
-        />
-        {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
-    </div>
-)
+const PhoneStep = ({ register, errors }) => {
+    const handlePhoneInput = (e) => {
+        // Удаляем все нецифровые символы
+        let value = e.target.value.replace(/\D/g, '');
+
+        // Если ввод начинается не с 7, добавляем +7
+        if (!value.startsWith('7') && value.length > 0) {
+            value = '7' + value;
+        }
+
+        // Ограничиваем длину (1 для 7 + 10 цифр)
+        if (value.length > 11) {
+            value = value.substring(0, 11);
+        }
+
+        // Форматируем значение
+        if (value.length > 1) {
+            e.target.value = `+7${value.substring(1)}`;
+        } else if (value.length === 1) {
+            e.target.value = '+7';
+        } else {
+            e.target.value = '';
+        }
+    };
+
+    return (
+        <div className={styles.form_item}>
+            <input
+                id="phone"
+                name="phone"
+                type="tel"
+                className={errors.phone ? styles.error : ''}
+                onInput={handlePhoneInput}
+                {...register('phone', {
+                    required: 'Введите номер',
+                    pattern: {
+                        value: /^\+7\d{10}$/,
+                        message: 'Формат ввода: +79991234567'
+                    }
+                })}
+                placeholder="+79991234567"
+                maxLength="12"
+            />
+            {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
+        </div>
+    );
+};
 
 const CodeStep = ({ register, errors, setValue }) => {
     const [code, setCode] = useState(['', '', '', '', '', '']);

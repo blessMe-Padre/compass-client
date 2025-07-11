@@ -34,6 +34,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .form_item label {
@@ -69,7 +70,7 @@
 
 .input_text_error {
     position: absolute;
-    top: -20px;
+    bottom: -20px;
     font-size: 12px;
     color: red;
 }
@@ -79,6 +80,7 @@
 }
 
 .form_item_checkbox {
+    position: relative;
     margin-bottom: 20px;
 }
 
@@ -90,6 +92,7 @@
 }
 
 .checkbox_wrapper {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -106,8 +109,6 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-
-   
 }
 
 .code_input {
@@ -125,4 +126,4 @@
 .code_input:focus {
     border-color: #0066cc;
     outline: none;
-  }
+}
