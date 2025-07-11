@@ -180,7 +180,6 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step }) => (
                 {error && <div className={styles.error_message}>{error}</div>}
 
                 <div className={`${styles.captcha} g-recaptcha`} data-sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}></div>
-
             </form>
         </div>
     </>
@@ -277,7 +276,6 @@ const Login = () => {
         setError('');
         setIsSending(false);
     };
-
 
     useEffect(() => {
         if (jwt) {
