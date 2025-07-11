@@ -1,6 +1,7 @@
 import { Ubuntu, Jost } from "next/font/google";
 import "./globals.css";
 import { Footer, Header, Notification } from "./components";
+import Script from 'next/script';
 
 const ubuntu = Ubuntu({
   variable: "--font-family",
@@ -23,6 +24,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body className={`${ubuntu.variable} ${jost.variable} relative`}>
+        <Script
+          src="https://www.google.com/recaptcha/api.js"
+          strategy="lazyOnload" // или "afterInteractive" (по умолчанию)
+          async
+          defer
+        />
         <Header />
         {children}
         <Notification />
