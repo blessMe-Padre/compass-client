@@ -1,6 +1,9 @@
 export async function POST(request) {
     if (req.method === 'POST') {
-        const captureResponse = req.body.captureResponse
+        const captureResponse = req.body.captureResponse;
+
+        console.log('captureResponse ==============>', captureResponse);
+
 
         fetch(`https://www.google.com/recaptcha/api/siteverify`, {
             method: 'POST',

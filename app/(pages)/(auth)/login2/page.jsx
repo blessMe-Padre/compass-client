@@ -301,6 +301,26 @@ const Login = () => {
         setIsSending(true);
         setError('');
 
+        // Получение токена от сервера reCAPTCHA
+        const captureResponse = grecaptcha.getResponse()
+        if (!captureResponse.length > 0) return
+
+        fetch(`/api/send`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                captureResponse // Дополнительно вместе с формой отправляем полученный токен
+            })
+        })
+            .then(r => r.json())
+            .then(data => {
+                setNotification(data?.message)
+            })
+            .catch(err => setNotification(err.message))
+
+
         setPhone(data.phone)
 
         try {
