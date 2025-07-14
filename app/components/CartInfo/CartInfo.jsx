@@ -10,13 +10,19 @@ import { useCartTotals } from '@/app/hooks/useCartTotals';
 
 export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit }) {
 
-    const [promocodSales, setPromocodSales] = useState(10)
+    // const [promocodSales, setPromocodSales] = useState(0);
+    const [couponSales, setCouponSales] = useState(0);
     const { totalQuantity, totalSum } = useCartTotals();
     const { storeData, setDeliveryData } = useDeliveryStore();
-    const sum = totalSum;
+
+    console.log(storeData);
+    console.log('totalSum', totalSum);
+
+
+    // const sum = totalSum;
     useEffect(() => {
-        setDeliveryData({ totalSum: sum });
-    }, [])
+        setDeliveryData({ totalSum: totalSum * (1 - couponSales / 100) });
+    }, [couponSales])
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('ru-RU').format(price);
@@ -49,17 +55,18 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
                     <p>Стоимость без учета доставки:</p>
                     <p>{formatPrice(totalSum)} ₽</p>
                 </div>
-                <div>
+                {/* <div>
                     <p>Скидка постоянного клиента:</p>
                     <p title="Скидка по промокоду" style={{ color: 'red' }}>{promocodSales} %</p>
-                </div>
+                </div> */}
             </div>
 
-            <PromocodComponent />
+            <PromocodComponent setCouponSales={setCouponSales} />
 
             <div className={styles.total_sum_order_wrapper}>
                 <div>
-                    <p>ИТОГО:</p> <p className={styles.total_sum_order}>{formatPrice(totalSum - (totalSum * promocodSales / 100))} ₽ </p>
+                    {/* <p>ИТОГО:</p> <p className={styles.total_sum_order}>{formatPrice(totalSum - (totalSum * promocodSales / 100))} ₽ </p> */}
+                    <p>ИТОГО:</p> <p className={styles.total_sum_order}>{formatPrice(totalSum - (totalSum * couponSales / 100))} ₽ </p>
                 </div>
 
 
