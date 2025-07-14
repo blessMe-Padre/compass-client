@@ -178,11 +178,11 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step, notific
                     }
                 </button>
                 {error && <div className={styles.error_message}>{error}</div>}
-                
-                
+
+
                 <div className='relative'>
-                  <div className={`${styles.captcha} g-recaptcha`} data-sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}></div>
-                  <div className={styles.input_text_error}>{notification}</div>
+                    <div className={`${styles.captcha} g-recaptcha`} data-sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}></div>
+                    <div className={styles.input_text_error}>{notification}</div>
                 </div>
             </form>
         </div>
@@ -270,7 +270,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [jwt, setJWT] = useState('');
     const [notification, setNotification] = useState("");
- 
+
     const [testCode, setTestCode] = useState();
 
     const { userData } = useUserStore();
@@ -303,43 +303,45 @@ const Login = () => {
     };
 
     const handlePhoneSubmit = async (data) => {
-      setIsSending(true);
-      setError('');
-      setNotification('Пройдите капчу');
-    
-      // 1. Получаем токен reCAPTCHA
-      const captureResponse = grecaptcha.getResponse();
-      if (!captureResponse) {
-        setIsSending(false);
-        return;
-      }
-    
-      try {
-        // 2. Проверяем токен на сервере
-        const res = await fetch('/api/captcha', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ captureResponse })
-        });
-    
-        const result = await res.json();
-        setNotification(result.message);
-    
-        if (!result.ok) {
-          setIsSending(false);
-          return;
+        setIsSending(true);
+        setError('');
+        setNotification('Пройдите капчу');
+
+        // 1. Получаем токен reCAPTCHA
+        const captureResponse = grecaptcha.getResponse();
+        if (!captureResponse) {
+            setIsSending(false);
+            return;
         }
-    
-        // 3. reCAPTCHA пройдена — отправляем СМС-код
-        await sendCode(data.phone, setTestCode);
-        setStep('verify');
-    
-      } catch (err) {
-        setError(err.message || 'Ошибка при отправке кода');
-        setStep('verify');
-      } finally {
-        setIsSending(false);
-      }
+
+        setPhone(data.phone);
+
+        try {
+            // 2. Проверяем токен на сервере
+            const res = await fetch('/api/captcha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ captureResponse })
+            });
+
+            const result = await res.json();
+            setNotification(result.message);
+
+            if (!result.ok) {
+                setIsSending(false);
+                return;
+            }
+
+            // 3. reCAPTCHA пройдена — отправляем СМС-код
+            await sendCode(data.phone, setTestCode);
+            setStep('verify');
+
+        } catch (err) {
+            setError(err.message || 'Ошибка при отправке кода');
+            setStep('verify');
+        } finally {
+            setIsSending(false);
+        }
     };
 
 
