@@ -106,8 +106,8 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     const { storeData, setDeliveryData } = useDeliveryStore();
     const [paymentData, setPaymentData] = useState(null);
     const router = useRouter();
-    const [deliveryMethod, setDeliveryMethod] = useState('');
-    const [paymentMethod, setPaymentMethod] = useState('');
+    const [deliveryMethod, setDeliveryMethod] = useState('Самовывоз');
+    const [paymentMethod, setPaymentMethod] = useState('Оплата наличными при получении');
     const { cartItems } = useCartStore();
 
     /**
