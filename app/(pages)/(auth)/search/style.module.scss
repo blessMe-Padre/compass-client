@@ -3,11 +3,21 @@
 
 .list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(326px, 1fr));
-
+    grid-template-columns: repeat(4, 1fr);
     gap: 30px;
 
     @include adaptiv-value("padding-top", 60, 30);
     @include adaptiv-value("padding-bottom", 60, 30);
 
+    @media (max-width: 1200px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 992px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 576px) {
+        grid-template-columns: 1fr;
+    }
 }

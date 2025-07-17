@@ -15,10 +15,6 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
     const { totalQuantity, totalSum } = useCartTotals();
     const { storeData, setDeliveryData } = useDeliveryStore();
 
-    console.log(storeData);
-    console.log('totalSum', totalSum);
-
-
     // const sum = totalSum;
     useEffect(() => {
         setDeliveryData({ totalSum: totalSum * (1 - couponSales / 100) });

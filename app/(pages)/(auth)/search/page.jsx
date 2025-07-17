@@ -23,7 +23,6 @@ function SearchResultsContent() {
     const searchParams = useSearchParams();
     const query = searchParams.get('query');
 
-
     useEffect(() => {
         const fetchSearchResults = async () => {
             try {
