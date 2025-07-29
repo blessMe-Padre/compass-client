@@ -295,7 +295,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
 
         const formData = {
             orderPaymentId: orderUniqNumber,
-            orderNumber: `Заказ № ${orderNumber}`,
+            orderNumber: `${orderNumber}`,
             UserDocumentId: user.documentId,
             orderText: orderText,
             dateOrder: getCurrentDate(),
