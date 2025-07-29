@@ -6,6 +6,8 @@ import Image from "next/image";
 import placeholder from '../../../public/remove/category-slide.jpg';
 import { useState, useEffect } from "react";
 
+import arrow from '../../../public/icons/arrow-white.svg';
+
 import styles from './style.module.scss';
 import "swiper/css";
 import "swiper/css/pagination";
@@ -21,6 +23,7 @@ import Link from 'next/link';
 const CategoryList = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [slides, setSlides] = useState([]);
+    const [isHover, setIsHover] = useState(false);
 
     useEffect(() => {
         try {
@@ -104,10 +107,17 @@ const CategoryList = () => {
                         {slides.map((slide, index) => {
                             if(index < 20) {
                                 return (
-                                    <Link href={`/catalog?slug=${slide?.slug}`} className={styles.item} key={index}>
+                                    <Link
+                                        href={`/catalog?slug=${slide?.slug}`}
+                                        className={styles.item}
+                                        key={index}
+                                        onMouseEnter={() => setIsHover(index)}
+                                        onMouseLeave={() => setIsHover(null)}
+                                    >
                                         <div className={styles.image_wrapper}>
                                             {slide?.image?.url
                                                 ? (
+                                                    
                                                     <Image
                                                         className={styles.slide}
                                                         src={`${domain}${slide?.image?.url}`}
@@ -128,6 +138,11 @@ const CategoryList = () => {
                                                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                                 />
                                             }
+
+                                            <div className={`${styles.image_wrapper_hover} ${isHover === index ? styles.active : ''}`}>
+                                                <h3>{slide?.name}</h3>
+                                                <Image className={styles.arrow} src={arrow} alt='arrow' width={24} height={24} />
+                                            </div>
                                         </div>
     
                                         <h3 className={styles.text}>{slide?.name}</h3>

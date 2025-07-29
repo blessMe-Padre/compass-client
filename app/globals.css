@@ -10,8 +10,14 @@
   --super-light-gray: #f6f6f6;
   --orange: #f79410;
   --gray-gray: #eaeaea;
-
+  
+  --new-blue: #4466B6;
+  --new-orange: #EEA47E;
+  --new-black: #22253C;
+  --new-light-orange: #FEF4EE;
+  
   --hover-blue: #438db8;
+  --hover-card: #FFF2EC;
 
   --font-family: "Ubuntu", sans-serif;
   --second-family: "GT Eesti Pro Display", sans-serif;
