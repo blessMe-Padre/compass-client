@@ -24,25 +24,53 @@ const api = https://sms.targetsms.ru/sendsms.php?user=root&pwd=password&name_del
 response = 1179038981
 */
 
-const PhoneStep = ({ register, errors }) => (
-    <div className={styles.form_item}>
-        <input
-            id="phone"
-            name="phone"
-            type="tel"
-            className={errors.phone ? styles.error : ''}
-            {...register('phone', {
-                required: 'Введите номер',
-                pattern: {
-                    value: /^\+7\d{10}$/,
-                    message: 'Формат: +79991234567'
-                }
-            })}
-            placeholder="+79991234567"
-        />
-        {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
-    </div>
-)
+const PhoneStep = ({ register, errors }) => {
+    const handlePhoneInput = (e) => {
+        // Удаляем все нецифровые символы
+        let value = e.target.value.replace(/\D/g, '');
+
+        // Если ввод начинается не с 7, добавляем +7
+        if (!value.startsWith('7') && value.length > 0) {
+            value = '7' + value;
+        }
+
+        // Ограничиваем длину (1 для 7 + 10 цифр)
+        if (value.length > 11) {
+            value = value.substring(0, 11);
+        }
+
+        // Форматируем значение
+        if (value.length > 1) {
+            e.target.value = `+7${value.substring(1)}`;
+        } else if (value.length === 1) {
+            e.target.value = '+7';
+        } else {
+            e.target.value = '';
+        }
+    };
+
+    return (
+        <div className={styles.form_item}>
+            <input
+                id="phone"
+                name="phone"
+                type="tel"
+                className={errors.phone ? styles.error : ''}
+                onInput={handlePhoneInput}
+                {...register('phone', {
+                    required: 'Введите номер',
+                    pattern: {
+                        value: /^\+7\d{10}$/,
+                        message: 'Формат ввода: +79991234567'
+                    }
+                })}
+                placeholder="+79991234567"
+                maxLength="12"
+            />
+            {errors.phone && <div className={styles.input_text_error}>{errors.phone.message}</div>}
+        </div>
+    );
+};
 
 const CodeStep = ({ register, errors, setValue }) => {
     const [code, setCode] = useState(['', '', '', '', '', '']);
@@ -109,7 +137,7 @@ const CodeStep = ({ register, errors, setValue }) => {
     )
 };
 
-const PhoneForm = ({ onSubmit, register, errors, isSending, error, step }) => (
+const PhoneForm = ({ onSubmit, register, errors, isSending, error, step, notification }) => (
     <>
         <h1 className={styles.title}>Авторизация</h1>
         <p className={styles.sub_title}>Для входа на сайт введите ваш номер телефона</p>
@@ -151,6 +179,11 @@ const PhoneForm = ({ onSubmit, register, errors, isSending, error, step }) => (
                 </button>
                 {error && <div className={styles.error_message}>{error}</div>}
 
+
+                <div className='relative'>
+                    <div className={`${styles.captcha} g-recaptcha`} data-sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}></div>
+                    <div className={styles.input_text_error}>{notification}</div>
+                </div>
             </form>
         </div>
     </>
@@ -236,6 +269,7 @@ const Login = () => {
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState('');
     const [jwt, setJWT] = useState('');
+    const [notification, setNotification] = useState("");
 
     const [testCode, setTestCode] = useState();
 
@@ -247,7 +281,6 @@ const Login = () => {
         setError('');
         setIsSending(false);
     };
-
 
     useEffect(() => {
         if (jwt) {
@@ -272,19 +305,45 @@ const Login = () => {
     const handlePhoneSubmit = async (data) => {
         setIsSending(true);
         setError('');
+        setNotification('Пройдите капчу');
 
-        setPhone(data.phone)
+        // 1. Получаем токен reCAPTCHA
+        const captureResponse = grecaptcha.getResponse();
+        if (!captureResponse) {
+            setIsSending(false);
+            return;
+        }
+
+        setPhone(data.phone);
 
         try {
+            // 2. Проверяем токен на сервере
+            const res = await fetch('/api/captcha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ captureResponse })
+            });
+
+            const result = await res.json();
+            setNotification(result.message);
+
+            if (!result.ok) {
+                setIsSending(false);
+                return;
+            }
+
+            // 3. reCAPTCHA пройдена — отправляем СМС-код
             await sendCode(data.phone, setTestCode);
             setStep('verify');
+
         } catch (err) {
             setError(err.message || 'Ошибка при отправке кода');
-            setStep('verify')
+            setStep('verify');
         } finally {
             setIsSending(false);
         }
     };
+
 
     const handleCodeSubmit = async (data) => {
         setIsSending(true)
@@ -316,6 +375,7 @@ const Login = () => {
                         isSending={isSending}
                         error={error}
                         step={step}
+                        notification={notification}
                     />
                 ) : (
                     <CodeForm

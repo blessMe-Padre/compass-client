@@ -14,6 +14,7 @@ import { AddToCartButton } from "@/app/components";
 import styles from './style.module.scss';
 
 const OrdersList = ({ orders = [] }) => {
+
     const [productsByOrderId, setProductsByOrderId] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
@@ -24,7 +25,7 @@ const OrdersList = ({ orders = [] }) => {
             if (Array.isArray(item)) {
                 return sum + calculateTotalPrice(item); // рекурсивно
             }
-            const price = item?.priceSales ?? 0;
+            const price = item?.priceSales ?? item?.price ?? 0;
 
             return sum + price;
         }, 0);

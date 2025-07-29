@@ -53,7 +53,7 @@ const Dashboard = () => {
         { title: 'Профиль' },
         { title: 'История заказов' },
         { title: 'Избранное' },
-        { title: 'Скидки и бонусы' }
+        // { title: 'Скидки и бонусы' }
     ]
     const [active, setActive] = useState(0);
     const openTab = e => setActive(+e.target.dataset.index);

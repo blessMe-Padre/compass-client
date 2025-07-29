@@ -1,7 +1,7 @@
 export default async function fetchData(url) {
     try {
         const response = await fetch(url, {
-            next: { revalidate: 10},
+            next: { revalidate: 600 },
         })
 
         if (!response.ok) {
