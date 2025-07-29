@@ -10,9 +10,8 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import { AddToCartButton, Counter, ReviewsForm, TableSize, FavoriteBtn } from "@/app/components";
+import { AddToCartButton, Counter, TableSize, FavoriteBtn } from "@/app/components";
 import { ReviewsSection } from "@/app/section";
-import useWishlistStore from '@/app/store/wishlistStore';
 
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
@@ -28,7 +27,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                     {item.title || 'Уточнить'}
                 </div>
             )} */}
-            <div className={`${styles.size} ${styles.blue_bg} ${isDisabled ? styles.disabled : ""}`}>
+            <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
                 {item.size ?? 'Уточнить'}
             </div>
             <div className={`${styles.height} ${isDisabled ? styles.disabled : ""}`}>
@@ -235,7 +234,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     <div className={styles.list_header_text}>Название:</div>
                                 )} */}
                                 {data?.size && ( 
-                                    <div className={`${styles.list_header_text} ${styles.blue_color}`}>Размер:</div>
+                                    <div className={`${styles.list_header_text}`}>Размер:</div>
                                 )}
                                 
                                 {/* {data?.height && ( */}

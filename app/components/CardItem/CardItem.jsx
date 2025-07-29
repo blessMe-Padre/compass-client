@@ -13,7 +13,6 @@ import "swiper/css/navigation";
 
 const apiUrl = `${process.env.NEXT_PUBLIC_DOMAIN}`
 
-import useWishlistStore from '@/app/store/wishlistStore';
 
 function CardItem({ element }) {
     const {

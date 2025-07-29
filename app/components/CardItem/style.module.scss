@@ -17,7 +17,7 @@
 }
 
 .card:hover {
-    border: 1px solid var(--orange);
+    background-color: var(--hover-card);
 }
 
 .swiper_image_wrapper {
@@ -155,13 +155,12 @@
 }
 
 .item_outstore {
-    background-color: var(--blue);
+    background-color: var(--new-black);
     border-radius: 6px;
     padding: 15px 25px;
     text-transform: uppercase;
     text-align: center;
     color: var(--white);
-    background-color: var(--blue);
     width: 100%;
     margin-top: 20px;
     pointer-events: none;

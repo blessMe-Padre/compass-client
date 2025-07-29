@@ -52,3 +52,33 @@
         font-size: 18px;
     }
 }
+
+.image_wrapper_hover {
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+
+    width: 100%;
+    height: 100%;
+    background-color: var(--new-orange);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    
+    &.active { 
+        opacity: 1;
+    }
+
+}
+
+.arrow {
+    margin-top: 10px;
+    width: 60px !important;
+    height: 24px !important;
+}
