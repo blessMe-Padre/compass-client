@@ -12,7 +12,7 @@
 }
 
 .form_item {
-    background-color: var(--super-light-gray);
+    background-color: var(--new-light-orange);
     padding: 35px;
 
     @media (max-width: 768px) {
@@ -85,7 +85,7 @@
     text-transform: uppercase;
     text-align: center;
     color: var(--white);
-    background-color: var(--blue);
+    background-color: var(--new-blue);
     padding: 15px 25px;
     border: none;
 
@@ -93,7 +93,11 @@
     transition: background-color var(--anim-function);
 
     &:hover {
-        background-color: var(--hover-blue);
+        background-color: var(--new-orange);
+    }
+
+    &:active {
+        background-color: var(--new-black);
     }
 
     cursor: pointer;
