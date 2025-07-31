@@ -66,18 +66,22 @@
     font-size: 18px;
     text-transform: uppercase;
     color: var(--white);
-    background-color: var(--blue);
+    background-color: var(--new-blue);
     border-radius: 10px;
-    padding: 6px 20px;
+    padding: 15px 20px;
     border: none;
     width: 190px;
     cursor: pointer;
     transition: background-color var(--anim-function);
 
-    &:hover,
-    &:active {
-        background-color: var(--hover-blue);
+    &:hover {
+        background-color: var(--new-orange);
     }
+
+    &:active {
+        background-color: var(--new-black);
+    }
+
 
     @media (max-width: 560px) {
         display: none;

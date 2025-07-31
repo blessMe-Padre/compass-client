@@ -1,7 +1,15 @@
+@use '@/app/mixins' as *;
+
+
 .designer_fckg_wrapper {
     max-width: 80%;
 
     @media (max-width: 780) {
         max-width: 100%;
     }
+}
+
+.section {
+  padding-top: 20px;
+  @include adaptiv-value("padding-bottom", 120, 50);
 }

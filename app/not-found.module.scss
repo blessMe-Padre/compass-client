@@ -10,12 +10,16 @@
     padding: 60px 0 150px;
 }
 
+.orange {
+    background-color: var(--new-orange);
+}
+
 .title {
     font-family: "Ubuntu", sans-serif;
     font-weight: 700;
     @include adaptiv-value("font-size", 400, 250);
     text-transform: uppercase;
-    color: #007cc2;
+    color: var(--new-orange);
 
     @media (max-width: 560px) {
         font-size: 160px;

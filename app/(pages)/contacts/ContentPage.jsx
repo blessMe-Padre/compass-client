@@ -19,7 +19,7 @@ export default function ContentPage({ data }) {
     }
 
     return (
-        <>
+        <section className={styles.section}>
             <div className='container'>
                 <Breadcrumbs
                     secondLabel="Контакты"
@@ -79,6 +79,6 @@ export default function ContentPage({ data }) {
 
             <Popup forAsk setActivePopup={setActivePopup} activePopup={activePopup} />
 
-        </>
+        </section>
     );
 }

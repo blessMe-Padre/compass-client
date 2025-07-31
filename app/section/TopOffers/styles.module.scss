@@ -56,9 +56,9 @@
 }
 
 .title_top_offers {
-    color: var(--blue);
+    color: var(--new-black);
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 700;
 
     @include adaptiv-value("font-size", 44, 22);
 
@@ -70,7 +70,7 @@
 .link_to_catalog {
     display: flex;
     align-items: center;
-    color: var(--blue);
+    color: var(--new-black);
     gap: 5px;
 
     font-size: 18px;

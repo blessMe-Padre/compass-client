@@ -20,7 +20,11 @@
     cursor: pointer;
 
     &:hover {
-        background-color: var(--hover-blue);
+        background-color: var(--new-orange);
+    }
+
+    &:active {
+        background-color: var(--new-black);
     }
 
     &.noBg {

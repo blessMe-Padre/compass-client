@@ -57,18 +57,6 @@ export default function FilterForm() {
         }
     };
 
-    // function formatPhone(raw) {
-    //     const matrix = '+7 (___) ___ __ __';
-    //     let i = 0;
-    //     const digits = raw.replace(/\D/g, '').slice(0, 11);
-    //     return matrix.replace(/./g, (a) => {
-    //         if (/[_\d]/.test(a) && i < digits.length) {
-    //             return digits.charAt(i++);
-    //         }
-    //         return i >= digits.length ? '' : a;
-    //     });
-    // }
-
     function formatPhone(raw) {
         let digits = raw.replace(/\D/g, '');
         if (digits.startsWith('7')) {
