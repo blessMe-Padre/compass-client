@@ -23,7 +23,8 @@ function CardItem({ element }) {
         promoName,
         modern,
         imgs,
-        id
+        id,
+        hit
     } = element;
 
     return (
@@ -46,18 +47,20 @@ function CardItem({ element }) {
                         {imgs?.map((img, idx) => {
                             return (
                                 <SwiperSlide key={idx}>
-                                    <div className={styles.img_wrapper}>
-                                        <Image
-                                            src={`${apiUrl}${img?.url}`}
-                                            alt={title}
-                                            width={305}
-                                            objectFit='contain'
-                                            height={360}
-                                            className={styles.card_image}
-                                            placeholder="blur"
-                                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                        />
-                                    </div>
+                                    <Link href={`products/${id}`}>
+                                        <div className={styles.img_wrapper}>
+                                            <Image
+                                                src={`${apiUrl}${img?.url}`}
+                                                alt={title}
+                                                width={305}
+                                                objectFit='contain'
+                                                height={360}
+                                                className={styles.card_image}
+                                                placeholder="blur"
+                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                />
+                                        </div>
+                                    </Link>
                                 </SwiperSlide>
                             )
                         })}
@@ -87,6 +90,11 @@ function CardItem({ element }) {
                             <span>Новинка</span>
                         </div>
                     )}
+                    {/* {hit === true && (
+                        <div className={styles.hit_badge}>
+                            <span>Хит</span>
+                        </div>
+                    )} */}
 
                     {promoName && (
                         <div className={styles.promo_badge}>

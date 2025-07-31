@@ -5,3 +5,11 @@
         max-width: 100%;
     }
 }
+
+.section {
+    margin-bottom: 100px;
+
+    @media (max-width: 780) {
+        margin-bottom: 20px;
+    }
+}

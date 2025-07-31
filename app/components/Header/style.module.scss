@@ -100,8 +100,8 @@
     }
 
     a:hover {
-        background-color: var(--blue);
-        color: var(--white) !important;
+        background-color: var(--new-light-orange);
+        color: var(--new-black) !important;
     }
 
     @media (max-width: 768px) {
@@ -151,8 +151,8 @@
     }
 
     :hover {
-        background-color: var(--blue);
-        color: var(--white) !important;
+        background-color: var(--new-light-orange);
+        color: var(--new-black) !important;
     }
 
     &.active {
@@ -253,7 +253,7 @@
     top: 30px;
     right: 0;
     background-color: var(--white);
-    color: var(--reverse-color);
+    color: var(--toggle-color);
     width: max-content;
     // min-width: 500px;
     // height: auto;

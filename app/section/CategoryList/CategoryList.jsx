@@ -140,7 +140,7 @@ const CategoryList = () => {
                                             }
 
                                             <div className={`${styles.image_wrapper_hover} ${isHover === index ? styles.active : ''}`}>
-                                                <h3>{slide?.name}</h3>
+                                                <h3 className={styles.text}>{slide?.name}</h3>
                                                 <Image className={styles.arrow} src={arrow} alt='arrow' width={24} height={24} />
                                             </div>
                                         </div>
