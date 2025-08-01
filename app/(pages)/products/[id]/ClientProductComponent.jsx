@@ -197,7 +197,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                     src={`${domain}${slide?.url}` ?? '/placeholder-image.jpg'}
                                                     alt={`main-${index}`}
                                                     width={582}
-                                                    height={730}
+                                                    height={600}
                                                     placeholder="blur"
                                                     blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                                 />

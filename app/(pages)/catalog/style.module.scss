@@ -40,6 +40,13 @@
   transition: all 0.3s ease-in-out;
   padding: 20px 0;
   border-top: 1px solid var(--light-gray);
+
+  transition: all 0.3s ease-in-out;
+
+
+  &:hover {
+    color: var(--new-orange);
+  }
 }
 
 
@@ -67,6 +74,15 @@
   margin-bottom: 10px;
   margin-top: 10px;
   text-transform: capitalize;
+
+  p {
+    transition: all 0.3s ease-in-out;
+
+
+    &:hover {
+      color: var(--new-orange);
+    }
+  }
 
 }
 
@@ -100,6 +116,11 @@
 
 .child_item h4 {
   color: var(--toggle-color);
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    color: var(--new-orange);
+  }
 }
 
 .child_item>* {
@@ -190,6 +211,8 @@
     align-items: center;
     color: var(--dark);
     margin: 0;
+
+    
   }
 }
 

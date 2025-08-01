@@ -1,7 +1,6 @@
 'use client';
 import { Breadcrumbs, ProductsList, LoadMoreButton, Popup, Notification } from '@/app/components';
 import { useEffect, useState, useRef } from 'react';
-import getAllCategories from '../../utils/getAllCategories';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 

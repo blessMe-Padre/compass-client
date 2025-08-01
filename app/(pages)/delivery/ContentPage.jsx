@@ -30,7 +30,7 @@ export default function ContentPage({ data }) {
             <section className={styles.bg}>
                 <div className='container'>
                     <div className={styles.designer_fckg_wrapper}>
-                        <ContentRenderer content={data.desc2}/>
+                        <ContentRenderer content={data?.desc2}/>
                     </div>
                 </div>
             </section>

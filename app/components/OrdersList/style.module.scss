@@ -14,7 +14,7 @@
 
 .item {
     @include adaptiv-value("padding", 40, 20);
-    background-color: var(--super-light-gray);
+    background-color: var(--new-light-orange);
     color: var(--black);
 
     display: flex;

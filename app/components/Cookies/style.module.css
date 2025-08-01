@@ -28,28 +28,46 @@
 .button {
     border: none;
     padding: 10px 20px;
-    background-color: var(--blue);
+    background-color: var(--new-blue);
     color: var(--white);
     border-radius: 6px;
     text-transform: uppercase;
     cursor: pointer;
 
+    transition: all 0.3s ease-in-out;
+
     font-weight: 500;
     font-size: 16px;
+}
+
+.button:hover {
+    background-color: var(--new-orange);
+}
+
+.button:active {
+    background-color: var(--new-black);
 }
 
 .button_cancel {
     border: none;
     padding: 10px 20px;
-    background-color: var(--white);
-    color: var(--black);
+    background-color: var(--new-orange);
+    color: var(--white);
     border-radius: 6px;
-    border: 1px solid var(--black);
     text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
     font-size: 16px;
     cursor: pointer;
 
     box-sizing: border-box;
+}
+
+.button_cancel:hover {
+    background-color: var(--new-blue);
+}
+
+.button_cancel:active {
+    background-color: var(--new-black);
 }
 
 .link {
