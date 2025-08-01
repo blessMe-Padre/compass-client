@@ -7,7 +7,6 @@ import getProductByDocumentId from '@/app/utils/getProductByDocumentId';
 import getProductWordForm from '@/app/utils/getProductWordForm';
 
 import { CartItem, Preloader } from '@/app/components';
-import Image from 'next/image';
 
 import { AddToCartButton } from "@/app/components";
 

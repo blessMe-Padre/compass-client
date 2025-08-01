@@ -1,4 +1,3 @@
-import styles from './style.module.scss';
 import fetchData from '@/app/utils/fetchData';
 import ContentPage from './ContentPage';
 
