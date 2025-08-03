@@ -8,7 +8,7 @@ const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 export default function ContentPage({ data }) {
     return (
-        <>
+        <section className={styles.section}>
             <div className='container'>
                 <Breadcrumbs
                     secondLabel="Пользовательское соглашение"
@@ -25,6 +25,6 @@ export default function ContentPage({ data }) {
                 </div>
 
             </div>
-        </>
+        </section>
     );
 }
