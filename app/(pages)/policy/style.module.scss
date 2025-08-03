@@ -1,0 +1,6 @@
+@use '@/app/mixins' as *;
+
+.section {
+  padding-top: 20px;
+  @include adaptiv-value("padding-bottom", 120, 50);
+}

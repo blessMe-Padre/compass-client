@@ -1,6 +1,23 @@
 @use '@/app/mixins' as *;
 // @include adaptiv-value("font-size", 24, 13);
 
+.info_section {
+    margin-top: 120px;
+    margin-bottom: 120px;
+
+
+    @media (max-width:800px) {
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+
+
+    @media (max-width:500px) {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+}
+
 .info_section_img {
     position: absolute;
 
@@ -24,8 +41,7 @@
 }
 
 .image_wrapper {
-    margin-top: 120px;
-    margin-bottom: 120px;
+
     background-image: url('../../../public/info.png');
     background-repeat: no-repeat;
 
