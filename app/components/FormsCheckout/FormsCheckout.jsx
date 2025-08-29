@@ -295,7 +295,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
 
         const formData = {
             orderPaymentId: orderUniqNumber,
-            orderNumber: `Заказ № ${orderNumber}`,
+            orderNumber: `${orderNumber}`,
             UserDocumentId: user.documentId,
             orderText: orderText,
             dateOrder: getCurrentDate(),
@@ -314,6 +314,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 },
                 quantity: cartItems.map(item => ({
                     id: item.documentId,
+                    id1c: item.id1c,
                     НАЗВАНИЕ_ТОВАРА: item.title,
                     КОЛИЧ_ВО: item.quantity,
                     ЦЕНА: item.price

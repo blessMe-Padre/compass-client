@@ -13,6 +13,7 @@ const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) 
     const prepareProduct = afterCounter
         ? (item) => ({
             id: item?.id ?? '55',
+            id1c: item?.id1c ?? '',
             documentId: item?.documentId ?? '',
             mainImg: item?.imgs?.[0]?.url ?? '',
             sku: item?.sku ?? '',
@@ -25,6 +26,7 @@ const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) 
         })
         : (item) => ({
             id: item?.id ?? '55',
+            id1c: item?.id1c ?? '',
             documentId: item?.documentId ?? '',
             mainImg: item?.imgs?.[0]?.url ?? '',
             sku: item?.sku ?? '',
