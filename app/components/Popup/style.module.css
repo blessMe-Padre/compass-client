@@ -41,7 +41,7 @@
     max-width: 740px;
     min-height: 430px;
     padding: 40px;
-    background: var(--reverse-color);
+    background: var(--new-light-orange);
     color: var(--toggle-color);
     text-align: center;
 }

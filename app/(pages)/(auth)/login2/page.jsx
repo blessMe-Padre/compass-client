@@ -1,28 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import styles from './style.module.scss';
 
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Timer } from '@/app/components';
 import useUserStore from '@/app/store/userStore';
 import { useRef } from 'react';
 
-const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/`;
-// Иван
-// zarodiny@yandex.ru
-// 123456789
-
-// https://sms.targetsms.ru/sendsms.php
-
-
-/**
-const api = https://sms.targetsms.ru/sendsms.php?user=root&pwd=password&name_delivery=nameDelivery&sadr=???&dadr=${phone}&text=текст SMS
-
-
-response = 1179038981
-*/
 
 const PhoneStep = ({ register, errors }) => {
     const handlePhoneInput = (e) => {

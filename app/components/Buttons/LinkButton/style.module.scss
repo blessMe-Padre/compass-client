@@ -11,7 +11,7 @@
     text-transform: uppercase;
     text-align: center;
     color: var(--white);
-    background-color: var(--blue);
+    background-color: var(--new-blue);
     padding: 20px 10px;
 
     width: 100%;
@@ -20,7 +20,11 @@
     cursor: pointer;
 
     &:hover {
-        background-color: var(--hover-blue);
+        background-color: var(--new-orange);
+    }
+
+    &:active {
+        background-color: var(--new-black);
     }
 
     &.noBg {

@@ -8,7 +8,7 @@ export default function NotFound() {
                 <h2 className={styles.title}>404</h2>
                 <p className={styles.text}>Страница не найдена, но вы можете продолжить поиск по сайту. Просто введите свой запрос в строку поиска — и мы найдёмдля вас полезную информацию.</p>
                 <Link href="/" className={styles.link}>На главную</Link>
-                <Link href="/" className={styles.link}>В каталог</Link>
+                <Link href="/" className={`${styles.link} ${styles.orange}`}>В каталог</Link>
             </div>
         </div>
     )

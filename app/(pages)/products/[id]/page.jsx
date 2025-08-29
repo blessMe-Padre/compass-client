@@ -1,6 +1,7 @@
 import ClientProductComponent from "./ClientProductComponent";
 import getProductById from '@/app/utils/getProductById';
 import getAllProductsByTitle from '@/app/utils/getAllProductsByTitle';
+import { RelativeProducts } from "@/app/section";
 
 export const revalidate = 60;
 
@@ -41,9 +42,13 @@ export default async function Page({ params }) {
     const sameProducts = await getAllProductsByTitle(productTitle);
 
     return (
-        <ClientProductComponent
-            data={product}
-            sameProducts={sameProducts}
-        />
+        <>
+            <ClientProductComponent
+                data={product}
+                sameProducts={sameProducts}
+            />
+            
+            <RelativeProducts />
+        </>
     );
 }

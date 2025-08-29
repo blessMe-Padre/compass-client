@@ -17,7 +17,7 @@
 }
 
 .card:hover {
-    border: 1px solid var(--orange);
+    background-color: var(--hover-card);
 }
 
 .swiper_image_wrapper {
@@ -92,7 +92,7 @@
 
 
 .promo_badge {
-    background-color: var(--orange);
+    background-color: var(--new-orange);
     border-radius: 40px;
     color: var(--white);
 
@@ -104,15 +104,16 @@
     gap: 10px;
 
     position: absolute;
-    top: 15px;
-    left: 10px;
+    top: 7px;
+    left: 0px;
     width: 100%;
     z-index: 1;
+    font-size: 14px;
 }
 
 
 .hit_badge {
-    background-color: var(--blue);
+    background-color: var(--new-black);
     border-radius: 40px;
     color: var(--white);
 
@@ -155,13 +156,12 @@
 }
 
 .item_outstore {
-    background-color: var(--blue);
+    background-color: var(--new-black);
     border-radius: 6px;
     padding: 15px 25px;
     text-transform: uppercase;
     text-align: center;
     color: var(--white);
-    background-color: var(--blue);
     width: 100%;
     margin-top: 20px;
     pointer-events: none;

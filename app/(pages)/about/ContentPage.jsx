@@ -7,6 +7,7 @@ const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 
 export default function ContentPage({ data }) {
+    console.log(data)
     return (
         <>
             <div className='container'>
@@ -21,8 +22,15 @@ export default function ContentPage({ data }) {
                 <div className={styles.designer_fckg_wrapper}>
                     <ContentRenderer content={data.desc} />
                 </div>
-
             </div>
+
+            <section className={styles.bg}>
+                <div className='container'>
+                    <div className={styles.designer_fckg_wrapper}>
+                        <ContentRenderer content={data?.desc2}/>
+                    </div>
+                </div>
+            </section>
         </>
     );
 }
