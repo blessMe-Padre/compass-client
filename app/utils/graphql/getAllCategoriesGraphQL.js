@@ -12,6 +12,13 @@ const GET_FISHING_CATEGORY = `
             id1c
             name   
             slug
+            image {
+                url
+                formats
+                width
+                height
+                alternativeText
+            }
             children(pagination: { limit: 100 }) {     
             id1c 
             name

@@ -1,6 +1,6 @@
 .products_list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 
   width: 0;
@@ -23,7 +23,7 @@
 }
 
 .products_list.wishlist {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
