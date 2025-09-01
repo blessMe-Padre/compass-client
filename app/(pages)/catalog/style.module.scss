@@ -378,6 +378,7 @@
     min-height: 120px;
     display: flex;
     align-items: center;
+    background-color: var(--new-light-orange);
   }
 }
 
@@ -485,9 +486,10 @@
 
 .category_card_subtitle_simple {
   font-size: 14px;
-  color: var(--gray);
+  color: var(--dark);
   margin: 0;
   font-weight: 400;
+  opacity: 0.8;
 }
 
 .category_card_arrow_simple {

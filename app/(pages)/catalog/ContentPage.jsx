@@ -262,6 +262,38 @@ function CatalogContent() {
         const data = await getAllCategoriesGraphQL();
         console.log(data)
         setCategories(data);
+        
+        // Если есть slug в URL, находим соответствующую категорию и показываем её дочерние элементы
+        const slug = searchParams.get('slug');
+        if (slug && data.length > 0) {
+          const findCategoryBySlug = (categories, targetSlug) => {
+            for (const category of categories) {
+              if (category.slug === targetSlug) return category;
+              if (category.children) {
+                const found = findCategoryBySlug(category.children, targetSlug);
+                if (found) return found;
+              }
+            }
+            return null;
+          };
+          
+          const foundCategory = findCategoryBySlug(data, slug);
+          if (foundCategory) {
+            // Если у категории есть дочерние элементы, показываем их
+            if (foundCategory.children && foundCategory.children.length > 0) {
+              setCurrentLevelCategories(foundCategory.children);
+              setShowProducts(false);
+              setCategoryName(foundCategory.name);
+              setNavigationPath([foundCategory]);
+            } else {
+              // Если нет дочерних, показываем товары
+              setShowProducts(true);
+              setCategoryName(foundCategory.name);
+              setNavigationPath([foundCategory]);
+            }
+          }
+        }
+        
         setLoading(false);
 
       } catch (err) {
@@ -272,7 +304,7 @@ function CatalogContent() {
     };
 
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {
