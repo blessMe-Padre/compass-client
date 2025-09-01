@@ -33,7 +33,7 @@
   --reverse-color: #ffffff;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     --background: #2e2e2e;
     --toggle-color: #ffffff;
