@@ -2,62 +2,67 @@
 // @include adaptiv-value("font-size", 24, 13);
 
 .section {
-    padding-top: 20px;
-    @include adaptiv-value("padding-bottom", 120, 50);
+  padding-top: 20px;
+  @include adaptiv-value("padding-bottom", 120, 50);
 }
 
 .catalog_wrapper {
-    display: grid;
-    grid-template-columns: 20% 78%; 
+  display: grid;
+  grid-template-columns: 20% 78%;
 
-    margin: 0 0 30px 0;
-    gap: 2%; 
-    align-items: flex-start; 
+  margin: 0 0 30px 0;
+  gap: 2%;
+  align-items: flex-start;
 
-    
-    @media (max-width: 480px) {
-        display: flex;
-        flex-direction: column; 
-    }
+
+  @media (max-width: 480px) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 
 
 .categories_list {
-    position: sticky;
-    top: 20px; /* Фиксируем позицию при скролле */
-    height: fit-content;
+  position: sticky;
+  top: 20px;
+  /* Фиксируем позицию при скролле */
+  height: fit-content;
 }
 
 .parent_cat h3 {
-    // margin-bottom: 10px;
-    transition: all 0.3s ease-in-out;
-    padding: 20px 0;
-    border-top: 1px solid var(--light-gray);
+  // margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+  padding: 20px 0;
+  border-top: 1px solid var(--light-gray);
 }
 
 
 .parent_cat:last-child {
-    border-bottom: 1px solid var(--light-gray);
+  border-bottom: 1px solid var(--light-gray);
 
 }
 
 .parent_cat:first-child {
-    border-top: none;
+  border-top: none;
 }
 
-  /* Базовые стили */
-.parent_cat, .child_item, .grandchild_item {
+/* Базовые стили */
+.parent_cat,
+.child_item,
+.grandchild_item {
   position: relative;
   transition: all 0.3s ease;
 }
 
-.grandchild_item, .child_item {
+.grandchild_item,
+.child_item {
   margin-left: 10px;
   margin-bottom: 10px;
   text-transform: capitalize;
 
 }
+
 .catalog_options {
   display: flex;
   flex-direction: row;
@@ -81,10 +86,10 @@
 }
 
 .child_item h4 {
-  color: var(--toggle-color);
+  color: var(--gray);
 }
 
-.child_item > * {
+.child_item>* {
   font-weight: 400;
   color: var(--light-gray);
   margin-bottom: 10px;
@@ -130,7 +135,8 @@
   fill: var(--toggle-color);
 }
 
-.catalog_options .sort, .catalog_options .stock {
+.catalog_options .sort,
+.catalog_options .stock {
   display: flex;
   gap: 10px;
 }
