@@ -4,7 +4,7 @@ const GET_FISHING_CATEGORY = `
     query GetFishingCategory {
         categories(
             filters: { 
-                isMainParent: { eq: true },
+                isMainParent: { eq: true }
             }
             pagination: { limit: 100 }
             sort: ["name:asc"]
@@ -20,43 +20,48 @@ const GET_FISHING_CATEGORY = `
                 alternativeText
             }
             children(pagination: { limit: 100 }) {     
-            id1c 
-            name
-            slug
-            image {
-                url
-                formats
-                width
-                height
-                alternativeText
-            }
-            children {
-                id1c
+                id1c 
                 name
                 slug
-                children {
-                id1c
-                name
-                slug
+                image {
+                    url
+                    formats
+                    width
+                    height
+                    alternativeText
+                }
                 children {
                     id1c
                     name
                     slug
-                    children {
-                    id1c
-                    name
-                    slug
+                    image {
+                        url
+                        formats
+                        width
+                        height
+                        alternativeText
+                    }
                     children {
                         id1c
                         name
                         slug
+                        image {
+                            url
+                            formats
+                            width
+                            height
+                            alternativeText
+                        }
+                        children {
+                            id1c
+                            name
+                            slug
+                        }
                     }
-                    }
-                }
                 }
             }
-            }}
         }
+    }
 `;
 
 export async function getAllCategoriesGraphQL() {
@@ -65,5 +70,5 @@ export async function getAllCategoriesGraphQL() {
         GET_FISHING_CATEGORY
     );
     // console.log('GraphQL Response:', JSON.stringify(res, null, 2)); // Добавлено для отладки
-    return res.categories;
+    return res.categories || [];
 }
