@@ -23,6 +23,13 @@ const GET_FISHING_CATEGORY = `
             id1c 
             name
             slug
+            image {
+                url
+                formats
+                width
+                height
+                alternativeText
+            }
             children {
                 id1c
                 name
