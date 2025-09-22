@@ -377,7 +377,9 @@ function CatalogContent() {
   const CategoryGrid = ({ categories }) => {
     return (
       <div className={styles.category_grid}>
-        {categories.map((category) => (
+        {[...categories]
+          .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+          .map((category) => (
           <motion.div
             key={category.id1c}
             className={`${styles.category_card} ${!category.image ? styles.category_card_no_image : ''}`}
@@ -523,7 +525,9 @@ function CatalogContent() {
               </div>
             </Link>
             <div className={styles.list_cat}>
-              {isLoading === false ? categories?.map((parentCategory) => (
+              {isLoading === false ? [...categories]
+                .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                .map((parentCategory) => (
                 <div key={parentCategory.id1c}
                   className={`${styles.parent_cat} ${isCategoryActive(parentCategory.id1c) ? styles.active : ''}`}
                 >
