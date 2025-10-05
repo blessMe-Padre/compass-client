@@ -1,5 +1,9 @@
 import { request } from 'graphql-request';
 
+/**
+ * получение всех категорий вложенных до 5 уровня
+ */
+
 const GET_FISHING_CATEGORY = `
     query GetFishingCategory {
         categories(
@@ -56,6 +60,25 @@ const GET_FISHING_CATEGORY = `
                             id1c
                             name
                             slug
+                            image {
+                                url
+                                formats
+                                width
+                                height
+                                alternativeText
+                            }
+                            children {
+                                id1c
+                                name
+                                slug
+                                image {
+                                    url
+                                    formats
+                                    width
+                                    height
+                                    alternativeText
+                                }
+                            }
                         }
                     }
                 }

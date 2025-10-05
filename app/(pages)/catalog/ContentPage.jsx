@@ -80,19 +80,19 @@ function CatalogContent() {
   };
 
   // Функция для получения всех дочерних категорий
-  const getChildCategories = (categories) => {
-    const result = [];
-    const traverse = (cats) => {
-      cats.forEach(cat => {
-        result.push(cat);
-        if (cat.children && cat.children.length > 0) {
-          traverse(cat.children);
-        }
-      });
-    };
-    traverse(categories);
-    return result;
-  };
+  // const getChildCategories = (categories) => {
+  //   const result = [];
+  //   const traverse = (cats) => {
+  //     cats.forEach(cat => {
+  //       result.push(cat);
+  //       if (cat.children && cat.children.length > 0) {
+  //         traverse(cat.children);
+  //       }
+  //     });
+  //   };
+  //   traverse(categories);
+  //   return result;
+  // };
 
   // Обработчик клика по категории в левой панели
   const handleLeftPanelCategoryClick = (e, categorySlug, categoryId, categoryName, category) => {
@@ -100,7 +100,7 @@ function CatalogContent() {
 
     // Всегда запускаем навигацию при клике на категорию
     handleCategoryNavigation(category);
-    
+
     // Если у категории есть дочерние элементы, также раскрываем/скрываем их в левой панели
     if (category && category.children && category.children.length > 0) {
       setExpandedCategories(prev => ({
@@ -116,7 +116,7 @@ function CatalogContent() {
     // Добавляем категорию в путь навигации
     const newPath = [...navigationPath, category];
     setNavigationPath(newPath);
-    
+
     // Проверяем, есть ли у категории дочерние элементы
     if (category.children && category.children.length > 0) {
       // Если есть дочерние - показываем их
@@ -142,7 +142,7 @@ function CatalogContent() {
     if (navigationPath.length > 0) {
       const newPath = navigationPath.slice(0, -1);
       setNavigationPath(newPath);
-      
+
       if (newPath.length === 0) {
         // Возвращаемся к корневым категориям
         setCurrentLevelCategories([]);
@@ -242,7 +242,6 @@ function CatalogContent() {
 
   useEffect(() => {
     const slug = searchParams.get('slug') || '';
-    console.log('22', slug)
     setCurrentSlug(slug);
   }, [searchParams, setCurrentSlug]);
 
@@ -262,7 +261,7 @@ function CatalogContent() {
         const data = await getAllCategoriesGraphQL();
         console.log(data)
         setCategories(data);
-        
+
         // Если есть slug в URL, находим соответствующую категорию и показываем её дочерние элементы
         const slug = searchParams.get('slug');
         if (slug && data.length > 0) {
@@ -276,7 +275,7 @@ function CatalogContent() {
             }
             return null;
           };
-          
+
           const foundCategory = findCategoryBySlug(data, slug);
           if (foundCategory) {
             // Если у категории есть дочерние элементы, показываем их
@@ -293,7 +292,7 @@ function CatalogContent() {
             }
           }
         }
-        
+
         setLoading(false);
 
       } catch (err) {
@@ -348,7 +347,7 @@ function CatalogContent() {
         const newProducts = await getAllProducts(apiUrl);
 
         if (pageCount === 1) {
-         
+
           setProducts(newProducts);
           setLoadMoreHidden(newProducts.length < pageSize);
         } else {
@@ -356,7 +355,7 @@ function CatalogContent() {
             setLoadMoreHidden(true);
           } else {
             setProducts(prev => [...prev, ...newProducts]);
-            setLoadMoreHidden(newProducts.length < PAGE_SIZE); 
+            setLoadMoreHidden(newProducts.length < PAGE_SIZE);
           }
         }
       } catch (error) {
@@ -380,55 +379,55 @@ function CatalogContent() {
         {[...categories]
           .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
           .map((category) => (
-          <motion.div
-            key={category.id1c}
-            className={`${styles.category_card} ${!category.image ? styles.category_card_no_image : ''}`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => handleRightPanelCategoryClick(category)}
-          >
-            {category.image ? (
-              <div className={styles.category_card_image}>
-                <Image
-                  className={styles.category_image}
-                  src={`${process.env.NEXT_PUBLIC_DOMAIN}${category?.image?.url}`}
-                  alt={category.name}
-                  width={345}
-                  height={223}
-                  placeholder="blur"
-                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                />
-                <div className={styles.category_overlay}>
-                  <h3 className={styles.category_card_title}>{category.name}</h3>
+            <motion.div
+              key={category.id1c}
+              className={`${styles.category_card} ${!category.image ? styles.category_card_no_image : ''}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleRightPanelCategoryClick(category)}
+            >
+              {category.image ? (
+                <div className={styles.category_card_image}>
+                  <Image
+                    className={styles.category_image}
+                    src={`${process.env.NEXT_PUBLIC_DOMAIN}${category?.image?.url}`}
+                    alt={category.name}
+                    width={345}
+                    height={223}
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+"
+                  />
+                  <div className={styles.category_overlay}>
+                    <h3 className={styles.category_card_title}>{category.name}</h3>
+                    {category.children && category.children.length > 0 && (
+                      <p className={styles.category_card_subtitle}>
+                        {category.children.length} подкатегорий
+                      </p>
+                    )}
+                    <div className={styles.category_card_arrow}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.category_card_content_simple}>
+                  <h3 className={styles.category_card_title_simple}>{category.name}</h3>
                   {category.children && category.children.length > 0 && (
-                    <p className={styles.category_card_subtitle}>
+                    <p className={styles.category_card_subtitle_simple}>
                       {category.children.length} подкатегорий
                     </p>
                   )}
-                  <div className={styles.category_card_arrow}>
+                  <div className={styles.category_card_arrow_simple}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className={styles.category_card_content_simple}>
-                <h3 className={styles.category_card_title_simple}>{category.name}</h3>
-                {category.children && category.children.length > 0 && (
-                  <p className={styles.category_card_subtitle_simple}>
-                    {category.children.length} подкатегорий
-                  </p>
-                )}
-                <div className={styles.category_card_arrow_simple}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        ))}
+              )}
+            </motion.div>
+          ))}
       </div>
     );
   };
@@ -497,12 +496,12 @@ function CatalogContent() {
         {/* Хлебные крошки навигации */}
         {navigationPath.length > 0 && (
           <div className={styles.navigation_breadcrumbs}>
-            <button 
+            <button
               className={styles.back_button}
               onClick={handleBackClick}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Назад
             </button>
@@ -528,51 +527,51 @@ function CatalogContent() {
               {isLoading === false ? [...categories]
                 .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
                 .map((parentCategory) => (
-                <div key={parentCategory.id1c}
-                  className={`${styles.parent_cat} ${isCategoryActive(parentCategory.id1c) ? styles.active : ''}`}
-                >
-                  <h3
-                    onClick={(e) => handleLeftPanelCategoryClick(e, parentCategory.slug, parentCategory.id1c, parentCategory.name, parentCategory)}
+                  <div key={parentCategory.id1c}
+                    className={`${styles.parent_cat} ${isCategoryActive(parentCategory.id1c) ? styles.active : ''}`}
                   >
-                    {parentCategory.name}
-                    {parentCategory.children?.length > 0 && (
-                      <span
-                        className={`${styles.arrow} ${expandedCategories[parentCategory.id1c] ? styles.rotated : ''}`}
-                      >
-                        <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                    )}
-                  </h3>
-
-                  {parentCategory.children?.length > 0 && (
-                    <div
-                      className={`${styles.child_container} ${expandedCategories[parentCategory.id1c] ? styles.expanded : ''}`}
+                    <h3
+                      onClick={(e) => handleLeftPanelCategoryClick(e, parentCategory.slug, parentCategory.id1c, parentCategory.name, parentCategory)}
                     >
-                      <div className={styles.child_cat}>
-                        {[...parentCategory.children]
-                          .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                          .map((childCategory) => (
-                                                         <RecursiveCategoryItem
-                               key={childCategory.id1c}
-                               category={childCategory}
-                               level={1}
-                               expandedCategories={expandedCategories}
-                               handleCategoryClick={handleLeftPanelCategoryClick}
-                               isCategoryActive={isCategoryActive}
-                               styles={styles}
-                             />
-                          ))}
+                      {parentCategory.name}
+                      {parentCategory.children?.length > 0 && (
+                        <span
+                          className={`${styles.arrow} ${expandedCategories[parentCategory.id1c] ? styles.rotated : ''}`}
+                        >
+                          <svg width="14" height="10" viewBox="0 0 14 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 5L6.76 1L1 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                          </svg>
+                        </span>
+                      )}
+                    </h3>
+
+                    {parentCategory.children?.length > 0 && (
+                      <div
+                        className={`${styles.child_container} ${expandedCategories[parentCategory.id1c] ? styles.expanded : ''}`}
+                      >
+                        <div className={styles.child_cat}>
+                          {[...parentCategory.children]
+                            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+                            .map((childCategory) => (
+                              <RecursiveCategoryItem
+                                key={childCategory.id1c}
+                                category={childCategory}
+                                level={1}
+                                expandedCategories={expandedCategories}
+                                handleCategoryClick={handleLeftPanelCategoryClick}
+                                isCategoryActive={isCategoryActive}
+                                styles={styles}
+                              />
+                            ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))
+                    )}
+                  </div>
+                ))
                 : (
-                   <Preloader width={40} height={40} />  
+                  <Preloader width={40} height={40} />
                 )
-            }
+              }
             </div>
           </div>
 
@@ -629,15 +628,15 @@ const RecursiveCategoryItem = ({ category, level, expandedCategories, handleCate
             {[...category.children]
               .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
               .map((child) => (
-                                 <RecursiveCategoryItem
-                   key={child.id1c} // Используем ID для ключа - это лучшая практика
-                   category={child}
-                   level={level + 1}
-                   expandedCategories={expandedCategories}
-                   handleCategoryClick={handleCategoryClick}
-                   isCategoryActive={isCategoryActive}
-                   styles={styles}
-                 />
+                <RecursiveCategoryItem
+                  key={child.id1c} // Используем ID для ключа - это лучшая практика
+                  category={child}
+                  level={level + 1}
+                  expandedCategories={expandedCategories}
+                  handleCategoryClick={handleCategoryClick}
+                  isCategoryActive={isCategoryActive}
+                  styles={styles}
+                />
               ))}
           </div>
         </motion.div>
