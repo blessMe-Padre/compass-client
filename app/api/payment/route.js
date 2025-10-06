@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { YooCheckout } from '@a2seven/yoo-checkout';
 
 export async function POST(request) {
-    const { metadata, sum } = await request.json()
+    const { metadata, sum, receipt, items } = await request.json();
 
     const checkout = new YooCheckout(
         {
@@ -29,11 +29,19 @@ export async function POST(request) {
         metadata: {
             orderId: metadata,
         },
+        receipt: {
+            customer: {
+                email: receipt
+            },
+            items: items
+        },
+        internet: true,
+
     };
 
     try {
         const payment = await checkout.createPayment(createPayload, idempotenceKey);
-        // console.log(payment);
+        // console.log('payment', payment);
         return NextResponse.json(
             {
                 success: true,
@@ -46,12 +54,12 @@ export async function POST(request) {
         console.error(error);
     }
 
-    if (!res.ok) {
-        return NextResponse.json(
-            { error: `Произошла ошибка во время оплаты: ${res.status}`, detail: data },
-            { status: res.status }
-        )
-    }
+    // if (!payment.ok) {
+    //     return NextResponse.json(
+    //         { error: `Произошла ошибка во время оплаты: ${res.status}`, detail: data },
+    //         { status: res.status }
+    //     )
+    // }
 
     return NextResponse.json(data)
 }

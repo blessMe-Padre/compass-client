@@ -43,14 +43,35 @@ export async function sendOrderService(orderData) {
     }
 }
 
-const sendPaymentService = async (orderUniqNumber, totalSum) => {
+const sendPaymentService = async (orderUniqNumber, totalSum, orderItems, user) => {
     try {
+        // Формируем корректный массив items для YooKassa
+        const items = orderItems.map(item => {
+            const price = item?.priceSales || item?.price;
+            const quantity = item?.quantity ?? 1;
+            const itemTotal = (price * quantity).toFixed(2);
+
+            return {
+                description: item.title || 'Товар',
+                quantity: quantity.toFixed(3),
+                amount: {
+                    value: itemTotal,
+                    currency: 'RUB'
+                },
+                vat_code: 1, // НДС 20%
+                payment_mode: 'full_prepayment',
+                payment_subject: 'commodity'
+            };
+        });
+
         const payload = {
             amountValue: '2.00',
             currency: 'RUB',
             returnUrl: window.location.href,
             metadata: orderUniqNumber,
             sum: totalSum,
+            receipt: user.email,
+            items: items,
         };
 
         const response = await fetch('/api/payment/', {
@@ -361,7 +382,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
 
             if (paymentMethod === "Оплата онлайн на сайте") {
                 setSubmitted(true);
-                const paymentResult = await sendPaymentService(orderUniqNumber, storeData.totalSum);
+                const paymentResult = await sendPaymentService(orderUniqNumber, storeData.totalSum, cartItems, user);
                 setPaymentData(paymentResult?.data);
 
                 // устанавливает сообщение о редирект
