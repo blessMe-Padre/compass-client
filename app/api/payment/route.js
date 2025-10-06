@@ -24,7 +24,7 @@ export async function POST(request) {
         capture: true,
         confirmation: {
             type: 'redirect',
-            return_url: `${process.env.NEXT_PUBLIC_DOMAIN}/checkout`
+            return_url: `https://shop.compass25.ru/checkout`
         },
         metadata: {
             orderId: metadata,
