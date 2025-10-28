@@ -84,7 +84,7 @@ export default function CartInfo({ onSubmit, forSubmit, isSubmit, setIsSubmit })
                             <LinkButton href={'/checkout'} text={buttonText} />
 
 
-                        : <LinkButton href={'/dashboard'} text={'Войти в аккаунт'} />
+                        : <a className={styles.link} href={'/dashboard'}>Войти в аккаунт</a>
                     }
 
                     <LinkButton href={'/catalog'} text={'Продолжить покупки'} style={'noBg'} />

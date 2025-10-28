@@ -21,3 +21,19 @@
     }
 }
 
+.btn_reset {
+    cursor: pointer;
+    color: var(--gray);
+    text-decoration: underline;
+
+    border: none;
+    background-color: transparent;
+
+    &:hover {
+        color: var(--blue);
+    }
+
+    &:active {
+        color: var(--orange);
+    }
+}

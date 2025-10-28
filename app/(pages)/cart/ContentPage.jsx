@@ -6,7 +6,7 @@ import useCartStore from "@/app/store/cartStore";
 
 export default function ContentPage() {
 
-    const { cartItems, clearCart } = useCartStore();    
+    const { cartItems, clearCart } = useCartStore();
 
     const handleClick = () => {
         const confirmation = confirm('Вы хотите очистить корзину?');
@@ -38,23 +38,25 @@ export default function ContentPage() {
                                     ))}
 
                                     <div>
-                                        <button 
-                                        onClick={() => handleClick()} className={styles.btn_reset}>Очистить корзину</button>
+                                        <button
+                                            onClick={() => handleClick()}
+                                            className={styles.btn_reset}>Очистить корзину
+                                        </button>
                                     </div>
                                 </div>
-                                
+
                                 <CartInfo />
                             </>
 
                         )
                         : (
                             <div>
-                                <p style={{ fontWeight: 'bold', marginBottom: '5px'}}>Здесь еще ничего нет. </p>
-                                <p style={{ marginBottom: '10px'}}>Выберите товары в каталоге</p>
+                                <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Здесь еще ничего нет. </p>
+                                <p style={{ marginBottom: '10px' }}>Выберите товары в каталоге</p>
                                 <LinkButton text={'Перейти в каталог'} href='/catalog' />
                             </div>
-                            )
-                        }
+                        )
+                    }
                 </div>
             </div>
         </section>
