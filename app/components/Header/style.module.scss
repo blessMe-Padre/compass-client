@@ -22,10 +22,12 @@
 }
 
 .link_homeColor {
+    transition: color 0.3s ease-in-out;
     color: var(--white);
 }
 
 .link_otherColor {
+    transition: color 0.3s ease-in-out;
     color: var(--toggle-color);
 }
 
@@ -137,7 +139,7 @@
     right: 20px;
     width: 50%;
     height: 624px;
-    overflow: auto; 
+    overflow: auto;
     z-index: 20;
 
     background-color: var(--white);

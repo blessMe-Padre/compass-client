@@ -14,7 +14,6 @@ import styles from './style.module.scss';
 import Link from 'next/link';
 import useFilterStore from '@/app/store/filterStore';
 import useCartStore from '@/app/store/cartStore';
-import { getAllCategoriesGraphQL } from '../../utils/graphql/getAllCategoriesGraphQL';
 import { Preloader } from '@/app/components'
 
 function usePrevious(value) {
@@ -78,21 +77,6 @@ function CatalogContent({ initialCategories }) {
     }
     return null;
   };
-
-  // Функция для получения всех дочерних категорий
-  // const getChildCategories = (categories) => {
-  //   const result = [];
-  //   const traverse = (cats) => {
-  //     cats.forEach(cat => {
-  //       result.push(cat);
-  //       if (cat.children && cat.children.length > 0) {
-  //         traverse(cat.children);
-  //       }
-  //     });
-  //   };
-  //   traverse(categories);
-  //   return result;
-  // };
 
   // Обработчик клика по категории в левой панели
   const handleLeftPanelCategoryClick = (e, categorySlug, categoryId, categoryName, category) => {
@@ -217,28 +201,28 @@ function CatalogContent({ initialCategories }) {
     return params.length > 0 ? params.join('&') + '&' : '';
   }
 
-  const handleClickDefault = async () => {
-    setLoading(true);
-    try {
-      const apiUrl = [
-        `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?`,
-        `pagination[page]=${pageCount}&`,
-        `pagination[pageSize]=${PAGE_SIZE}&`,
-        'populate=*'
-      ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
+  // const handleClickDefault = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const apiUrl = [
+  //       `${process.env.NEXT_PUBLIC_DOMAIN}/api/products?`,
+  //       `pagination[page]=${pageCount}&`,
+  //       `pagination[pageSize]=${PAGE_SIZE}&`,
+  //       'populate=*'
+  //     ].join('').replace(/&+/g, '&').replace(/\?&/, '?');
 
-      const newProducts = await getAllProducts(apiUrl);
+  //     const newProducts = await getAllProducts(apiUrl);
 
-      setProducts(prev => pageCount === 1 ? newProducts : [...prev, ...newProducts]);
-      setLoadMoreHidden(newProducts.length < PAGE_SIZE);
-      setCategoryName('Каталог');
+  //     setProducts(prev => pageCount === 1 ? newProducts : [...prev, ...newProducts]);
+  //     setLoadMoreHidden(newProducts.length < PAGE_SIZE);
+  //     setCategoryName('Каталог');
 
-    } catch (error) {
-      console.error('Ошибка:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  //   } catch (error) {
+  //     console.error('Ошибка:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
     const slug = searchParams.get('slug') || '';
@@ -490,7 +474,9 @@ function CatalogContent({ initialCategories }) {
               {navigationPath.map((item, index) => (
                 <span key={item.id1c} className={styles.path_item}>
                   {index > 0 && <span className={styles.path_separator}>/</span>}
-                  {item.name}
+                  <Link href={`/catalog?slug=${item.slug}`}>
+                    {item.name}
+                  </Link>
                 </span>
               ))}
             </div>

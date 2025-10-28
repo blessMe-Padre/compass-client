@@ -414,10 +414,6 @@ const Header = () => {
                             }
 
                         </div>
-
-
-
-
                         <a
                             title='Личный кабинет'
                             href={'/dashboard'}
