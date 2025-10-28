@@ -1,10 +1,3 @@
-import { request } from 'graphql-request';
-
-// Кэш для результатов запросов (только для клиента)
-let categoriesCache = null;
-let cacheTimestamp = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 минут
-
 const GET_FISHING_CATEGORY = `
     query GetFishingCategory {
         categories(
@@ -61,27 +54,21 @@ const GET_FISHING_CATEGORY = `
     }
 `;
 
-export function clearCategoriesCache() {
-    categoriesCache = null;
-    cacheTimestamp = 0;
+export async function getAllCategoriesGraphQLServer() {
+    // Используем fetch для серверного кэширования Next.js
+    const response = await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/graphql`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: GET_FISHING_CATEGORY }),
+        next: {
+            revalidate: 300 // Кэшировать на 5 минут
+        },
+        cache: 'force-cache'
+    });
+
+    const json = await response.json();
+    return json.data.categories;
 }
 
-export async function getAllCategoriesGraphQL() {
-    // Проверяем кэш
-    const now = Date.now();
-    if (categoriesCache && (now - cacheTimestamp) < CACHE_DURATION) {
-        return categoriesCache;
-    }
-
-    // Загружаем данные с сервера
-    const res = await request(
-        `${process.env.NEXT_PUBLIC_DOMAIN}/graphql`,
-        GET_FISHING_CATEGORY
-    );
-
-    // Сохраняем в кэш
-    categoriesCache = res.categories;
-    cacheTimestamp = now;
-
-    return res.categories;
-}

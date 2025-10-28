@@ -25,18 +25,18 @@ function usePrevious(value) {
   return ref.current;
 }
 
-function CatalogContent() {
+function CatalogContent({ initialCategories }) {
 
   // Для получения slug из GET параметра
   const searchParams = useSearchParams();
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(initialCategories || []);
   const { currentSlug, setCurrentSlug } = useCategorySlug();
   const prevSlug = usePrevious(currentSlug);
 
   const [categoryName, setCategoryName] = useState('Каталог');
   const [products, setProducts] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(!initialCategories);
   const [error, setError] = useState(null);
   const [expandedCategories, setExpandedCategories] = useState([]);
 
@@ -254,56 +254,37 @@ function CatalogContent() {
   }, [cartItems])
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // const data = await getAllCategories();
-        const data = await getAllCategoriesGraphQL();
-        console.log(data)
-        setCategories(data);
-
-        // Если есть slug в URL, находим соответствующую категорию и показываем её дочерние элементы
-        const slug = searchParams.get('slug');
-        if (slug && data.length > 0) {
-          const findCategoryBySlug = (categories, targetSlug) => {
-            for (const category of categories) {
-              if (category.slug === targetSlug) return category;
-              if (category.children) {
-                const found = findCategoryBySlug(category.children, targetSlug);
-                if (found) return found;
-              }
-            }
-            return null;
-          };
-
-          const foundCategory = findCategoryBySlug(data, slug);
-          if (foundCategory) {
-            // Если у категории есть дочерние элементы, показываем их
-            if (foundCategory.children && foundCategory.children.length > 0) {
-              setCurrentLevelCategories(foundCategory.children);
-              setShowProducts(false);
-              setCategoryName(foundCategory.name);
-              setNavigationPath([foundCategory]);
-            } else {
-              // Если нет дочерних, показываем товары
-              setShowProducts(true);
-              setCategoryName(foundCategory.name);
-              setNavigationPath([foundCategory]);
+    if (initialCategories) {
+      // Если категории уже загружены, обрабатываем slug
+      const slug = searchParams.get('slug');
+      if (slug && initialCategories.length > 0) {
+        const findCategoryBySlug = (categories, targetSlug) => {
+          for (const category of categories) {
+            if (category.slug === targetSlug) return category;
+            if (category.children) {
+              const found = findCategoryBySlug(category.children, targetSlug);
+              if (found) return found;
             }
           }
+          return null;
+        };
+
+        const foundCategory = findCategoryBySlug(initialCategories, slug);
+        if (foundCategory) {
+          if (foundCategory.children && foundCategory.children.length > 0) {
+            setCurrentLevelCategories(foundCategory.children);
+            setShowProducts(false);
+            setCategoryName(foundCategory.name);
+            setNavigationPath([foundCategory]);
+          } else {
+            setShowProducts(true);
+            setCategoryName(foundCategory.name);
+            setNavigationPath([foundCategory]);
+          }
         }
-
-        setLoading(false);
-
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchData();
-  }, [searchParams]);
+    }
+  }, [initialCategories, searchParams]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -646,11 +627,11 @@ const RecursiveCategoryItem = ({ category, level, expandedCategories, handleCate
 };
 
 
-export default function ContentPage({ data }) {
+export default function ContentPage({ data, initialCategories }) {
 
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
-      <CatalogContent />
+      <CatalogContent initialCategories={initialCategories} />
     </Suspense>
   )
 }
