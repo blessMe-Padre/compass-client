@@ -70,6 +70,16 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
 })
 
 
+const sortProductsBySize = (products) => { 
+    return products.sort((a, b) => { 
+        const sizeA = a.size ? parseInt(a.size) : 0;
+        const sizeB = b.size ? parseInt(b.size) : 0;
+
+        return sizeA - sizeB;
+    })
+}
+
+
 const ClientProductComponent = ({ data, sameProducts }) => {
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -249,7 +259,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 <div className={styles.list_header_text}>Цена:</div>
                             </li>
                             
-                            {sameProducts.map((item, index) => (
+                            {sortProductsBySize([...sameProducts]).map((item, index) => (
                                 <ProductVariantRow
                                     key={item.documentId || index}
                                     item={item}

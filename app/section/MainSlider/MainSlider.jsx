@@ -98,6 +98,13 @@ const MainSlider = () => {
                                 </div>
                                 <div className={styles.slide_content}>
                                     <h2 className={styles.slide_text}>{slide?.text}</h2>
+                                    <p style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                                      Уважаемые гости! <br />
+                                    </p>
+                                    <p style={{ color: 'red', fontSize: '20px', fontWeight: 'bold' }}>
+                                        Сайт работает в тестовом режиме! <br />
+                                        Страницы находятся в стадии наполнения!
+                                    </p>
                                     <LinkButton
                                         href="/catalog"
                                         text="В каталог"
