@@ -58,7 +58,7 @@ function CardItem({ element }) {
                                                 className={styles.card_image}
                                                 placeholder="blur"
                                                 blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                />
+                                            />
                                         </div>
                                     </Link>
                                 </SwiperSlide>
@@ -103,7 +103,7 @@ function CardItem({ element }) {
                     )}
                 </div>
 
-               <FavoriteBtn element={element} />
+                <FavoriteBtn element={element} />
 
                 <div className={styles.price_container}>
                     {priceSales && price ? (

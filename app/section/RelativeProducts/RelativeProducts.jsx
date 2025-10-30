@@ -74,13 +74,13 @@ const RelativeProducts = () => {
                         onSwiper={(sw) => (swiperRef.current = sw)}
                         onSlideChange={(sw) => setCurrent(sw.realIndex + 1)}
                         spaceBetween={20}
-                        loop={true}
+                        loop={false}
                         pagination={false}
                         allowTouchMove={false}
                         breakpoints={{
                             320: { slidesPerView: 1 },
-                            375: { slidesPerView: 1.5 },
-                            560: { slidesPerView: 2 },
+                            375: { slidesPerView: 1.2 },
+                            560: { slidesPerView: 1.5 },
                             760: { slidesPerView: 3 },
                             920: { slidesPerView: 4 },
                         }}

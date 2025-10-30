@@ -82,7 +82,7 @@ export default function ContentPage() {
 
                     {orderWasCreate && !paymentMessage &&
                         < div >
-                            <p style={{ marginBottom: '20px' }}>Ваш "{lastOrder?.orderNumber}" <span style={{ fontWeight: 700 }}> </span> оформлен, ожидайте смс о готовности</p>
+                            <p style={{ marginBottom: '20px' }}>Ваш заказ № "{lastOrder?.orderNumber}" <span style={{ fontWeight: 700 }}> </span> оформлен</p>
                             <p style={{ marginBottom: '20px' }}><span style={{ fontWeight: 700 }}> </span>Посмотреть статус заказа вы можете в личном кабинете</p>
                             <LinkButton href='/dashboard' text={'Перейти в личный кабинет'} />
                         </div>

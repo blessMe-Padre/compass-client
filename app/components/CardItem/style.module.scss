@@ -97,6 +97,10 @@
     color: var(--white);
 
     padding: 6px 10px;
+
+    @media (max-width: 560px) {
+        font-size: 12px;
+    }
 }
 
 .badges_container {
@@ -120,7 +124,7 @@
     padding: 6px 10px;
 
     @media (max-width: 560px) {
-        font-size: 14px;
+        font-size: 12px;
     }
 }
 

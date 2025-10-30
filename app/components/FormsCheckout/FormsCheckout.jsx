@@ -617,7 +617,10 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                         className={styles.delivery_address}
                         style={{ marginTop: '20px' }}
                     >
-                        г. Владивосток, пр-кт Красного Знамени, д.91, с 9:00 до 20:00
+                        г. Владивосток, пр-кт Красного Знамени, д.91,<br />
+                        <span>пн-сб: с 10:00 до 19:00</span>
+                        <br />
+                        <span>вс: с 10:00 до 17:00</span>
                     </motion.p>
                 }
 
