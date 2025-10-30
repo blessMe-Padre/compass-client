@@ -40,6 +40,21 @@
     @media (max-width:500px) {
         padding: 20px 0px;
     }
+
+    h2 {
+        text-transform: uppercase;
+        color: var(--white);
+        font-weight: 700;
+
+        margin-bottom: 40px;
+
+        @include adaptiv-value("font-size", 44, 30);
+
+        @media (max-width:500px) {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+    }
 }
 
 .image_wrapper {

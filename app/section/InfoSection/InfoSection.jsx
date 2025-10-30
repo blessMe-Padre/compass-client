@@ -2,34 +2,39 @@
 
 import React, { useState, useEffect } from 'react';
 import styles from './style.module.scss';
-import { LinkButton } from '@/app/components';
+import { ContentRenderer, LinkButton } from '@/app/components';
+import fetchData from '@/app/utils/fetchData';
 
 
 function InfoSection() {
+  const [data, setData] = useState([]);
+  console.log(data);
+  // 
+  const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/sekcziya-informacziya?populate=*`
+  // const url = `http://90.156.134.142:1337/api/sekcziya-informacziya?populate=*`
+
+  useEffect(() => {
+    const fetchInfoSection = async () => {
+      const response = await fetchData(url);
+      setData(response?.data);
+    };
+    fetchInfoSection();
+  }, []);
 
   return (
     <section className={styles.info_section}>
       <div className={`container ${styles.image_wrapper}`}>
-          <div className={styles.info_section_content}>
-            <h2 className={styles.info_title}>
-              Одежда для охоты, <br /> рыбалки от бренда КОМПАС
-            </h2>
+        <div className={styles.info_section_content}>
 
-            <div className={styles.info_content_text}>
-              <p>
-                Магазин «КОМПАС» начала свою деятельность в 2015 году. Являясь одним из ведущих производителей современной функциональной одежды бренд завоевал доверие и признание у российских охотников, рыболовов и любителей активного отдыха. Надежность и качество экипировки подтверждены многочисленными сертификатами, победами на международных выставках и отзывами представителей экспертного сообщества
-              </p>
-
-              <p>
-                Сотрудники компании имеют непосредственное отношение к охоте и рыбалке, регулярно тестируют одежду непосредственно на себе в полевых условиях. Вы можете быть уверены в качестве, мы выпускаем экипировку для людей, близких нам по духу!
-              </p>
-            </div>
-
-            <LinkButton
-              href={'/about'}
-              text={'Подробнее'}
-            />
+          <div className={styles.info_content_text}>
+            <ContentRenderer content={data?.content || []} />
           </div>
+
+          <LinkButton
+            href={'/about'}
+            text={'Подробнее'}
+          />
+        </div>
       </div>
     </section>
   );

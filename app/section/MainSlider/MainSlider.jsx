@@ -88,7 +88,7 @@ const MainSlider = () => {
                                 <div className={styles.image_wrapper}>
                                     <Image
                                         className={styles.slide}
-                                        src={`${domain}${slide?.image?.url}`}
+                                        src={`${domain}${slide?.image?.url || '/remove/slide.webp'}`}
                                         alt="logo"
                                         width={1920}
                                         height={910}
@@ -99,7 +99,7 @@ const MainSlider = () => {
                                 <div className={styles.slide_content}>
                                     <h2 className={styles.slide_text}>{slide?.text}</h2>
                                     <p style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                                      Уважаемые гости! <br />
+                                        Уважаемые гости! <br />
                                     </p>
                                     <p style={{ color: 'red', fontSize: '20px', fontWeight: 'bold' }}>
                                         Сайт работает в тестовом режиме! <br />
