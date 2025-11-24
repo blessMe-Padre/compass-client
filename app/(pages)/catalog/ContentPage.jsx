@@ -1,7 +1,7 @@
 'use client';
 import { Breadcrumbs, ProductsList, LoadMoreButton, Popup, Notification } from '@/app/components';
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Suspense } from 'react';
 
@@ -28,6 +28,7 @@ function CatalogContent({ initialCategories }) {
 
   // Для получения slug из GET параметра
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const [categories, setCategories] = useState(initialCategories || []);
   const { currentSlug, setCurrentSlug } = useCategorySlug();
@@ -97,23 +98,8 @@ function CatalogContent({ initialCategories }) {
 
   // Общая функция навигации по категории
   const handleCategoryNavigation = (category) => {
-    // Добавляем категорию в путь навигации
-    const newPath = [...navigationPath, category];
-    setNavigationPath(newPath);
-
-    // Проверяем, есть ли у категории дочерние элементы
-    if (category.children && category.children.length > 0) {
-      // Если есть дочерние - показываем их
-      setCurrentLevelCategories(category.children);
-      setShowProducts(false);
-      setCategoryName(category.name);
-    } else {
-      // Если нет дочерних - показываем товары
-      setShowProducts(true);
-      setCurrentSlug(category.slug);
-      setCategoryName(category.name);
-      setPageCount(1);
-    }
+    // Все переходы фиксируем в URL, чтобы работала кнопка браузера "Назад"
+    router.push(`/catalog?slug=${category.slug}`, { scroll: false });
   }
 
   // Обработчик клика по категории в правой панели
@@ -123,34 +109,14 @@ function CatalogContent({ initialCategories }) {
 
   // Обработчик кнопки "Назад"
   const handleBackClick = () => {
-    if (navigationPath.length > 0) {
-      const newPath = navigationPath.slice(0, -1);
-      setNavigationPath(newPath);
-
-      if (newPath.length === 0) {
-        // Возвращаемся к корневым категориям
-        setCurrentLevelCategories([]);
-        setShowProducts(false);
-        setCategoryName('Каталог');
-      } else {
-        // Возвращаемся к предыдущему уровню
-        const previousCategory = newPath[newPath.length - 1];
-        setCurrentLevelCategories(previousCategory.children || []);
-        setShowProducts(false);
-        setCategoryName(previousCategory.name);
-      }
-    }
+    // Используем историю браузера
+    router.back();
   }
 
   // Обработчик клика по "Каталог" (сброс к корню)
   const handleCatalogRootClick = () => {
-    setNavigationPath([]);
-    setCurrentLevelCategories([]);
-    setShowProducts(false);
-    setCategoryName('Каталог');
-    setCurrentSlug('');
-    setActiveCategoryId(null);
-    setPageCount(1);
+    // Сбрасываем URL без slug — состояние восстановится через эффекты
+    router.push('/catalog', { scroll: false });
   }
 
   const isCategoryActive = (categoryId) => {
@@ -237,34 +203,42 @@ function CatalogContent({ initialCategories }) {
     setNotificationActive(true)
   }, [cartItems])
 
+  // Находит путь категорий по slug: [root, ..., found]
+  const findCategoryPathBySlug = (categories, targetSlug) => {
+    for (const category of categories) {
+      if (category.slug === targetSlug) return [category];
+      if (category.children) {
+        const childPath = findCategoryPathBySlug(category.children, targetSlug);
+        if (childPath) return [category, ...childPath];
+      }
+    }
+    return null;
+  };
+
   useEffect(() => {
     if (initialCategories) {
       // Если категории уже загружены, обрабатываем slug
-      const slug = searchParams.get('slug');
-      if (slug && initialCategories.length > 0) {
-        const findCategoryBySlug = (categories, targetSlug) => {
-          for (const category of categories) {
-            if (category.slug === targetSlug) return category;
-            if (category.children) {
-              const found = findCategoryBySlug(category.children, targetSlug);
-              if (found) return found;
+      const slug = searchParams.get('slug') || '';
+      if (initialCategories.length > 0) {
+        if (slug) {
+          const path = findCategoryPathBySlug(initialCategories, slug);
+          if (path && path.length > 0) {
+            const last = path[path.length - 1];
+            if (last.children && last.children.length > 0) {
+              setCurrentLevelCategories(last.children);
+              setShowProducts(false);
+            } else {
+              setShowProducts(true);
             }
+            setCategoryName(last.name);
+            setNavigationPath(path);
           }
-          return null;
-        };
-
-        const foundCategory = findCategoryBySlug(initialCategories, slug);
-        if (foundCategory) {
-          if (foundCategory.children && foundCategory.children.length > 0) {
-            setCurrentLevelCategories(foundCategory.children);
-            setShowProducts(false);
-            setCategoryName(foundCategory.name);
-            setNavigationPath([foundCategory]);
-          } else {
-            setShowProducts(true);
-            setCategoryName(foundCategory.name);
-            setNavigationPath([foundCategory]);
-          }
+        } else {
+          // Нет slug — корень каталога
+          setNavigationPath([]);
+          setCurrentLevelCategories([]);
+          setShowProducts(false);
+          setCategoryName('Каталог');
         }
       }
     }
