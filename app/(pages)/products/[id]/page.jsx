@@ -16,30 +16,32 @@ export async function generateMetadata({ params }) {
 
 
 // Вспомогательная функция для получения "чистого" названия товара
-function getCleanTitle(fullTitle) {
-    if (typeof fullTitle !== 'string') {
-        return fullTitle || ''; // Возвращаем пустую строку, если название не строка или null/undefined
-    }
+// function getCleanTitle(fullTitle) {
+//     if (typeof fullTitle !== 'string') {
+//         return fullTitle || ''; // Возвращаем пустую строку, если название не строка или null/undefined
+//     }
 
-    const sizeHeightPattern = /\s(?:[рp]\.\s*)?[\d-]+(?:\/[\d-]+)?$/i;
+//     const sizeHeightPattern = /\s(?:[рp]\.\s*)?[\d-]+(?:\/[\d-]+)?$/i;
 
-    let cleanTitle = fullTitle.replace(sizeHeightPattern, '');
+//     let cleanTitle = fullTitle.replace(sizeHeightPattern, '');
 
 
-    cleanTitle = cleanTitle.replace(/\s*,\s*$/, '').trim();
-    cleanTitle = cleanTitle.replace(/\s*\(\s*\)\s*$/, '').trim();
-    cleanTitle = cleanTitle.trim();
+//     cleanTitle = cleanTitle.replace(/\s*,\s*$/, '').trim();
+//     cleanTitle = cleanTitle.replace(/\s*\(\s*\)\s*$/, '').trim();
+//     cleanTitle = cleanTitle.trim();
 
-    return cleanTitle;
-}
+//     return cleanTitle;
+// }
 
 
 
 export default async function Page({ params }) {
     const { id } = await params;
     const product = await getProductById(id);
-    const productTitle = getCleanTitle(product?.title);
-    const sameProducts = await getAllProductsByTitle(productTitle);
+    // const productTitle = getCleanTitle(product?.title);
+    // const sameProducts = await getAllProductsByTitle(productTitle);
+    const productTitle = product?.title
+    const sameProducts = await getAllProductsByTitle(productTitle)
 
     return (
         <>
