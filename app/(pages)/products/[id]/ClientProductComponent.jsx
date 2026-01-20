@@ -10,58 +10,81 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import { AddToCartButton, Counter, TableSize, FavoriteBtn } from "@/app/components";
+import { AddToCartButton, Counter, TableSize, FavoriteBtn, OrderModal } from "@/app/components";
 import { ReviewsSection } from "@/app/section";
 
 
 const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
 
-const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, maxAmount, status }) => {
+// Категории, для которых не нужно отображать колонку "Рост"
+const CATEGORIES_WITHOUT_HEIGHT = [
+    '02-obuv-',
+    '16-pnevmatika',
+    '14-suveniry',
+    '13-flagi',
+    '09-ochki-s-effektom-polyarizacii',
+    '10-repellenty'
+];
 
-    const isDisabled = item.price === 0 || item.amount === 0 || item.amount === null || item.statusProduct === 'none';
+const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, maxAmount, status, onOrderClick, productTitle, showSize, showHeight, colClass }) => {
+
+    const isOutOfStock = item.amount === 0 || item.amount === null;
+    const isDisabled = item.price === 0 || item.statusProduct === 'none';
+    const stockAmount = item.amount ?? 0;
     
     return (
-        <li className={styles.list_item}>
-            {/* {item?.title && (
-                <div className={styles.title_small}>
-                    {item.title || 'Уточнить'}
+        <li className={`${styles.list_item} ${colClass || ''}`}>
+            {showSize && (
+                <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
+                    {item.size ?? 'Уточнить'}
                 </div>
-            )} */}
-            <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
-                {item.size ?? 'Уточнить'}
-            </div>
-            <div className={`${styles.height} ${isDisabled ? styles.disabled : ""}`}>
-                {item.height ?? 'Уточнить'}
-            </div>
-
-            {/* <div className={styles.list_header_amount_sklad}>{item.amount === null ? 'Нет в наличии' : item.amount}</div> */}
+            )}
+            {showHeight && (
+                <div className={`${styles.height} ${isDisabled ? styles.disabled : ""}`}>
+                    {item.height ?? 'Уточнить'}
+                </div>
+            )}
 
             <div className={styles.qty}>
-                <Counter
-                    maxAmount={maxAmount}
-                    disabled={item.price === 0 || item.amount === 0 || item.amount === null ? true : ''}
-                        onChange={(newCount) => {
-                            setQuantities(prev => ({
-                                ...prev,
-                                [index]: newCount
-                            }))
+                <div className={styles.counter_wrapper}>
+                    <Counter
+                        maxAmount={9999}
+                        disabled={item.price === 0 ? true : false}
+                            onChange={(newCount) => {
+                                setQuantities(prev => ({
+                                    ...prev,
+                                    [index]: newCount
+                                }))
+                            }
                         }
-                    }
-                    value={quantities[index] || 0}
-                    documentId={item.documentId}
-                />
+                        value={quantities[index] || 0}
+                        documentId={item.documentId}
+                    />
+                    <span className={styles.stock_info}>
+                        на складе: {stockAmount}
+                    </span>
+                </div>
             </div>
             <div className={styles.price}>
-                {item.amount !== 0 && item.price !== 0 ? (
+                {item.price !== 0 ? (
                     <div> {item.price?.toLocaleString('ru-RU') ?? 0} ₽</div>
-                ) : (
-                    <div className='flex'>
+                ) : null}
+                {isOutOfStock && (
+                    <button 
+                        className={styles.order_btn}
+                        onClick={() => onOrderClick({
+                            title: productTitle || item.title,
+                            size: item.size,
+                            height: item.height,
+                            quantity: quantities[index] || 0
+                        })}
+                    >
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="14" height="14" rx="7" fill="#F79410" />
                             <path d="M7.38094 5.45031C7.38094 6.01031 7.36094 6.52031 7.32094 6.98031C7.28094 7.43365 7.23094 7.88698 7.17094 8.34031H6.59094C6.53094 7.88698 6.48094 7.43365 6.44094 6.98031C6.40094 6.52031 6.38094 6.01031 6.38094 5.45031V3.57031H7.38094V5.45031ZM7.55094 9.96031C7.55094 10.1403 7.49094 10.297 7.37094 10.4303C7.25094 10.5636 7.0876 10.6303 6.88094 10.6303C6.67427 10.6303 6.51094 10.5636 6.39094 10.4303C6.27094 10.297 6.21094 10.1403 6.21094 9.96031C6.21094 9.78031 6.27094 9.62365 6.39094 9.49031C6.51094 9.35698 6.67427 9.29031 6.88094 9.29031C7.0876 9.29031 7.25094 9.35698 7.37094 9.49031C7.49094 9.62365 7.55094 9.78031 7.55094 9.96031Z" fill="white" />
                         </svg>
                         Под заказ
-                    </div>
+                    </button>
                 )}
             </div>
         </li>
@@ -69,15 +92,57 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
     )
 })
 
+// Компонент для строки с размером из razmer
+const RazmerVariantRow = React.memo(({ size, sizeIndex, quantity, setQuantity, amount, price, documentId, onOrderClick, productTitle, colClass }) => {
+    const isOutOfStock = !amount || amount === 0;
+    const isDisabled = !price || price === 0;
+    
+    return (
+        <li className={`${styles.list_item} ${colClass || ''}`}>
+            <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
+                {size}
+            </div>
 
-const sortProductsBySize = (products) => { 
-    return products.sort((a, b) => { 
-        const sizeA = a.size ? parseInt(a.size) : 0;
-        const sizeB = b.size ? parseInt(b.size) : 0;
-
-        return sizeA - sizeB;
-    })
-}
+            <div className={styles.qty}>
+                <div className={styles.counter_wrapper}>
+                    <Counter
+                        maxAmount={9999}
+                        disabled={isDisabled}
+                        onChange={(newCount) => {
+                            setQuantity(sizeIndex, newCount);
+                        }}
+                        value={quantity || 0}
+                        documentId={documentId}
+                    />
+                    <span className={styles.stock_info}>
+                        на складе: {amount || 0}
+                    </span>
+                </div>
+            </div>
+            <div className={styles.price}>
+                {price > 0 ? (
+                    <div> {price?.toLocaleString('ru-RU') ?? 0} ₽</div>
+                ) : null}
+                {isOutOfStock && (
+                    <button 
+                        className={styles.order_btn}
+                        onClick={() => onOrderClick({
+                            title: productTitle,
+                            size: size,
+                            quantity: quantity || 0
+                        })}
+                    >
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="14" height="14" rx="7" fill="#F79410" />
+                            <path d="M7.38094 5.45031C7.38094 6.01031 7.36094 6.52031 7.32094 6.98031C7.28094 7.43365 7.23094 7.88698 7.17094 8.34031H6.59094C6.53094 7.88698 6.48094 7.43365 6.44094 6.98031C6.40094 6.52031 6.38094 6.01031 6.38094 5.45031V3.57031H7.38094V5.45031ZM7.55094 9.96031C7.55094 10.1403 7.49094 10.297 7.37094 10.4303C7.25094 10.5636 7.0876 10.6303 6.88094 10.6303C6.67427 10.6303 6.51094 10.5636 6.39094 10.4303C6.27094 10.297 6.21094 10.1403 6.21094 9.96031C6.21094 9.78031 6.27094 9.62365 6.39094 9.49031C6.51094 9.35698 6.67427 9.29031 6.88094 9.29031C7.0876 9.29031 7.25094 9.35698 7.37094 9.49031C7.49094 9.62365 7.55094 9.78031 7.55094 9.96031Z" fill="white" />
+                        </svg>
+                        Под заказ
+                    </button>
+                )}
+            </div>
+        </li>
+    )
+})
 
 
 const ClientProductComponent = ({ data, sameProducts }) => {
@@ -88,36 +153,151 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const openTab = e => setActive(+e.target.dataset.index);
     const [quantities, setQuantities] = useState({})
     const [direction, setDirection] = useState('vertical');
+    
+    // Состояние модального окна для заказа
+    const [orderModalOpen, setOrderModalOpen] = useState(false);
+    const [orderProductData, setOrderProductData] = useState(null);
+    
+    const handleOrderClick = (productInfo) => {
+        setOrderProductData(productInfo);
+        setOrderModalOpen(true);
+    };
 
     const imageList = data?.imgs;
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
+    
+    // Получаем slug категории
+    const categorySlug = data?.category?.slug || data?.categorySlug || '';
+    
+    // Проверяем, нужно ли скрывать колонку "Рост" для данной категории
+    const isCategoryWithoutHeight = CATEGORIES_WITHOUT_HEIGHT.some(slug => categorySlug.includes(slug));
+    
+    // Проверяем наличие данных size и height в sameProducts
+    const hasSizeData = useMemo(() => {
+        return sameProducts?.some(item => item.size !== null && item.size !== undefined && item.size !== '');
+    }, [sameProducts]);
+    
+    const hasHeightData = useMemo(() => {
+        if (isCategoryWithoutHeight) return false;
+        return sameProducts?.some(item => item.height !== null && item.height !== undefined && item.height !== '');
+    }, [sameProducts, isCategoryWithoutHeight]);
+
+    // Проверяем наличие массивов razmer, couts_razmer и price_razmer
+    const hasRazmerData = data?.razmer && Array.isArray(data.razmer) && data.razmer.length > 0 &&
+                          data?.couts_razmer && Array.isArray(data.couts_razmer) && data.couts_razmer.length > 0 &&
+                          data?.price_razmer && Array.isArray(data.price_razmer) && data.price_razmer.length > 0;
+
+    // Парсим JSON массивы если они строки
+    const razmerArray = useMemo(() => {
+        if (!data?.razmer) return null;
+        try {
+            return typeof data.razmer === 'string' ? JSON.parse(data.razmer) : data.razmer;
+        } catch {
+            return Array.isArray(data.razmer) ? data.razmer : null;
+        }
+    }, [data?.razmer]);
+
+    const coutsRazmerArray = useMemo(() => {
+        if (!data?.couts_razmer) return null;
+        try {
+            return typeof data.couts_razmer === 'string' ? JSON.parse(data.couts_razmer) : data.couts_razmer;
+        } catch {
+            return Array.isArray(data.couts_razmer) ? data.couts_razmer : null;
+        }
+    }, [data?.couts_razmer]);
+
+    const priceRazmerArray = useMemo(() => {
+        if (!data?.price_razmer) return null;
+        try {
+            return typeof data.price_razmer === 'string' ? JSON.parse(data.price_razmer) : data.price_razmer;
+        } catch {
+            return Array.isArray(data.price_razmer) ? data.price_razmer : null;
+        }
+    }, [data?.price_razmer]);
+
+    const hasRazmerDataParsed = razmerArray && coutsRazmerArray && priceRazmerArray &&
+                                 razmerArray.length === coutsRazmerArray.length &&
+                                 razmerArray.length === priceRazmerArray.length;
 
     const { total, totalSales } = useMemo(() => {
         let total = Number(0);
         let totalSales = Number(0);
         
-        sameProducts.forEach((item, index) => {
-            const priceSales = Number(item.priceSales) || Number(item.price);
-            const price = Number(item.price);
-            
-            const quantity = quantities[index] || 0;
-            total += quantity * price;
-            totalSales += quantity * priceSales;
-            
-        });
+        if (hasRazmerDataParsed) {
+            // Подсчет для размеров из razmer
+            razmerArray.forEach((_, index) => {
+                const price = Number(priceRazmerArray[index]) || 0;
+                const quantity = quantities[index] || 0;
+                total += quantity * price;
+                totalSales += quantity * price; // Если нет priceSales, используем price
+            });
+        } else {
+            // Подсчет для обычных товаров
+            sameProducts.forEach((item, index) => {
+                const priceSales = Number(item.priceSales) || Number(item.price);
+                const price = Number(item.price);
+                
+                const quantity = quantities[index] || 0;
+                total += quantity * price;
+                totalSales += quantity * priceSales;
+            });
+        }
         
         return { total, totalSales };
-    }, [sameProducts, quantities]);
+    }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, priceRazmerArray, sameProducts, quantities]);
     
 
-    const updatedItems = useMemo(() => sameProducts.map((item, idx) => ({
-        ...item,
-        amount: quantities[idx] || 0
-    })), [sameProducts, quantities]);
+    const updatedItems = useMemo(() => {
+        if (hasRazmerDataParsed) {
+            // Формируем элементы для корзины из razmer данных
+            return razmerArray.map((size, idx) => {
+                // Парсим размер и рост из строки вида "р. 60/182-188"
+                const sizeMatch = size.match(/[рp]\.\s*(\d+)(?:\/(\d+-\d+))?/i);
+                const parsedSize = sizeMatch ? sizeMatch[1] : size;
+                const parsedHeight = sizeMatch ? sizeMatch[2] : null;
+                
+                return {
+                    size: parsedSize,
+                    height: parsedHeight,
+                    amount: quantities[idx] || 0,
+                    price: Number(priceRazmerArray[idx]) || 0,
+                    priceSales: Number(priceRazmerArray[idx]) || 0,
+                    documentId: data.documentId || data.id,
+                    title: `${data.title} ${size}`,
+                    sku: data.sku,
+                    statusProduct: (Number(coutsRazmerArray[idx]) || 0) > 0 ? 'stock' : 'order'
+                };
+            }).filter(item => item.amount > 0);
+        } else {
+            // Обычные товары
+            return sameProducts.map((item, idx) => ({
+                ...item,
+                amount: quantities[idx] || 0
+            })).filter(item => item.amount > 0);
+        }
+    }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, priceRazmerArray, sameProducts, quantities, data]);
 
-   const statusProductRussian = useMemo(() => updatedItems?.map(item =>
-        item.statusProduct == 'order' ? 'Под заказ' : 'В наличии'
-   ), [updatedItems])
+   const statusProductRussian = useMemo(() => {
+        if (hasRazmerDataParsed) {
+            return razmerArray.map((_, idx) => {
+                const amount = Number(coutsRazmerArray[idx]) || 0;
+                return amount > 0 ? 'В наличии' : 'Под заказ';
+            });
+        } else {
+            return updatedItems?.map(item =>
+                item.statusProduct == 'order' ? 'Под заказ' : 'В наличии'
+            );
+        }
+   }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, updatedItems])
+
+    // Форматирование описания с переносом строки после точки
+    const formattedDescription = useMemo(() => {
+        if (!data?.description) return '';
+        // Добавляем <br> после точки, за которой следует пробел и буква (не внутри HTML тегов)
+        return data.description
+            .replace(/\.(\s+)(?=[А-ЯA-Z])/g, '.<br>$1')
+            .replace(/\.(\s+)(?=[а-яa-z])/g, '.<br>$1');
+    }, [data?.description]);
     
     useEffect(() => {
         const handleResize = () => {
@@ -128,6 +308,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    
 
     return (
         <section className={styles.section}>
@@ -238,39 +420,80 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         {data?.sku !== null && (
                             <p className={styles.article}>{data?.sku}</p>
                         )}
-                        <ul className={styles.list}>
-                            <li className={styles.list_header}>
-                                {/* {data?.title && (
-                                    <div className={styles.list_header_text}>Название:</div>
-                                )} */}
-                                {data?.size && ( 
-                                    <div className={`${styles.list_header_text}`}>Размер:</div>
-                                )}
-                                
-                                {/* {data?.height && ( */}
-                                    <div className={styles.list_header_text}>Рост:</div>
-                                {/* )} */}
-
-                                
-                                {/* <div className={styles.list_header_text}>Склад:</div> */}
-                                
-
-                                <div className={styles.list_header_text}>Кол-во:</div>
-                                <div className={styles.list_header_text}>Цена:</div>
-                            </li>
+                        {(() => {
+                            // Вычисляем количество колонок
+                            const colCount = hasRazmerDataParsed 
+                                ? 3 // Размер, Кол-во, Цена
+                                : 2 + (hasSizeData ? 1 : 0) + (hasHeightData ? 1 : 0); // Кол-во, Цена + опционально Размер и Рост
+                            const colClass = styles[`cols_${colCount}`] || '';
                             
-                            {sortProductsBySize([...sameProducts]).map((item, index) => (
-                                <ProductVariantRow
-                                    key={item.documentId || index}
-                                    item={item}
-                                    index={index}
-                                    quantities={quantities[index] || 0}
-                                    setQuantities={setQuantities}
-                                    maxAmount={item?.amount}
-                                    status={statusProductRussian[index]}
-                                />
-                            ))}
-                        </ul>
+                            return (
+                                <ul className={styles.list}>
+                                    <li className={`${styles.list_header} ${colClass}`}>
+                                        {hasRazmerDataParsed ? (
+                                            <>
+                                                <div className={styles.list_header_text}>Размер:</div>
+                                                <div className={styles.list_header_text}>Кол-во:</div>
+                                                <div className={styles.list_header_text}>Цена:</div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                {hasSizeData && (
+                                                    <div className={styles.list_header_text}>Размер:</div>
+                                                )}
+                                                {hasHeightData && (
+                                                    <div className={styles.list_header_text}>Рост:</div>
+                                                )}
+                                                <div className={styles.list_header_text}>Кол-во:</div>
+                                                <div className={styles.list_header_text}>Цена:</div>
+                                            </>
+                                        )}
+                                    </li>
+                                    
+                                    {hasRazmerDataParsed ? (
+                                        // Отображаем размеры из razmer массивов
+                                        razmerArray.map((size, index) => (
+                                            <RazmerVariantRow
+                                                key={`razmer-${index}`}
+                                                size={size}
+                                                sizeIndex={index}
+                                                quantity={quantities[index] || 0}
+                                                setQuantity={(idx, count) => {
+                                                    setQuantities(prev => ({
+                                                        ...prev,
+                                                        [idx]: count
+                                                    }))
+                                                }}
+                                                amount={Number(coutsRazmerArray[index]) || 0}
+                                                price={Number(priceRazmerArray[index]) || 0}
+                                                documentId={data.documentId || data.id}
+                                                onOrderClick={handleOrderClick}
+                                                productTitle={data?.title}
+                                                colClass={colClass}
+                                            />
+                                        ))
+                                    ) : (
+                                        // Отображаем обычные товары
+                                        sameProducts.map((item, index) => (
+                                            <ProductVariantRow
+                                                key={item.documentId || index}
+                                                item={item}
+                                                index={index}
+                                                quantities={quantities[index] || 0}
+                                                setQuantities={setQuantities}
+                                                maxAmount={item?.amount}
+                                                status={statusProductRussian[index]}
+                                                onOrderClick={handleOrderClick}
+                                                productTitle={data?.title}
+                                                showSize={hasSizeData}
+                                                showHeight={hasHeightData}
+                                                colClass={colClass}
+                                            />
+                                        ))
+                                    )}
+                                </ul>
+                            );
+                        })()}
 
                         <div className={styles.total}>
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
@@ -313,7 +536,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         )}
                     </div> */}
 
-                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: data?.description }}>
+                    <div className={styles.descriptions_wrapper} dangerouslySetInnerHTML={{ __html: formattedDescription }}>
 
                     </div>
                 </div>
@@ -329,6 +552,11 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 </div>
             </div>
 
+            <OrderModal 
+                isOpen={orderModalOpen} 
+                onClose={() => setOrderModalOpen(false)} 
+                productData={orderProductData}
+            />
         </section>
     )
 }
