@@ -109,7 +109,7 @@ const Header = () => {
 
     useEffect(() => {
         const fetchTopMenu = async () => {
-            const response = await fetchData(`${domain}/api/header-menu-item?populate[item_menu][populate][kategoriis][fields][0]=name&populate[item_menu][populate][kategoriis][fields][1]=slug&populate[item_menu][populate][kategoriis][populate][children][fields][0]=name&populate[item_menu][populate][kategoriis][populate][children][fields][1]=slug`);
+            const response = await fetchData(`${domain}/api/header-menu-item?populate[item_menu][populate][kategoriis][filters][isActive][$eq]=true&populate[item_menu][populate][kategoriis][fields][0]=name&populate[item_menu][populate][kategoriis][fields][1]=slug&populate[item_menu][populate][kategoriis][populate][children][filters][isActive][$eq]=true&populate[item_menu][populate][kategoriis][populate][children][fields][0]=name&populate[item_menu][populate][kategoriis][populate][children][fields][1]=slug`);
             setCatalogLinks(response.data.item_menu || [])
         }
 

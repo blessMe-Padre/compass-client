@@ -24,6 +24,8 @@ export { default as UserForm } from './UserForm/UserForm';
 export { default as FilterForm } from './FilterForm/FilterForm'
 export { default as FormsCheckout } from './FormsCheckout/FormsCheckout';
 export { default as AskForm } from './AskForm/AskForm';
+export { default as OrderModal } from './OrderModal/OrderModal';
+
 
 export { default as ProductsList } from './ProductsList/ProductsList';
 

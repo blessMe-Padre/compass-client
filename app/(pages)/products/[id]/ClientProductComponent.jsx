@@ -215,9 +215,11 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         }
     }, [data?.price_razmer]);
 
-    const hasRazmerDataParsed = razmerArray && coutsRazmerArray && priceRazmerArray &&
-                                 razmerArray.length === coutsRazmerArray.length &&
-                                 razmerArray.length === priceRazmerArray.length;
+    // const hasRazmerDataParsed = razmerArray && coutsRazmerArray && priceRazmerArray &&
+    //                              razmerArray.length === coutsRazmerArray.length &&
+    //                              razmerArray.length === priceRazmerArray.length;
+
+    const hasRazmerDataParsed = razmerArray && razmerArray.length > 0;
 
     const { total, totalSales } = useMemo(() => {
         let total = Number(0);
@@ -226,7 +228,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         if (hasRazmerDataParsed) {
             // Подсчет для размеров из razmer
             razmerArray.forEach((_, index) => {
-                const price = Number(priceRazmerArray[index]) || 0;
+                const price = (priceRazmerArray && priceRazmerArray[index] !== null && priceRazmerArray[index] !== undefined) 
+                    ? Number(priceRazmerArray[index]) || 0 
+                    : 0;
                 const quantity = quantities[index] || 0;
                 total += quantity * price;
                 totalSales += quantity * price; // Если нет priceSales, используем price
@@ -256,16 +260,23 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 const parsedSize = sizeMatch ? sizeMatch[1] : size;
                 const parsedHeight = sizeMatch ? sizeMatch[2] : null;
                 
+                const price = (priceRazmerArray && priceRazmerArray[idx] !== null && priceRazmerArray[idx] !== undefined) 
+                    ? Number(priceRazmerArray[idx]) || 0 
+                    : 0;
+                const couts = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined) 
+                    ? Number(coutsRazmerArray[idx]) || 0 
+                    : 0;
+                
                 return {
                     size: parsedSize,
                     height: parsedHeight,
                     amount: quantities[idx] || 0,
-                    price: Number(priceRazmerArray[idx]) || 0,
-                    priceSales: Number(priceRazmerArray[idx]) || 0,
+                    price: price,
+                    priceSales: price,
                     documentId: data.documentId || data.id,
                     title: `${data.title} ${size}`,
                     sku: data.sku,
-                    statusProduct: (Number(coutsRazmerArray[idx]) || 0) > 0 ? 'stock' : 'order'
+                    statusProduct: couts > 0 ? 'stock' : 'order'
                 };
             }).filter(item => item.amount > 0);
         } else {
@@ -280,7 +291,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
    const statusProductRussian = useMemo(() => {
         if (hasRazmerDataParsed) {
             return razmerArray.map((_, idx) => {
-                const amount = Number(coutsRazmerArray[idx]) || 0;
+                const amount = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined) 
+                    ? Number(coutsRazmerArray[idx]) || 0 
+                    : 0;
                 return amount > 0 ? 'В наличии' : 'Под заказ';
             });
         } else {
@@ -452,26 +465,35 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     
                                     {hasRazmerDataParsed ? (
                                         // Отображаем размеры из razmer массивов
-                                        razmerArray.map((size, index) => (
-                                            <RazmerVariantRow
-                                                key={`razmer-${index}`}
-                                                size={size}
-                                                sizeIndex={index}
-                                                quantity={quantities[index] || 0}
-                                                setQuantity={(idx, count) => {
-                                                    setQuantities(prev => ({
-                                                        ...prev,
-                                                        [idx]: count
-                                                    }))
-                                                }}
-                                                amount={Number(coutsRazmerArray[index]) || 0}
-                                                price={Number(priceRazmerArray[index]) || 0}
-                                                documentId={data.documentId || data.id}
-                                                onOrderClick={handleOrderClick}
-                                                productTitle={data?.title}
-                                                colClass={colClass}
-                                            />
-                                        ))
+                                        razmerArray.map((size, index) => {
+                                            const amount = (coutsRazmerArray && coutsRazmerArray[index] !== null && coutsRazmerArray[index] !== undefined) 
+                                                ? Number(coutsRazmerArray[index]) || 0 
+                                                : 0;
+                                            const price = (priceRazmerArray && priceRazmerArray[index] !== null && priceRazmerArray[index] !== undefined) 
+                                                ? Number(priceRazmerArray[index]) || 0 
+                                                : 0;
+                                            
+                                            return (
+                                                <RazmerVariantRow
+                                                    key={`razmer-${index}`}
+                                                    size={size}
+                                                    sizeIndex={index}
+                                                    quantity={quantities[index] || 0}
+                                                    setQuantity={(idx, count) => {
+                                                        setQuantities(prev => ({
+                                                            ...prev,
+                                                            [idx]: count
+                                                        }))
+                                                    }}
+                                                    amount={amount}
+                                                    price={price}
+                                                    documentId={data.documentId || data.id}
+                                                    onOrderClick={handleOrderClick}
+                                                    productTitle={data?.title}
+                                                    colClass={colClass}
+                                                />
+                                            );
+                                        })
                                     ) : (
                                         // Отображаем обычные товары
                                         sameProducts.map((item, index) => (
