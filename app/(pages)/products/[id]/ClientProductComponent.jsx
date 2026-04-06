@@ -311,6 +311,40 @@ const ClientProductComponent = ({ data, sameProducts }) => {
             .replace(/\.(\s+)(?=[А-ЯA-Z])/g, '.<br>$1')
             .replace(/\.(\s+)(?=[а-яa-z])/g, '.<br>$1');
     }, [data?.description]);
+
+    // Выносим сортировку в useMemo
+    const sortedRazmerData = useMemo(() => {
+        if (!razmerArray) return [];
+        
+        return razmerArray
+            .map((size, index) => ({ size, originalIndex: index }))
+            .sort((a, b) => {
+                const parseSize = (sizeStr) => {
+                    const match = sizeStr.match(/[рp]\.\s*(\d+)-(\d+)\/(\d+)-(\d+)/i);
+                    if (match) {
+                        return {
+                            volumeMin: parseInt(match[1]),
+                            volumeMax: parseInt(match[2]),
+                            heightMin: parseInt(match[3]),
+                            heightMax: parseInt(match[4])
+                        };
+                    }
+                    return { volumeMin: 999, volumeMax: 999, heightMin: 999, heightMax: 999 };
+                };
+                
+                const sizeA = parseSize(a.size);
+                const sizeB = parseSize(b.size);
+                const volumeA = (sizeA.volumeMin + sizeA.volumeMax) / 2;
+                const volumeB = (sizeB.volumeMin + sizeB.volumeMax) / 2;
+                
+                if (volumeA !== volumeB) return volumeA - volumeB;
+                
+                const heightA = (sizeA.heightMin + sizeA.heightMax) / 2;
+                const heightB = (sizeB.heightMin + sizeB.heightMax) / 2;
+                return heightA - heightB;
+            });
+    }, [razmerArray]); // ✅ Пересчитаем только если razmerArray изменился
+
     
     useEffect(() => {
         const handleResize = () => {
@@ -464,26 +498,22 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                     </li>
                                     
                                     {hasRazmerDataParsed ? (
-                                        // Отображаем размеры из razmer массивов
-                                        razmerArray.map((size, index) => {
-                                            const amount = (coutsRazmerArray && coutsRazmerArray[index] !== null && coutsRazmerArray[index] !== undefined) 
-                                                ? Number(coutsRazmerArray[index]) || 0 
+                                        sortedRazmerData.map(({ size, originalIndex }) => {
+                                            const amount = (coutsRazmerArray && coutsRazmerArray[originalIndex] !== null && coutsRazmerArray[originalIndex] !== undefined) 
+                                                ? Number(coutsRazmerArray[originalIndex]) || 0 
                                                 : 0;
-                                            const price = (priceRazmerArray && priceRazmerArray[index] !== null && priceRazmerArray[index] !== undefined) 
-                                                ? Number(priceRazmerArray[index]) || 0 
+                                            const price = (priceRazmerArray && priceRazmerArray[originalIndex] !== null && priceRazmerArray[originalIndex] !== undefined) 
+                                                ? Number(priceRazmerArray[originalIndex]) || 0 
                                                 : 0;
                                             
                                             return (
                                                 <RazmerVariantRow
-                                                    key={`razmer-${index}`}
+                                                    key={`razmer-${originalIndex}`}
                                                     size={size}
-                                                    sizeIndex={index}
-                                                    quantity={quantities[index] || 0}
+                                                    sizeIndex={originalIndex}
+                                                    quantity={quantities[originalIndex] || 0}
                                                     setQuantity={(idx, count) => {
-                                                        setQuantities(prev => ({
-                                                            ...prev,
-                                                            [idx]: count
-                                                        }))
+                                                        setQuantities(prev => ({ ...prev, [idx]: count }))
                                                     }}
                                                     amount={amount}
                                                     price={price}

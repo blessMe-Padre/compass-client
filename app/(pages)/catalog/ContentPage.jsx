@@ -244,6 +244,15 @@ function CatalogContent({ initialCategories }) {
     }
   }, [initialCategories, searchParams]);
 
+  // Очищаем товары при смене категории/фильтров
+  useEffect(() => {
+    if (showProducts) {
+      setProducts([]);        // Очищаем старые товары
+      setLoading(true);       // Показываем лоадер
+      setLoadMoreHidden(false); // Сбрасываем кнопку "Показать ещё"
+    }
+  }, [currentSlug, checkboxStatus, sortedFilters, filters, showProducts]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       // setLoading(true);
