@@ -14,7 +14,7 @@ import styles from './style.module.scss';
 import Link from 'next/link';
 import useFilterStore from '@/app/store/filterStore';
 import useCartStore from '@/app/store/cartStore';
-import { Preloader } from '@/app/components'
+import { Preloader } from '@/app/components';
 
 function usePrevious(value) {
   const ref = useRef();
@@ -597,6 +597,8 @@ const RecursiveCategoryItem = ({ category, level, expandedCategories, handleCate
 
 
 export default function ContentPage({ data, initialCategories }) {
+
+  console.log('initialCategories', initialCategories);
 
   return (
     <Suspense fallback={<div>Загрузка...</div>}>

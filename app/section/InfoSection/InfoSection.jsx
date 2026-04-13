@@ -8,7 +8,7 @@ import fetchData from '@/app/utils/fetchData';
 
 function InfoSection() {
   const [data, setData] = useState([]);
-  console.log(data);
+  // console.log(data);
   // 
   const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/sekcziya-informacziya?populate=*`
   // const url = `http://90.156.134.142:1337/api/sekcziya-informacziya?populate=*`
