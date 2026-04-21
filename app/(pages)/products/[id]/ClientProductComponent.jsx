@@ -31,7 +31,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
     const isOutOfStock = item.amount === 0 || item.amount === null;
     const isDisabled = item.price === 0 || item.statusProduct === 'none';
     const stockAmount = item.amount ?? 0;
-    
+
     return (
         <li className={`${styles.list_item} ${colClass || ''}`}>
             {showSize && (
@@ -50,12 +50,12 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                     <Counter
                         maxAmount={9999}
                         disabled={item.price === 0 ? true : false}
-                            onChange={(newCount) => {
-                                setQuantities(prev => ({
-                                    ...prev,
-                                    [index]: newCount
-                                }))
-                            }
+                        onChange={(newCount) => {
+                            setQuantities(prev => ({
+                                ...prev,
+                                [index]: newCount
+                            }))
+                        }
                         }
                         value={quantities[index] || 0}
                         documentId={item.documentId}
@@ -70,7 +70,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
                     <div> {item.price?.toLocaleString('ru-RU') ?? 0} ₽</div>
                 ) : null}
                 {isOutOfStock && (
-                    <button 
+                    <button
                         className={styles.order_btn}
                         onClick={() => onOrderClick({
                             title: productTitle || item.title,
@@ -96,7 +96,7 @@ const ProductVariantRow = React.memo(({ item, index, quantities, setQuantities, 
 const RazmerVariantRow = React.memo(({ size, sizeIndex, quantity, setQuantity, amount, price, documentId, onOrderClick, productTitle, colClass }) => {
     const isOutOfStock = !amount || amount === 0;
     const isDisabled = !price || price === 0;
-    
+
     return (
         <li className={`${styles.list_item} ${colClass || ''}`}>
             <div className={`${styles.size} ${isDisabled ? styles.disabled : ""}`}>
@@ -124,7 +124,7 @@ const RazmerVariantRow = React.memo(({ size, sizeIndex, quantity, setQuantity, a
                     <div> {price?.toLocaleString('ru-RU') ?? 0} ₽</div>
                 ) : null}
                 {isOutOfStock && (
-                    <button 
+                    <button
                         className={styles.order_btn}
                         onClick={() => onOrderClick({
                             title: productTitle,
@@ -147,17 +147,19 @@ const RazmerVariantRow = React.memo(({ size, sizeIndex, quantity, setQuantity, a
 
 const ClientProductComponent = ({ data, sameProducts }) => {
 
+    console.log('data', data);
+
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
     const openTab = e => setActive(+e.target.dataset.index);
     const [quantities, setQuantities] = useState({})
     const [direction, setDirection] = useState('vertical');
-    
+
     // Состояние модального окна для заказа
     const [orderModalOpen, setOrderModalOpen] = useState(false);
     const [orderProductData, setOrderProductData] = useState(null);
-    
+
     const handleOrderClick = (productInfo) => {
         setOrderProductData(productInfo);
         setOrderModalOpen(true);
@@ -165,18 +167,18 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
     const imageList = data?.imgs;
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
-    
+
     // Получаем slug категории
     const categorySlug = data?.category?.slug || data?.categorySlug || '';
-    
+
     // Проверяем, нужно ли скрывать колонку "Рост" для данной категории
     const isCategoryWithoutHeight = CATEGORIES_WITHOUT_HEIGHT.some(slug => categorySlug.includes(slug));
-    
+
     // Проверяем наличие данных size и height в sameProducts
     const hasSizeData = useMemo(() => {
         return sameProducts?.some(item => item.size !== null && item.size !== undefined && item.size !== '');
     }, [sameProducts]);
-    
+
     const hasHeightData = useMemo(() => {
         if (isCategoryWithoutHeight) return false;
         return sameProducts?.some(item => item.height !== null && item.height !== undefined && item.height !== '');
@@ -184,8 +186,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
 
     // Проверяем наличие массивов razmer, couts_razmer и price_razmer
     const hasRazmerData = data?.razmer && Array.isArray(data.razmer) && data.razmer.length > 0 &&
-                          data?.couts_razmer && Array.isArray(data.couts_razmer) && data.couts_razmer.length > 0 &&
-                          data?.price_razmer && Array.isArray(data.price_razmer) && data.price_razmer.length > 0;
+        data?.couts_razmer && Array.isArray(data.couts_razmer) && data.couts_razmer.length > 0 &&
+        data?.price_razmer && Array.isArray(data.price_razmer) && data.price_razmer.length > 0;
 
     // Парсим JSON массивы если они строки
     const razmerArray = useMemo(() => {
@@ -224,12 +226,12 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const { total, totalSales } = useMemo(() => {
         let total = Number(0);
         let totalSales = Number(0);
-        
+
         if (hasRazmerDataParsed) {
             // Подсчет для размеров из razmer
             razmerArray.forEach((_, index) => {
-                const price = (priceRazmerArray && priceRazmerArray[index] !== null && priceRazmerArray[index] !== undefined) 
-                    ? Number(priceRazmerArray[index]) || 0 
+                const price = (priceRazmerArray && priceRazmerArray[index] !== null && priceRazmerArray[index] !== undefined)
+                    ? Number(priceRazmerArray[index]) || 0
                     : 0;
                 const quantity = quantities[index] || 0;
                 total += quantity * price;
@@ -240,16 +242,16 @@ const ClientProductComponent = ({ data, sameProducts }) => {
             sameProducts.forEach((item, index) => {
                 const priceSales = Number(item.priceSales) || Number(item.price);
                 const price = Number(item.price);
-                
+
                 const quantity = quantities[index] || 0;
                 total += quantity * price;
                 totalSales += quantity * priceSales;
             });
         }
-        
+
         return { total, totalSales };
     }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, priceRazmerArray, sameProducts, quantities]);
-    
+
 
     const updatedItems = useMemo(() => {
         if (hasRazmerDataParsed) {
@@ -259,14 +261,14 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 const sizeMatch = size.match(/[рp]\.\s*(\d+)(?:\/(\d+-\d+))?/i);
                 const parsedSize = sizeMatch ? sizeMatch[1] : size;
                 const parsedHeight = sizeMatch ? sizeMatch[2] : null;
-                
-                const price = (priceRazmerArray && priceRazmerArray[idx] !== null && priceRazmerArray[idx] !== undefined) 
-                    ? Number(priceRazmerArray[idx]) || 0 
+
+                const price = (priceRazmerArray && priceRazmerArray[idx] !== null && priceRazmerArray[idx] !== undefined)
+                    ? Number(priceRazmerArray[idx]) || 0
                     : 0;
-                const couts = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined) 
-                    ? Number(coutsRazmerArray[idx]) || 0 
+                const couts = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined)
+                    ? Number(coutsRazmerArray[idx]) || 0
                     : 0;
-                
+
                 return {
                     size: parsedSize,
                     height: parsedHeight,
@@ -288,11 +290,11 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         }
     }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, priceRazmerArray, sameProducts, quantities, data]);
 
-   const statusProductRussian = useMemo(() => {
+    const statusProductRussian = useMemo(() => {
         if (hasRazmerDataParsed) {
             return razmerArray.map((_, idx) => {
-                const amount = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined) 
-                    ? Number(coutsRazmerArray[idx]) || 0 
+                const amount = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined)
+                    ? Number(coutsRazmerArray[idx]) || 0
                     : 0;
                 return amount > 0 ? 'В наличии' : 'Под заказ';
             });
@@ -301,7 +303,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 item.statusProduct == 'order' ? 'Под заказ' : 'В наличии'
             );
         }
-   }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, updatedItems])
+    }, [hasRazmerDataParsed, razmerArray, coutsRazmerArray, updatedItems])
 
     // Форматирование описания с переносом строки после точки
     const formattedDescription = useMemo(() => {
@@ -315,37 +317,46 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     // Выносим сортировку в useMemo
     const sortedRazmerData = useMemo(() => {
         if (!razmerArray) return [];
-        
+
         return razmerArray
             .map((size, index) => ({ size, originalIndex: index }))
             .sort((a, b) => {
                 const parseSize = (sizeStr) => {
-                    const match = sizeStr.match(/[рp]\.\s*(\d+)-(\d+)\/(\d+)-(\d+)/i);
-                    if (match) {
+                    const matchFull = sizeStr.match(/[рp]\.\s*(\d+)-(\d+)\/(\d+)-(\d+)/i);
+                    if (matchFull) {
                         return {
-                            volumeMin: parseInt(match[1]),
-                            volumeMax: parseInt(match[2]),
-                            heightMin: parseInt(match[3]),
-                            heightMax: parseInt(match[4])
+                            volumeMin: parseInt(matchFull[1], 10),
+                            volumeMax: parseInt(matchFull[2], 10),
+                            heightMin: parseInt(matchFull[3], 10),
+                            heightMax: parseInt(matchFull[4], 10)
+                        };
+                    }
+                    const matchRange = sizeStr.match(/[рp]\.\s*(\d+)\s*-\s*(\d+)/i);
+                    if (matchRange) {
+                        return {
+                            volumeMin: parseInt(matchRange[1], 10),
+                            volumeMax: parseInt(matchRange[2], 10),
+                            heightMin: 0,
+                            heightMax: 0
                         };
                     }
                     return { volumeMin: 999, volumeMax: 999, heightMin: 999, heightMax: 999 };
                 };
-                
+
                 const sizeA = parseSize(a.size);
                 const sizeB = parseSize(b.size);
                 const volumeA = (sizeA.volumeMin + sizeA.volumeMax) / 2;
                 const volumeB = (sizeB.volumeMin + sizeB.volumeMax) / 2;
-                
+
                 if (volumeA !== volumeB) return volumeA - volumeB;
-                
+
                 const heightA = (sizeA.heightMin + sizeA.heightMax) / 2;
                 const heightB = (sizeB.heightMin + sizeB.heightMax) / 2;
                 return heightA - heightB;
             });
     }, [razmerArray]); // ✅ Пересчитаем только если razmerArray изменился
 
-    
+
     useEffect(() => {
         const handleResize = () => {
             setDirection(window.innerWidth < 780 ? 'horizontal' : 'vertical');
@@ -356,7 +367,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    
+
 
     return (
         <section className={styles.section}>
@@ -394,18 +405,18 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                                         placeholder="blur"
                                                         blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
                                                     />
-                                                    ) : 
-                                                        <Image
-                                                            src={`/placeholder-image.jpg`}
-                                                            alt={title}
-                                                            width={305}
-                                                            objectFit='contain'
-                                                            height={360}
-                                                            className={styles.card_image}
-                                                            placeholder="blur"
-                                                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                        />
-                                                    }
+                                                ) :
+                                                    <Image
+                                                        src={`/placeholder-image.jpg`}
+                                                        alt={title}
+                                                        width={305}
+                                                        objectFit='contain'
+                                                        height={360}
+                                                        className={styles.card_image}
+                                                        placeholder="blur"
+                                                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                    />
+                                                }
                                             </div>
                                         </SwiperSlide>
 
@@ -446,7 +457,7 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                 ))}
 
                                 {!imageList && (
-                                     <Image
+                                    <Image
                                         src={`/placeholder-image.jpg`}
                                         alt={'заглушка'}
                                         width={500}
@@ -469,11 +480,11 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                         )}
                         {(() => {
                             // Вычисляем количество колонок
-                            const colCount = hasRazmerDataParsed 
+                            const colCount = hasRazmerDataParsed
                                 ? 3 // Размер, Кол-во, Цена
                                 : 2 + (hasSizeData ? 1 : 0) + (hasHeightData ? 1 : 0); // Кол-во, Цена + опционально Размер и Рост
                             const colClass = styles[`cols_${colCount}`] || '';
-                            
+
                             return (
                                 <ul className={styles.list}>
                                     <li className={`${styles.list_header} ${colClass}`}>
@@ -496,16 +507,16 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                                             </>
                                         )}
                                     </li>
-                                    
+
                                     {hasRazmerDataParsed ? (
                                         sortedRazmerData.map(({ size, originalIndex }) => {
-                                            const amount = (coutsRazmerArray && coutsRazmerArray[originalIndex] !== null && coutsRazmerArray[originalIndex] !== undefined) 
-                                                ? Number(coutsRazmerArray[originalIndex]) || 0 
+                                            const amount = (coutsRazmerArray && coutsRazmerArray[originalIndex] !== null && coutsRazmerArray[originalIndex] !== undefined)
+                                                ? Number(coutsRazmerArray[originalIndex]) || 0
                                                 : 0;
-                                            const price = (priceRazmerArray && priceRazmerArray[originalIndex] !== null && priceRazmerArray[originalIndex] !== undefined) 
-                                                ? Number(priceRazmerArray[originalIndex]) || 0 
+                                            const price = (priceRazmerArray && priceRazmerArray[originalIndex] !== null && priceRazmerArray[originalIndex] !== undefined)
+                                                ? Number(priceRazmerArray[originalIndex]) || 0
                                                 : 0;
-                                            
+
                                             return (
                                                 <RazmerVariantRow
                                                     key={`razmer-${originalIndex}`}
@@ -551,8 +562,8 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                             Итого: {totalSales.toLocaleString('ru-RU')} ₽ &nbsp;&nbsp;
                             <span>{total.toLocaleString('ru-RU')} ₽</span>
                         </div>
-                        
-                      
+
+
                         <AddToCartButton
                             many
                             items={updatedItems.filter(i => i.amount > 0)}
@@ -604,9 +615,9 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 </div>
             </div>
 
-            <OrderModal 
-                isOpen={orderModalOpen} 
-                onClose={() => setOrderModalOpen(false)} 
+            <OrderModal
+                isOpen={orderModalOpen}
+                onClose={() => setOrderModalOpen(false)}
                 productData={orderProductData}
             />
         </section>
