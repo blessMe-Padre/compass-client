@@ -1,3 +1,6 @@
+/**
+ * НЕ УДАЛЯТЬ ЗАКОММЕНТИРОВАННЫЙ КОД - это пример запроса на получение всех категорий
+ */
 // const GET_FISHING_CATEGORY = `
 //     query GetFishingCategory {
 //         categories(
@@ -63,6 +66,7 @@
 //         }
 //     }
 // `;
+
 const GET_FISHING_CATEGORY = `
     query GetFishingCategory {
         categories(
@@ -76,6 +80,7 @@ const GET_FISHING_CATEGORY = `
             id1c
             name   
             slug
+            isActive
             image {
                 url
             }
@@ -86,6 +91,7 @@ const GET_FISHING_CATEGORY = `
                 id1c 
                 name
                 slug
+                isActive
                 image {
                     url
                 }
@@ -96,6 +102,7 @@ const GET_FISHING_CATEGORY = `
                     id1c
                     name
                     slug
+                    isActive
                     image {
                         url
                     }
@@ -106,6 +113,7 @@ const GET_FISHING_CATEGORY = `
                         id1c
                         name
                         slug
+                        isActive
                         image {
                             url
                         }
@@ -116,6 +124,7 @@ const GET_FISHING_CATEGORY = `
                             id1c
                             name
                             slug
+                            isActive
                             image {
                                 url
                             }
@@ -126,6 +135,16 @@ const GET_FISHING_CATEGORY = `
                                 id1c
                                 name
                                 slug
+                                isActive
+                                children(
+                                    filters: { isActive: { eq: true } }
+                                    pagination: { limit: 100 }
+                                ) {
+                                    id1c
+                                    name
+                                    slug
+                                    isActive
+                                }
                             }
                         }
                     }
