@@ -6,8 +6,11 @@ const useUserStore = create(
   persist(
     (set) => ({
       userData: {},
+      setUserData: (userData) => {
+        set({ userData });
+      },
       setUserDocumentId: (documentId) => {
-        set({ userData: { documentId } });
+        set((state) => ({ userData: { ...state.userData, documentId } }));
       }
     }),
     {

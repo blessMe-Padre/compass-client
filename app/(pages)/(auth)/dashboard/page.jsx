@@ -11,12 +11,13 @@ import { Discounts, RelativeProducts } from '@/app/section';
 import useWishlistStore from '@/app/store/wishlistStore';
 import useUserStore from '@/app/store/userStore';
 
-const documentId = useUserStore.getState().userData?.documentId ?? 'f9bh8d19a9ij1gg5zegvposx';
-
 const Dashboard = () => {
     const router = useRouter();
     const [user, setUser] = useState({});
     const { wishlist } = useWishlistStore();
+    const documentId = useUserStore((state) => state.userData?.documentId);
+
+    console.log(user);
 
     const variants = {
         visible: {
@@ -36,9 +37,13 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
+        if (!documentId) {
+            return;
+        }
+
         const loadData = async () => {
             try {
-                const response = await getUserById(`${documentId}`);
+                const response = await getUserById(documentId);
                 setUser(response[0]);
 
             } catch (error) {
@@ -47,7 +52,7 @@ const Dashboard = () => {
         };
 
         loadData();
-    }, []);
+    }, [documentId]);
 
     const tabButtons = [
         { title: 'Профиль' },
@@ -69,7 +74,7 @@ const Dashboard = () => {
             <section>
                 <div className="container">
                     <div className={styles.header}>
-                        <h1>Здравствуйте, {user?.username}</h1>
+                        <h1>Здравствуйте, {user?.full_name ? user.full_name : user.username}</h1>
                         <button
                             className={styles.button}
                             onClick={handleLogout}

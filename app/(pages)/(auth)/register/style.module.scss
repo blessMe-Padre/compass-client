@@ -44,6 +44,7 @@
 .form_item input {
     background-color: var(--new-light-orange);
     padding: 16px 20px;
+    color: var(--black);
 }
 
 .form_button {
@@ -87,4 +88,16 @@
         display: block;
         text-decoration: underline;
     }
+}
+
+.success_message {
+    font-size: 18px;
+    color: var(--black);
+    margin-bottom: 20px;
+    margin-top: 40px;
+    border: 1px solid green;
+    color: green;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
 }

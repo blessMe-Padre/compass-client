@@ -17,8 +17,8 @@ const userInitialFields = [
     {
         label: 'Ваше имя*',
         type: 'text',
-        name: 'username',
-        id: 'username',
+        name: 'full_name',
+        id: 'full_name',
         placeholder: 'Введите ваше имя',
         required: true
     },

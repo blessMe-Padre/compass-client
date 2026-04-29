@@ -41,7 +41,7 @@ export default function PopupText({ title, activePopupText, setActivePopupText }
 
                     <LinkButton
                         text='Зарегистрироваться / войти'
-                        href='/login2'
+                        href='/login'
                         width='100%'
                     />
 
