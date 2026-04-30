@@ -87,3 +87,16 @@
         text-decoration: underline;
     }
 }
+
+.register_link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    color: var(--toggle-color);
+}
+
+.register_link span {
+    text-decoration: underline;
+    color: var(--blue);
+}

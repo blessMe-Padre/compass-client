@@ -129,6 +129,7 @@ const Login = () => {
                         </button>
                         {error && <div className={styles.error_message}>{error}</div>}
                     </form>
+                    <Link className={styles.register_link} href="/register">Нет аккаунта? <span>Зарегистрироваться</span></Link>
                 </div>
             </div>
         </div>

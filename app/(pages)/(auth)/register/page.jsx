@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import styles from './style.module.scss';
+import { useRouter } from 'next/navigation';
 
 const url = `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/local/register`;
 // zarodiny@yandex.ru
@@ -33,6 +34,8 @@ const Register = () => {
     const [error, setError] = useState();
     const [sending, isSending] = useState(false);
 
+    const router = useRouter();
+
     const onSubmit = async (formData) => {
         isSending(true);
         setError(undefined);
@@ -51,6 +54,10 @@ const Register = () => {
                 setIsSuccess(true);
                 setError(undefined);
                 reset();
+
+                router.refresh(); // dirty fix, but it works
+                router.push("/dashboard");
+                window.location.href = '/dashboard';
             } else {
                 setError(data?.error?.message || 'Что-то пошло не так');
                 console.error('Статус ошибки:', response.status, data);
