@@ -2,6 +2,7 @@ import ClientProductComponent from "./ClientProductComponent";
 import getProductById from '@/app/utils/getProductById';
 import getAllProductsByTitle from '@/app/utils/getAllProductsByTitle';
 import { RelativeProducts } from "@/app/section";
+import { Breadcrumbs } from "@/app/components";
 
 export const revalidate = 60;
 
@@ -43,13 +44,23 @@ export default async function Page({ params }) {
     const productTitle = product?.title
     const sameProducts = await getAllProductsByTitle(productTitle)
 
+    console.log(product);
+
     return (
         <>
+            <div className='container'>
+                <Breadcrumbs
+                    secondLabel={product?.categories[0]?.name}
+                    secondLink={`/catalog?slug=${product?.categories[0]?.slug}`}
+                    thirdLabel={product?.categories[1]?.name}
+                    thirdLink={`/catalog?slug=${product?.categories[1]?.slug}`}
+                />
+            </div>
             <ClientProductComponent
                 data={product}
                 sameProducts={sameProducts}
             />
-            
+
             <RelativeProducts />
         </>
     );

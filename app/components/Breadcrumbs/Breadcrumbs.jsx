@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import styles from './style.module.scss';
 
-export default function Breadcrumbs({ secondLink = '', secondLabel, thirdLabel }) {
+export default function Breadcrumbs({ secondLink = '', secondLabel, thirdLabel, thirdLink = '' }) {
     return (
         <nav className={styles.breadcrumbs}>
             <ul>
@@ -20,7 +20,13 @@ export default function Breadcrumbs({ secondLink = '', secondLabel, thirdLabel }
                     </li>
                 )}
                 {thirdLabel && (
-                    <li className={styles.active}>{thirdLabel}</li>
+                    <li className={styles.active}>
+                        {thirdLink ? (
+                            <Link href={thirdLink}>{thirdLabel}</Link>
+                        ) : (
+                            <span className={styles.active}>{thirdLabel}</span>
+                        )}
+                    </li>
                 )}
             </ul>
         </nav>

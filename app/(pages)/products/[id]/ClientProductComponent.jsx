@@ -147,8 +147,6 @@ const RazmerVariantRow = React.memo(({ size, sizeIndex, quantity, setQuantity, a
 
 const ClientProductComponent = ({ data, sameProducts }) => {
 
-    console.log('data', data);
-
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [mainSwiper, setMainSwiper] = useState(null);
     const [active, setActive] = useState(0);
