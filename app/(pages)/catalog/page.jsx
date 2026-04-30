@@ -3,7 +3,7 @@ import { getAllCategoriesGraphQLServer } from "@/app/utils/graphql/getAllCategor
 
 // потом удалить ревалидацию
 // оставить graphql «застывшего» дерева категорий, обновление категорий каталога только через перезборку проекта
-export const revalidate = 10;
+export const revalidate = 1;
 
 export const metadata = {
     title: "Компас СП | Каталог",

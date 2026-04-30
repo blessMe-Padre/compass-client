@@ -318,31 +318,57 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const sortedRazmerData = useMemo(() => {
         if (!razmerArray) return [];
 
+        const parseSize = (sizeStr) => {
+            const normalized = String(sizeStr || '').replace(/\s+/g, ' ');
+
+            const matchFullRange = normalized.match(/[рp]\.\s*(\d+)-(\d+)\/(\d+)-(\d+)/i);
+            if (matchFullRange) {
+                return {
+                    volumeMin: parseInt(matchFullRange[1], 10),
+                    volumeMax: parseInt(matchFullRange[2], 10),
+                    heightMin: parseInt(matchFullRange[3], 10),
+                    heightMax: parseInt(matchFullRange[4], 10)
+                };
+            }
+
+            const matchSingleWithHeight = normalized.match(/[рp]\.\s*(\d+)\/(\d+)-(\d+)/i);
+            if (matchSingleWithHeight) {
+                const size = parseInt(matchSingleWithHeight[1], 10);
+                return {
+                    volumeMin: size,
+                    volumeMax: size,
+                    heightMin: parseInt(matchSingleWithHeight[2], 10),
+                    heightMax: parseInt(matchSingleWithHeight[3], 10)
+                };
+            }
+
+            const matchRange = normalized.match(/[рp]\.\s*(\d+)\s*-\s*(\d+)/i);
+            if (matchRange) {
+                return {
+                    volumeMin: parseInt(matchRange[1], 10),
+                    volumeMax: parseInt(matchRange[2], 10),
+                    heightMin: 0,
+                    heightMax: 0
+                };
+            }
+
+            const matchSingle = normalized.match(/[рp]\.\s*(\d+)/i);
+            if (matchSingle) {
+                const size = parseInt(matchSingle[1], 10);
+                return {
+                    volumeMin: size,
+                    volumeMax: size,
+                    heightMin: 0,
+                    heightMax: 0
+                };
+            }
+
+            return { volumeMin: 999, volumeMax: 999, heightMin: 999, heightMax: 999 };
+        };
+
         return razmerArray
             .map((size, index) => ({ size, originalIndex: index }))
             .sort((a, b) => {
-                const parseSize = (sizeStr) => {
-                    const matchFull = sizeStr.match(/[рp]\.\s*(\d+)-(\d+)\/(\d+)-(\d+)/i);
-                    if (matchFull) {
-                        return {
-                            volumeMin: parseInt(matchFull[1], 10),
-                            volumeMax: parseInt(matchFull[2], 10),
-                            heightMin: parseInt(matchFull[3], 10),
-                            heightMax: parseInt(matchFull[4], 10)
-                        };
-                    }
-                    const matchRange = sizeStr.match(/[рp]\.\s*(\d+)\s*-\s*(\d+)/i);
-                    if (matchRange) {
-                        return {
-                            volumeMin: parseInt(matchRange[1], 10),
-                            volumeMax: parseInt(matchRange[2], 10),
-                            heightMin: 0,
-                            heightMax: 0
-                        };
-                    }
-                    return { volumeMin: 999, volumeMax: 999, heightMin: 999, heightMax: 999 };
-                };
-
                 const sizeA = parseSize(a.size);
                 const sizeB = parseSize(b.size);
                 const volumeA = (sizeA.volumeMin + sizeA.volumeMax) / 2;
