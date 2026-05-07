@@ -114,7 +114,6 @@ const Login = () => {
                             <div className={styles.input_text_error}>{errors['checkbox'] && errors['checkbox'].message}</div>
                         </div>
 
-
                         <button className={styles.form_button}>
                             Войти
                             {!isSending &&
@@ -129,7 +128,7 @@ const Login = () => {
                         </button>
                         {error && <div className={styles.error_message}>{error}</div>}
                     </form>
-                    <Link className={styles.register_link} href="/register">Нет аккаунта? <span>Зарегистрироваться</span></Link>
+                    <a className={styles.register_link} href="/register">Нет аккаунта? <span>Зарегистрироваться</span></a>
                 </div>
             </div>
         </div>

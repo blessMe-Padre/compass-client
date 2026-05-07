@@ -32,6 +32,7 @@ const Register = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState();
+    const [notification, setNotification] = useState('');
     const [sending, isSending] = useState(false);
 
     const router = useRouter();
@@ -40,6 +41,14 @@ const Register = () => {
         isSending(true);
         setError(undefined);
         setIsSuccess(false);
+        setNotification('Пройдите капчу');
+
+        const captureResponse = window.grecaptcha?.getResponse();
+
+        if (!captureResponse) {
+            isSending(false);
+            return;
+        }
 
         const email = formData.email.trim().toLowerCase();
         const payload = {
@@ -49,6 +58,19 @@ const Register = () => {
         };
 
         try {
+            const captchaRes = await fetch('/api/captcha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ captureResponse }),
+            });
+            const captchaResult = await captchaRes.json();
+            setNotification(captchaResult.message);
+
+            if (!captchaResult.ok) {
+                isSending(false);
+                return;
+            }
+
             const { response, data } = await registerUserService(payload);
             if (response.ok) {
                 setIsSuccess(true);
@@ -60,10 +82,12 @@ const Register = () => {
                 window.location.href = '/dashboard';
             } else {
                 setError(data?.error?.message || 'Что-то пошло не так');
+                window.grecaptcha?.reset();
                 console.error('Статус ошибки:', response.status, data);
             }
         } catch (err) {
             setError('Ошибка запроса, попробуйте позже');
+            window.grecaptcha?.reset();
             console.error('Fetch error:', err);
         } finally {
             isSending(false);
@@ -118,6 +142,11 @@ const Register = () => {
                                     error={errors.password}
                                 />
                                 <div className={styles.input_text_error}>{errors['password'] && errors['password'].message}</div>
+                            </div>
+
+                            <div className={styles.captcha_wrapper}>
+                                <div className="g-recaptcha" data-sitekey={process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY}></div>
+                                <div className={styles.input_text_error}>{notification}</div>
                             </div>
 
                             <button className={styles.form_button}>
