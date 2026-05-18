@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { Preloader } from '@/app/components';
 
-
 const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
 export default function Search() {
@@ -17,8 +16,7 @@ export default function Search() {
     const [isFocused, setIsFocused] = useState(false);
 
     const router = useRouter();
-
-    const debounceTimeout = useRef(null)
+    const debounceTimeout = useRef(null);
 
     const handleDelete = (e) => {
         e.preventDefault();
@@ -76,7 +74,11 @@ export default function Search() {
             try {
                 const url = `${domain}/api/products?filters[title][$containsi]=${encodeURIComponent(inputValue)}&populate=*`;
                 const result = await fetchData(url);
-                setData(result?.data);
+
+                // Тут фильтруем товары у которых нет категорий. categories = 0;
+                const filteredData = result?.data?.filter(item => item.categories.length > 0);
+
+                setData(filteredData);
                 setLoading(false);
             } catch (error) {
                 console.error('Ошибка загрузки Объектов:', error)
@@ -136,31 +138,31 @@ export default function Search() {
                                                     className={styles.list_item}
                                                 >
                                                     {product?.imgs !== null ? (
-                                                            <Image
-                                                                src={`${domain}${product?.imgs?.[0]?.url}`} 
-                                                                alt="logo"
-                                                                width={40}
-                                                                height={50}
-                                                                placeholder="blur"
-                                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                            />
-                                                        ) : (
-                                                            <Image
-                                                                src={`/placeholder-image.jpg`}
-                                                                alt="logo"
-                                                                width={40}
-                                                                height={50}
-                                                                placeholder="blur"
-                                                                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
-                                                            />
-                                                        )
+                                                        <Image
+                                                            src={`${domain}${product?.imgs?.[0]?.url}`}
+                                                            alt="logo"
+                                                            width={40}
+                                                            height={50}
+                                                            placeholder="blur"
+                                                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                        />
+                                                    ) : (
+                                                        <Image
+                                                            src={`/placeholder-image.jpg`}
+                                                            alt="logo"
+                                                            width={40}
+                                                            height={50}
+                                                            placeholder="blur"
+                                                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MiIgaGVpZ2h0PSIxMTg5IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNjY2MiIC8+PC9zdmc+" priority
+                                                        />
+                                                    )
                                                     }
                                                     <div>
                                                         <div>
                                                             <span className={styles.item_title}>{highlightText(product.title, inputValue)}</span>
-                                                            <span className={styles.item_atr}>({product.size})</span>
+                                                            <span className={styles.item_atr}>{product.size}</span>
                                                         </div>
-                                                        <div>{product.price}</div>
+                                                        <div>{product.price.toLocaleString('ru-Ru')} Р</div>
                                                     </div>
 
                                                 </Link>
