@@ -130,7 +130,9 @@ function CardItem({ element }) {
                         <p className={`${styles.item_outstore}`}>Нет в наличии</p>
                     )
                     : (
-                        <AddToCartButton item={element} text={'В корзину'} />
+                        // Тут поменялась логика, теперь переход на страницу товара через Link
+                        // <AddToCartButton item={element} text={'Подробнее'} />
+                        <Link href={`products/${id}`} className={styles.btn}>Подробнее</Link>
                     )
                 }
 
