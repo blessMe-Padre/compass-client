@@ -598,10 +598,8 @@ const RecursiveCategoryItem = ({ category, level, expandedCategories, handleCate
 
 export default function ContentPage({ data, initialCategories }) {
 
-  console.log('initialCategories', initialCategories);
-
   return (
-    <Suspense fallback={<div>Загрузка...</div>}>
+    <Suspense fallback={<div className={'container'}><Preloader width={40} height={40} /></div>}>
       <CatalogContent initialCategories={initialCategories} />
     </Suspense>
   )
