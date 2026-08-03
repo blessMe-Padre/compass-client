@@ -1,0 +1,101 @@
+@use '@/app/mixins' as *;
+
+.section {
+    padding: 40px 0 0;
+}
+
+.tableBlock {
+    margin-bottom: 40px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.title {
+    font-weight: 500;
+    @include adaptiv-value("font-size", 19, 16);
+    line-height: 1.45;
+    color: var(--toggle-color);
+    margin-bottom: 20px;
+    max-width: 980px;
+}
+
+.tableScroll {
+    width: 100%;
+    margin-bottom: 18px;
+    overflow-x: auto;
+    border-radius: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--blue) transparent;
+}
+
+.table {
+    width: 100%;
+    min-width: max-content;
+    border-collapse: collapse;
+    color: var(--toggle-color);
+
+    th,
+    td {
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(107, 107, 107, 0.22);
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    td {
+        min-width: 72px;
+        font-variant-numeric: tabular-nums;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: rgba(107, 107, 107, 0.06);
+    }
+
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+        border-bottom: 0;
+    }
+}
+
+.sectionTitle {
+    background-color: rgba(0, 124, 194, 0.16);
+    color: var(--toggle-color);
+    font-weight: 600;
+    text-align: left !important;
+}
+
+.rowLabel {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 180px;
+    background-color: var(--new-light-orange);
+    font-weight: 500;
+    text-align: left !important;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding-top: 28px;
+    }
+
+    .table {
+        th,
+        td {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        td {
+            min-width: 62px;
+        }
+    }
+
+    .rowLabel {
+        min-width: 145px;
+    }
+}

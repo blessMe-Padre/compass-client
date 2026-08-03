@@ -41,7 +41,7 @@ export async function POST(request) {
 
     try {
         const payment = await checkout.createPayment(createPayload, idempotenceKey);
-        // console.log('payment', payment);
+
         return NextResponse.json(
             {
                 success: true,

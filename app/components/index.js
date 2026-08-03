@@ -6,6 +6,7 @@ export { default as Counter } from './Counter/Counter';
 export { default as MiniCart } from './MiniCart/MiniCart';
 export { default as PageMenu } from './PageMenu/PageMenu';
 export { default as TableSize } from './TableSize/TableSize';
+export { default as TableSizeShoe } from './TableSizeShoe/TableSizeShoe';
 
 
 // buttons

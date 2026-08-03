@@ -44,8 +44,6 @@ export default async function Page({ params }) {
     const productTitle = product?.title
     const sameProducts = await getAllProductsByTitle(productTitle)
 
-    console.log(product);
-
     return (
         <>
             <div className='container'>

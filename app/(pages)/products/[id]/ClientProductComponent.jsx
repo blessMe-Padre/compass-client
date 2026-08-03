@@ -10,11 +10,48 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import styles from './style.module.scss';
-import { AddToCartButton, Counter, TableSize, FavoriteBtn, OrderModal } from "@/app/components";
+import { AddToCartButton, Counter, TableSize, FavoriteBtn, OrderModal, TableSizeShoe } from "@/app/components";
 import { ReviewsSection } from "@/app/section";
 
 
-const tabButtons = [{ title: 'Характеристики' }, { title: 'Отзывы' }, { title: 'Таблица размеров' }]
+const BASE_TAB_BUTTONS = [{ title: 'Характеристики' }, { title: 'Отзывы' }];
+
+// Таблица определяется по верхней категории. UUID в конце slug может меняться,
+// поэтому сопоставляем по стабильному префиксу названия категории.
+const SIZE_TABLE_BY_TOP_CATEGORY = [
+    {
+        type: 'shoe',
+        slugs: ['02-obuv-'],
+    },
+    {
+        type: 'clothing',
+        slugs: [
+            '01-specodezhda-',
+            '03-odezhda-',
+            '4-termobel-yo-',
+            '08-detskiy-kamuflyazh-',
+        ],
+    },
+];
+
+const getProductCategorySlugs = (product) => {
+    const slugs = product?.categories?.map(category => category?.slug).filter(Boolean) ?? [];
+
+    if (product?.category?.slug) slugs.push(product.category.slug);
+    if (product?.categorySlug) slugs.push(product.categorySlug);
+
+    return [...new Set(slugs)];
+};
+
+const getSizeTableType = (categorySlugs) => {
+    const matchedTable = SIZE_TABLE_BY_TOP_CATEGORY.find(({ slugs }) =>
+        slugs.some(topCategorySlug =>
+            categorySlugs.some(categorySlug => categorySlug.startsWith(topCategorySlug))
+        )
+    );
+
+    return matchedTable?.type ?? null;
+};
 
 // Категории, для которых не нужно отображать колонку "Рост"
 const CATEGORIES_WITHOUT_HEIGHT = [
@@ -166,11 +203,22 @@ const ClientProductComponent = ({ data, sameProducts }) => {
     const imageList = data?.imgs;
     const domain = `${process.env.NEXT_PUBLIC_DOMAIN}`;
 
-    // Получаем slug категории
-    const categorySlug = data?.category?.slug || data?.categorySlug || '';
+    const categorySlugs = useMemo(() => getProductCategorySlugs(data), [data]);
+    const sizeTableType = useMemo(() => getSizeTableType(categorySlugs), [categorySlugs]);
+    const tabButtons = sizeTableType
+        ? [...BASE_TAB_BUTTONS, { title: 'Таблица размеров' }]
+        : BASE_TAB_BUTTONS;
 
     // Проверяем, нужно ли скрывать колонку "Рост" для данной категории
-    const isCategoryWithoutHeight = CATEGORIES_WITHOUT_HEIGHT.some(slug => categorySlug.includes(slug));
+    const isCategoryWithoutHeight = CATEGORIES_WITHOUT_HEIGHT.some(slug =>
+        categorySlugs.some(categorySlug => categorySlug.includes(slug))
+    );
+
+    useEffect(() => {
+        if (!sizeTableType && active === 2) {
+            setActive(0);
+        }
+    }, [active, sizeTableType]);
 
     // Проверяем наличие данных size и height в sameProducts
     const hasSizeData = useMemo(() => {
@@ -632,11 +680,14 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 >
                     <ReviewsSection data={data} />
                 </div>
-                <div
-                    className={`${active === 2 ? `${styles.block}` : `${styles.none}`}`}
-                >
-                    <TableSize />
-                </div>
+                {sizeTableType && (
+                    <div
+                        className={`${active === 2 ? `${styles.block}` : `${styles.none}`}`}
+                    >
+                        {sizeTableType === 'shoe' && <TableSizeShoe />}
+                        {sizeTableType === 'clothing' && <TableSize />}
+                    </div>
+                )}
             </div>
 
             <OrderModal

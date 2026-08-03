@@ -17,8 +17,6 @@ const Dashboard = () => {
     const { wishlist } = useWishlistStore();
     const documentId = useUserStore((state) => state.userData?.documentId);
 
-    console.log(user);
-
     const variants = {
         visible: {
             opacity: 1,
