@@ -10,12 +10,12 @@
   --super-light-gray: #f6f6f6;
   --orange: #f79410;
   --gray-gray: #eaeaea;
-  
+
   --new-blue: #4466B6;
   --new-orange: #EEA47E;
   --new-black: #22253C;
   --new-light-orange: #FEF4EE;
-  
+
   --hover-blue: #438db8;
   --hover-card: #FFF2EC;
 
@@ -147,7 +147,7 @@ svg path {
 
 .custom-pagination2 .swiper-pagination-bullet {
   width: 50px !important;
-} 
+}
 
 /* Общие стили для обеих кнопок */
 .custom-navigation .swiper-button-next,
@@ -173,10 +173,10 @@ svg path {
   .custom-navigation .swiper-button-next {
     margin-right: 20px;
   }
-  
+
   .custom-navigation .swiper-button-prev {
     margin-left: 20px;
-  }  
+  }
 }
 
 /* Стили при наведении */
@@ -383,4 +383,17 @@ svg path {
   36% {
     stroke-dashoffset: 0;
   }
+}
+
+.alert-wrapper {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+  text-align: center;
+}
+
+.alert-text {
+  color: green;
+  font-size: 20px;
 }
