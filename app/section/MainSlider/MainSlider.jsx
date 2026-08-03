@@ -98,13 +98,15 @@ const MainSlider = () => {
                                 </div>
                                 <div className={styles.slide_content}>
                                     <h2 className={styles.slide_text}>{slide?.text}</h2>
-                                    <div className="alert-wrapper">
-                                        <p style={{ fontSize: '20px', fontWeight: 'bold' }}>
-                                            Уважаемые гости! <br />
+                                    <div className={styles.alert_wrapper}>
+                                        <p className={styles.alert_title}>
+                                            Уважаемые гости!
                                         </p>
-                                        <p className='alert-text'>
-                                            Интернет магазин работает!  <br />
-                                            Страницы находятся в стадии наполнения!
+                                        <p className={styles.alert_text}>
+                                            Интернет магазин работает!
+                                            <span className={styles.alert_subtext}>
+                                                Страницы находятся в стадии наполнения
+                                            </span>
                                         </p>
                                     </div>
                                     <LinkButton

@@ -384,16 +384,3 @@ svg path {
     stroke-dashoffset: 0;
   }
 }
-
-.alert-wrapper {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 10px;
-  color: black;
-  text-align: center;
-}
-
-.alert-text {
-  color: green;
-  font-size: 20px;
-}
