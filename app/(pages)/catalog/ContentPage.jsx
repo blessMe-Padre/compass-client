@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Suspense } from 'react';
+import { createPortal } from 'react-dom';
 
 import getAllProducts from '@/app/utils/getAllProducts';
 import { motion } from "framer-motion";
@@ -39,6 +40,45 @@ function CatalogContent({ initialCategories }) {
   const [isLoading, setLoading] = useState(!initialCategories);
   const [error, setError] = useState(null);
   const [expandedCategories, setExpandedCategories] = useState([]);
+  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
+  const [mobileCategoryPath, setMobileCategoryPath] = useState([]);
+  const mobileDialogRef = useRef(null);
+  const mobileTriggerRef = useRef(null);
+  const mobileCurrentCategory = mobileCategoryPath[mobileCategoryPath.length - 1];
+  const mobileVisibleCategories = mobileCurrentCategory?.children || categories;
+
+  useEffect(() => {
+    if (!mobileCategoriesOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    mobileDialogRef.current?.querySelector('button')?.focus();
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setMobileCategoriesOpen(false);
+      if (event.key === 'Tab') {
+        const controls = mobileDialogRef.current?.querySelectorAll('button, a[href]');
+        if (!controls?.length) return;
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault(); last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault(); first.focus();
+        }
+      }
+    };
+    const onResize = () => {
+      if (window.innerWidth > 768) setMobileCategoriesOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('resize', onResize);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('resize', onResize);
+      mobileTriggerRef.current?.focus();
+    };
+  }, [mobileCategoriesOpen]);
+
 
   const [activeCategoryId, setActiveCategoryId] = useState([]);
   const [loadMoreHidden, setLoadMoreHidden] = useState(false);
@@ -226,7 +266,7 @@ function CatalogContent({ initialCategories }) {
             const last = path[path.length - 1];
             if (last.children && last.children.length > 0) {
               setCurrentLevelCategories(last.children);
-              setShowProducts(false);
+              setShowProducts(searchParams.get('view') === 'products');
             } else {
               setShowProducts(true);
             }
@@ -237,7 +277,7 @@ function CatalogContent({ initialCategories }) {
           // Нет slug — корень каталога
           setNavigationPath([]);
           setCurrentLevelCategories([]);
-          setShowProducts(false);
+          setShowProducts(searchParams.get('view') === 'products');
           setCategoryName('Каталог');
         }
       }
@@ -434,6 +474,7 @@ function CatalogContent({ initialCategories }) {
       <div className='container'>
         <Breadcrumbs
           secondLabel="Каталог"
+          secondLink="/catalog"
           thirdLabel={categoryName !== 'Каталог' ? categoryName : ''}
         />
 
@@ -466,8 +507,51 @@ function CatalogContent({ initialCategories }) {
           </div>
         )}
 
+        <button type="button" ref={mobileTriggerRef} className={styles.mobile_categories_trigger}
+          aria-haspopup="dialog" aria-expanded={mobileCategoriesOpen}
+          onClick={() => {
+            setMobileCategoryPath(navigationPath);
+            setMobileCategoriesOpen(true);
+          }}>
+          Категории <span aria-hidden="true">☰</span>
+        </button>
+        {mobileCategoriesOpen && createPortal(
+          <div ref={mobileDialogRef} className={styles.mobile_categories_dialog} role="dialog" aria-modal="true" aria-labelledby="mobile-category-title">
+            <div className={styles.mobile_categories_header}>
+              <button type="button" disabled={!mobileCategoryPath.length}
+                onClick={() => setMobileCategoryPath(path => path.slice(0, -1))}>← Назад</button>
+              <button type="button" onClick={() => setMobileCategoriesOpen(false)} aria-label="Закрыть категории">✕</button>
+            </div>
+            <h2 id="mobile-category-title" className={styles.mobile_categories_title} aria-live="polite">
+              {mobileCurrentCategory?.name || 'Каталог'}
+            </h2>
+            <div className={styles.mobile_categories_scroll}>
+              <Link className={styles.mobile_categories_all}
+                href={mobileCurrentCategory ? `/catalog?slug=${encodeURIComponent(mobileCurrentCategory.slug)}&view=products` : '/catalog?view=products'}
+                onClick={() => setMobileCategoriesOpen(false)}>
+                {mobileCurrentCategory ? 'Все товары раздела' : 'Все товары каталога'}
+              </Link>
+              <ul className={styles.mobile_categories_list}>
+                {[...mobileVisibleCategories].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map(category => (
+                  <li key={category.id1c || category.slug}>
+                    {category.children?.length > 0 ? (
+                      <button type="button" onClick={() => {
+                        setMobileCategoryPath(path => [...path, category]);
+                        mobileDialogRef.current?.querySelector(`.${styles.mobile_categories_scroll}`)?.scrollTo(0, 0);
+                      }}>
+                        <span>{category.name}</span><span aria-hidden="true">›</span>
+                      </button>
+                    ) : (
+                      <Link href={`/catalog?slug=${encodeURIComponent(category.slug)}`} onClick={() => setMobileCategoriesOpen(false)}>{category.name}</Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>, document.body
+        )}
         <div className={styles.catalog_wrapper}>
-          <div className={styles.dop_wrapper}>
+          <div className={`${styles.dop_wrapper} ${styles.desktop_categories}`}>
             <Link href={'/catalog'}>
               <div className={styles.catalog_btn} onClick={handleCatalogRootClick}>
                 Каталог
