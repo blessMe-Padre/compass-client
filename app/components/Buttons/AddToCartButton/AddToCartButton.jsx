@@ -42,6 +42,7 @@ const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) 
     const handleClick = async () => {
         setIsLoading(true);
         localStorage.setItem('orderPlaced', false);
+        localStorage.removeItem('placedOrder');
         
         try {
             // Добавляем минимальную задержку для видимости loading состояния

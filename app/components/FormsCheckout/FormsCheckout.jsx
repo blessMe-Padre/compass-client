@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import styles from './style.module.scss'
 import { useForm, useWatch, Controller } from 'react-hook-form';
@@ -83,19 +83,15 @@ const sendPaymentService = async (orderUniqNumber, totalSum, orderItems, user) =
         });
 
         const result = await response.json();
-        return result;
-
-
         if (!response.ok || !result.success) {
             throw new Error(result.error || 'Ошибка при создании платежа');
         }
-
+        return result;
     } catch (err) {
-        console.log(err);
-
-    } finally {
-
+        console.error('Ошибка создания платежа:', err);
+        throw err;
     }
+
 };
 
 function formatPhone(raw) {
@@ -121,7 +117,7 @@ function formatPhone(raw) {
     return result;
 }
 
-export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, setPaymentMessage, setOrderWasCreate }) {
+export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, setPaymentMessage, setOrderWasCreate, setLastOrder, setPaymentError }) {
     const [user, setUser] = useState({});
     const { token } = useCdekTokenStore();
     const { storeData, setDeliveryData } = useDeliveryStore();
@@ -154,7 +150,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     }, []);
 
     const [error, setError] = useState();
-    const [sending, isSending] = useState(false);
+    const submittingRef = useRef(false);
 
     const { totalSum } = useCartTotals();
     const { clearCart } = useCartStore();
@@ -275,6 +271,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     }
 
     const onSubmit = async () => {
+        if (submittingRef.current) return;
         const orderUniqNumber = crypto.randomUUID();
 
         // Собираем данные доставки только если нужно
@@ -360,60 +357,61 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
             dataCustomer: dataCustomer,
         };
 
-        // console.log(formData);
-        isSending(true);
-
+        submittingRef.current = true;
+        setIsSubmit(true);
+        setError(undefined);
+        setPaymentError('');
+        let created = false;
         try {
-            // отправка заказа в страпи и в сдэк
-            setIsSubmit(true);
             const { response, data } = await sendOrderService(formData);
-            if (response.ok) {
+            if (!response.ok) {
+                throw new Error(data?.error?.message || 'Не удалось оформить заказ');
+            }
+            created = true;
+            const savedOrder = {
+                id: data?.data?.id,
+                documentId: data?.data?.documentId,
+                orderNumber: data?.data?.orderNumber || data?.data?.attributes?.orderNumber || formData.orderNumber,
+            };
+            // Сначала передаём номер, затем показываем результат и очищаем корзину.
+            setLastOrder(savedOrder);
+            try {
+                localStorage.setItem('placedOrder', JSON.stringify(savedOrder));
+                localStorage.setItem('orderPlaced', 'true');
+            } catch (storageError) {
+                console.error('Не удалось сохранить номер заказа:', storageError);
+            }
+
+            if (paymentMethod === 'Оплата онлайн на сайте') {
+                setPaymentMessage(true);
+                try {
+                    const paymentResult = await sendPaymentService(orderUniqNumber, totalSum, cartItems, user);
+                    const paymentUrl = paymentResult?.data?.confirmation?.confirmation_url;
+                    if (!paymentUrl) throw new Error('Не получена ссылка на оплату');
+                    window.location.assign(paymentUrl);
+                } catch (paymentError) {
+                    setPaymentMessage(false);
+                    setPaymentError('Заказ оформлен, но перейти к оплате не удалось. Не создавайте повторный заказ; свяжитесь с магазином для оплаты.');
+                }
+            }
+        } catch (err) {
+            console.error('Ошибка оформления заказа:', err);
+            setError(err.message || 'Ошибка запроса, попробуйте позже');
+        } finally {
+            if (created) {
+                setOrderWasCreate(true);
                 setSubmitted(true);
-                setError(undefined);
                 reset();
                 clearCart();
-                setOrderWasCreate(true);
-                localStorage.setItem('orderPlaced', 'true');
-                // handleCreateCdekOrder();
-            } else {
-                setError(data?.error?.message || 'Что-то пошло не так');
-                console.error('Статус ошибки:', response.status, data);
             }
-
-            if (paymentMethod === "Оплата онлайн на сайте") {
-                setSubmitted(true);
-                const paymentResult = await sendPaymentService(orderUniqNumber, storeData.totalSum, cartItems, user);
-                setPaymentData(paymentResult?.data);
-
-                // устанавливает сообщение о редирект
-                setPaymentMessage(true);
-                const url = paymentResult.data?.confirmation?.confirmation_url;
-
-                if (url) {
-                    setTimeout(() => {
-                        // router.push(url);
-                        window.location.href = url;
-                    }, 2000);
-                }
-
-                if (!paymentResult.success) {
-                    // throw new Error(paymentResult.error || "Оплата не прошла");
-                }
-            }
-
-            setError('Ошибка запроса, попробуйте позже');
-            setIsSubmit(false);
-
-        } catch (err) {
-            console.error('Общая ошибка отправки создания заказа:', err);
+            submittingRef.current = false;
             setIsSubmit(false);
         }
-
-        // ===============================
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            {error && <p role="alert">{error}</p>}
             <h3>Контактные данные</h3>
             <div className={styles.form_content}>
                 {type === 'physical'

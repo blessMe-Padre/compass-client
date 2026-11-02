@@ -52,14 +52,6 @@ export async function POST(request) {
 
     } catch (error) {
         console.error(error);
+        return NextResponse.json({ success: false, error: 'Не удалось создать платёж' }, { status: 502 });
     }
-
-    // if (!payment.ok) {
-    //     return NextResponse.json(
-    //         { error: `Произошла ошибка во время оплаты: ${res.status}`, detail: data },
-    //         { status: res.status }
-    //     )
-    // }
-
-    return NextResponse.json(data)
 }

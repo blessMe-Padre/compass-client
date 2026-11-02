@@ -4,16 +4,12 @@ import styles from './style.module.scss';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FormsCheckout, CartInfo, LinkButton } from '@/app/components';
 
-import useUserStore from '@/app/store/userStore';
-import getUserById from '@/app/utils/getUserById';
 
 import { useRef } from 'react';
 import useCartStore from '@/app/store/cartStore';
 
 
 export default function ContentPage() {
-    const [user, setUser] = useState({});
-    const documentId = useUserStore.getState().userData?.documentId ?? '';
 
     const [activeTab, setActiveTab] = useState('physical');
     const [isSubmitSuccessful, setIsSubmitSuccessful] = useState(false);
@@ -21,6 +17,7 @@ export default function ContentPage() {
 
     const [orderWasCreate, setOrderWasCreate] = useState(false);
     const [paymentMessage, setPaymentMessage] = useState(false);
+    const [paymentError, setPaymentError] = useState('');
     const [lastOrder, setLastOrder] = useState();
     const { cartItems } = useCartStore();
     const formRef = useRef();
@@ -39,37 +36,19 @@ export default function ContentPage() {
         }
     };
 
-    if (typeof window !== 'undefined') {
-        useEffect(() => {
-            const flag = localStorage.getItem('orderPlaced');
-            setOrderWasCreate(flag === 'true');
-        }, []);
-    }
-
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await getUserById(documentId);
-                setUser(response[0]);
-
-            } catch (error) {
-                console.error('Произошла ошибка', error);
+        if (localStorage.getItem('orderPlaced') !== 'true') return;
+        try {
+            const savedOrder = JSON.parse(localStorage.getItem('placedOrder') || 'null');
+            if (savedOrder?.orderNumber) {
+                setLastOrder(savedOrder);
+                setOrderWasCreate(true);
+                setIsSubmitSuccessful(true);
             }
-        };
-
-        loadData();
+        } catch {
+            localStorage.removeItem('placedOrder');
+        }
     }, []);
-
-    useEffect(() => {
-        const orders = user?.orders ?? [];
-        const lastOrder = orders.length > 0
-            ? orders.reduce((max, o) =>
-                Number(o.id) > Number(max.id) ? o : max
-                , orders[0])
-            : null;
-
-        setLastOrder(lastOrder);
-    }, [isSubmitSuccessful, user?.orders]);
 
     return (
         <section>
@@ -78,11 +57,12 @@ export default function ContentPage() {
 
                 <div className={styles.wrapper}>
 
-                    {paymentMessage && <p>Ожидайте, перенаправления на страницу оплату</p>}
+                    {paymentMessage && <p>Заказ № {lastOrder?.orderNumber} оформлен. Перенаправляем на страницу оплаты…</p>}
+                    {paymentError && <p role="alert">{paymentError}</p>}
 
                     {orderWasCreate && !paymentMessage &&
                         < div >
-                            <p style={{ marginBottom: '20px' }}>Ваш заказ № "{lastOrder?.orderNumber}" <span style={{ fontWeight: 700 }}> </span> оформлен</p>
+                            <p style={{ marginBottom: '20px' }}>Ваш заказ № {lastOrder?.orderNumber} <span style={{ fontWeight: 700 }}> </span> оформлен</p>
                             <p style={{ marginBottom: '20px' }}><span style={{ fontWeight: 700 }}> </span>Посмотреть статус заказа вы можете в личном кабинете</p>
                             <LinkButton href='/dashboard' text={'Перейти в личный кабинет'} />
                         </div>
@@ -143,6 +123,8 @@ export default function ContentPage() {
                                                                 ref={formRef}
                                                                 type={'physical'}
                                                                 setSubmitted={setIsSubmitSuccessful}
+                                                                setLastOrder={setLastOrder}
+                                                                setPaymentError={setPaymentError}
                                                                 setIsSubmit={setIsSubmit}
                                                                 setPaymentMessage={setPaymentMessage}
                                                                 setOrderWasCreate={setOrderWasCreate}
@@ -162,7 +144,12 @@ export default function ContentPage() {
                                                             <FormsCheckout
                                                                 ref={formRef}
                                                                 type={'legal'}
+                                                                setIsSubmit={setIsSubmit}
+                                                                setPaymentMessage={setPaymentMessage}
+                                                                setOrderWasCreate={setOrderWasCreate}
                                                                 setSubmitted={setIsSubmitSuccessful}
+                                                                setLastOrder={setLastOrder}
+                                                                setPaymentError={setPaymentError}
                                                             />
                                                         </motion.div>
                                                     )}
