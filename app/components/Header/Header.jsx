@@ -31,42 +31,49 @@ const Header = () => {
     const pathname = usePathname();
     const isHome = pathname === '/';
 
-    // состояния меню каталога
-    const [activeSubmenuLvl1, setActiveSubmenuLvl1] = useState(null);
+    const [activeMenu, setActiveMenu] = useState(null);
     const [hoveredSubmenuItem, setHoveredSubmenuItem] = useState(null);
-
+    const [menuAlignRight, setMenuAlignRight] = useState(false);
+    const catalogRef = useRef(null);
+    const closeTimer = useRef(null);
+    const hoverTimer = useRef(null);
     const { cartItems, removeFromCart } = useCartStore();
 
-    const menuClick = (e) => {
-        e.preventDefault();
-        document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
-            link.classList.remove(`${styles.catalog_item_active}`);
-        });
-
-        document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
-            ul.classList.remove(styles.submenu_active);
-        });
-
-        const targetLink = e.target;
-        targetLink.classList.add(`${styles.catalog_item_active}`);
-
-        const nextUl = targetLink.parentElement.querySelector('ul');
-        if (nextUl) {
-            nextUl.classList.add(styles.submenu_active);
-        }
-    }
-
-    const returnToPrev = () => {
-        setHoveredSubmenuItem(null);
+    const cancelMenuTimers = () => {
+        clearTimeout(closeTimer.current);
+        clearTimeout(hoverTimer.current);
     };
-
     const closeMobileCatalogMenu = () => {
+        cancelMenuTimers();
+        setActiveMenu(null);
         setHoveredSubmenuItem(null);
-        setActiveSubmenuLvl1(null);
-        document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
-            ul.classList.remove(styles.submenu_active);
-        });
     };
+    const returnToPrev = () => setHoveredSubmenuItem(null);
+    const menuClick = (e, index) => {
+        e.preventDefault();
+        cancelMenuTimers();
+        const rect = e.currentTarget.getBoundingClientRect();
+        setMenuAlignRight(rect.left + 640 > window.innerWidth - 20);
+        setActiveMenu(activeMenu === index ? null : index);
+        setHoveredSubmenuItem(null);
+    };
+
+    useEffect(() => {
+        const outside = (event) => {
+            if (!catalogRef.current?.contains(event.target)) closeMobileCatalogMenu();
+        };
+        const escape = (event) => {
+            if (event.key === 'Escape') closeMobileCatalogMenu();
+        };
+        document.addEventListener('pointerdown', outside);
+        document.addEventListener('keydown', escape);
+        return () => {
+            cancelMenuTimers();
+            document.removeEventListener('pointerdown', outside);
+            document.removeEventListener('keydown', escape);
+        };
+    }, []);
+    useEffect(() => { closeMobileCatalogMenu(); }, [pathname, isMobile]);
 
     const handleClickMiniCart = () => {
         modalMiniCartOpened === true ? setModalMiniCartOpened(false) : setModalMiniCartOpened(true)
@@ -92,7 +99,6 @@ const Header = () => {
 
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
-    const submenuRef = useRef(null);
     const modalMiniCartRef = useRef(null);
 
 
@@ -110,32 +116,11 @@ const Header = () => {
     useEffect(() => {
         const fetchTopMenu = async () => {
             const response = await fetchData(`${domain}/api/header-menu-item?populate[item_menu][populate][kategoriis][filters][isActive][$eq]=true&populate[item_menu][populate][kategoriis][fields][0]=name&populate[item_menu][populate][kategoriis][fields][1]=slug&populate[item_menu][populate][kategoriis][populate][children][filters][isActive][$eq]=true&populate[item_menu][populate][kategoriis][populate][children][fields][0]=name&populate[item_menu][populate][kategoriis][populate][children][fields][1]=slug`);
-            setCatalogLinks(response.data.item_menu || [])
+            setCatalogLinks(response?.data?.item_menu || [])
         }
 
         fetchTopMenu();
     }, [])
-
-    useEffect(() => {
-        if (isMobile) return;
-
-        const handleClickOutside = (e) => {
-            const menu = document.querySelector(`.${styles.catalog_list}`);
-            if (menu && !menu.contains(e.target)) {
-                document.querySelectorAll(`.${styles.catalog_list} li a`).forEach(link => {
-                    link.classList.remove(styles.catalog_item_active);
-                });
-                document.querySelectorAll(`.${styles.submenu}`).forEach(ul => {
-                    ul.classList.remove(styles.submenu_active);
-                });
-            }
-        };
-
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, [isMobile]);
 
     useEffect(() => {
         const checkIsMobile = () => {
@@ -236,87 +221,68 @@ const Header = () => {
                                 }}
                                 opened={opened}
                             />
-                            <div className='relative'>
-                                <ul className={`${styles.catalog_list}`}>
-                                    {[...catalogLinks]
-                                        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                                        .map((item, index) => (
-                                            <li key={index} className={styles.catalog_list_item}>
-                                                <Link
-                                                    href={item.link}
-                                                    onClick={menuClick}
-                                                    className={`${isHome ? styles.link_homeColor : styles.link_otherColor}`}
-                                                >
-                                                    {item.name}
-                                                </Link>
-                                                <ul className={styles.submenu}>
-                                                    {isMobile &&
-                                                        <div className={styles.menu_wrapper}>
-                                                            <p onClick={returnToPrev} className={styles.text}>Каталог</p>
-                                                            <div onClick={closeMobileCatalogMenu}>
-                                                                <Image
-                                                                    src="/сlose.svg"
-                                                                    alt="сlose"
-                                                                    width={20}
-                                                                    height={20}
-                                                                    priority
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                    {[...item?.kategoriis]
-                                                        .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                                                        .map((subItem, subIndex) => (
-                                                            <li
-                                                                key={subIndex}
+                            <div ref={catalogRef}>
+                                <ul className={styles.catalog_list}>
+                                    {[...catalogLinks].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map((item, index) => (
+                                        <li key={item.id ?? index} className={styles.catalog_list_item}
+                                            onMouseEnter={() => clearTimeout(closeTimer.current)}
+                                            onMouseLeave={() => {
+                                                if (!isMobile) {
+                                                    cancelMenuTimers();
+                                                    closeTimer.current = setTimeout(closeMobileCatalogMenu, 300);
+                                                }
+                                            }}>
+                                            <Link href={item.link} onClick={(e) => menuClick(e, index)}
+                                                aria-expanded={activeMenu === index}
+                                                className={`${isHome ? styles.link_homeColor : styles.link_otherColor} ${activeMenu === index ? styles.catalog_item_active : ''}`}>
+                                                {item.name}
+                                            </Link>
+                                            {activeMenu === index && (
+                                                <div className={`${styles.catalog_panel} ${menuAlignRight ? styles.align_right : ''}`}
+                                                    onMouseEnter={cancelMenuTimers}>
+                                                    <ul className={styles.submenu}>
+                                                        {isMobile && <li className={styles.menu_wrapper}>
+                                                            <span>Каталог</span>
+                                                            <button type="button" onClick={closeMobileCatalogMenu} aria-label="Закрыть меню">×</button>
+                                                        </li>}
+                                                        {[...(item.kategoriis || [])].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map((subItem) => (
+                                                            <li key={subItem.id ?? subItem.slug}
                                                                 onMouseEnter={() => {
-                                                                    setHoveredSubmenuItem(subItem);
-                                                                    setActiveSubmenuLvl1(subItem);
+                                                                    if (isMobile) return;
+                                                                    clearTimeout(hoverTimer.current);
+                                                                    hoverTimer.current = setTimeout(() => setHoveredSubmenuItem(subItem), 180);
                                                                 }}
-                                                                onMouseLeave={() => setHoveredSubmenuItem(null)}
-                                                            >
-                                                                <Link href={`/catalog?slug=${subItem?.slug}`}>{subItem?.name}</Link>
+                                                                onMouseLeave={() => clearTimeout(hoverTimer.current)}>
+                                                                <Link href={`/catalog?slug=${subItem.slug}`}
+                                                                    className={hoveredSubmenuItem === subItem ? styles.category_active : ''}
+                                                                    onFocus={() => setHoveredSubmenuItem(subItem)}
+                                                                    onClick={(e) => {
+                                                                        if (isMobile && subItem.children?.length) {
+                                                                            e.preventDefault();
+                                                                            setHoveredSubmenuItem(subItem);
+                                                                        } else closeMobileCatalogMenu();
+                                                                    }}>
+                                                                    {subItem.name}{subItem.children?.length > 0 && <span aria-hidden="true"> ›</span>}
+                                                                </Link>
                                                             </li>
                                                         ))}
-                                                </ul>
-                                            </li>
-                                        ))}
-                                </ul>
-
-                                {hoveredSubmenuItem?.children?.length > 0 && (
-                                    <div
-                                        ref={submenuRef}
-                                        className={`${styles.submenu_2} ${styles.active}`}
-                                        onMouseEnter={() => setHoveredSubmenuItem(hoveredSubmenuItem)}
-                                        onMouseLeave={() => setHoveredSubmenuItem(null)}
-                                    >
-                                        {isMobile &&
-                                            <div className={styles.menu_wrapper}>
-                                                <p onClick={returnToPrev} className={styles.text}>
-                                                    ← {hoveredSubmenuItem.name}
-                                                </p>
-                                                <div onClick={closeMobileCatalogMenu}>
-                                                    <Image
-                                                        src="/сlose.svg"
-                                                        alt="сlose"
-                                                        width={20}
-                                                        height={20}
-                                                        priority
-                                                    />
+                                                    </ul>
+                                                    {hoveredSubmenuItem?.children?.length > 0 && (
+                                                        <div className={styles.submenu_2} onMouseEnter={cancelMenuTimers}>
+                                                            {isMobile && <div className={styles.menu_wrapper}>
+                                                                <button type="button" onClick={returnToPrev}>← {hoveredSubmenuItem.name}</button>
+                                                                <button type="button" onClick={closeMobileCatalogMenu} aria-label="Закрыть меню">×</button>
+                                                            </div>}
+                                                            {[...hoveredSubmenuItem.children].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map((child) => (
+                                                                <Link key={child.id ?? child.slug} href={`/catalog?slug=${child.slug}`} onClick={closeMobileCatalogMenu}>{child.name}</Link>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            </div>
-                                        }
-
-                                        {[...hoveredSubmenuItem.children]
-                                            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-                                            .map((subItem, index) => (
-                                                <Link key={index} href={`/catalog?slug=${subItem.slug}`}>
-                                                    {subItem.name}
-                                                </Link>
-                                            ))}
-                                    </div>
-                                )}
-
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     </div>
