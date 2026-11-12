@@ -139,7 +139,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                 const response = await getUserById(documentId);
                 setUser(response[0]);
                 const userData = response[0];
-                setDeliveryData({ username: userData.username, phone: userData.phone, email: userData.email });
+                setDeliveryData({ phone: userData.phone, email: userData.email });
 
             } catch (error) {
                 console.error('Произошла ошибка', error);
@@ -239,7 +239,7 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
     useEffect(() => {
         if (user) {
             reset({
-                name: user.username || '',
+                name: '',
                 email: user.email || '',
                 tel: user.phone || '',
             });
@@ -433,7 +433,6 @@ export default function FormsCheckout({ type, ref, setSubmitted, setIsSubmit, se
                                         }
                                     })}
                                     error={errors.name}
-                                    defaultValue={user?.username ?? ''}
                                 />
                             </div>
                             <div className={styles.input_text_error}>{errors['name'] && errors['name'].message}</div>

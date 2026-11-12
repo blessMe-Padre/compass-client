@@ -29,7 +29,7 @@ export async function registerUserService(userData) {
 }
 
 const Register = () => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset, getValues } = useForm();
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState();
     const [notification, setNotification] = useState('');
@@ -142,6 +142,22 @@ const Register = () => {
                                     error={errors.password}
                                 />
                                 <div className={styles.input_text_error}>{errors['password'] && errors['password'].message}</div>
+                            </div>
+
+                            <div className={styles.form_item}>
+                                <label htmlFor="passwordConfirm">Повторите пароль</label>
+                                <input
+                                    id="passwordConfirm"
+                                    name="passwordConfirm"
+                                    type="password"
+                                    placeholder='Повторите пароль'
+                                    className={`${errors.passwordConfirm ? styles.error : ''}`}
+                                    {...register('passwordConfirm', {
+                                        required: { value: true, message: 'Повторите пароль' },
+                                        validate: (value) => value === getValues('password') || 'Пароли не совпадают'
+                                    })}
+                                />
+                                <div className={styles.input_text_error}>{errors['passwordConfirm'] && errors['passwordConfirm'].message}</div>
                             </div>
 
                             <div className={styles.captcha_wrapper}>

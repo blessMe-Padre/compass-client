@@ -92,7 +92,7 @@ export default function ContentPage() {
                                                     Физ.лицо
                                                 </label>
 
-                                                <label
+                                                {/* <label
                                                     htmlFor='legal'
                                                     className={`${styles.tab_btn} ${activeTab === 'legal' ? styles.active : ''}`}
                                                 >
@@ -105,7 +105,7 @@ export default function ContentPage() {
                                                         className={styles.radio_input}
                                                     />
                                                     Юр.лицо
-                                                </label>
+                                                </label> */}
                                             </div>
 
                                             <div className={styles.tab_content}>
@@ -132,7 +132,7 @@ export default function ContentPage() {
                                                         </motion.div>
                                                     )}
 
-                                                    {activeTab === 'legal' && (
+                                                    {/* {activeTab === 'legal' && (
                                                         <motion.div
                                                             key="legal"
                                                             variants={tabVariants}
@@ -152,7 +152,7 @@ export default function ContentPage() {
                                                                 setPaymentError={setPaymentError}
                                                             />
                                                         </motion.div>
-                                                    )}
+                                                    )} */}
                                                 </AnimatePresence>
                                             </div>
                                         </div>
