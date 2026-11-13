@@ -13,9 +13,8 @@ const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) 
 
     const prepareProduct = afterCounter
         ? (item) => ({
-            id: item?.id || item?.productId || '',
-            productId: item?.productId || item?.id || '',
-            id1c: item?.id1c || '',
+            id: item?.id ?? '55',
+            id1c: item?.id1c ?? '',
             documentId: item?.documentId ?? '',
             mainImg: item?.imgs?.[0]?.url ?? '',
             sku: item?.sku ?? '',
@@ -27,9 +26,8 @@ const AddToCartButton = ({ href = '/', text, items, many, item, afterCounter }) 
             quantity: item?.amount > 0 ? item.amount : 1,
         })
         : (item) => ({
-            id: item?.id || item?.productId || '',
-            productId: item?.productId || item?.id || '',
-            id1c: item?.id1c || '',
+            id: item?.id ?? '55',
+            id1c: item?.id1c ?? '',
             documentId: item?.documentId ?? '',
             mainImg: item?.imgs?.[0]?.url ?? '',
             sku: item?.sku ?? '',

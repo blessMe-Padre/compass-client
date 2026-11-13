@@ -53,23 +53,6 @@ const getSizeTableType = (categorySlugs) => {
     return matchedTable?.type ?? null;
 };
 
-const normalizeSizeToken = (value) => String(value ?? '').replace(/\s+/g, '').toLowerCase();
-
-const findSizeVariantProduct = (products, size, height, parentId) => {
-    const sizeKey = normalizeSizeToken(size);
-    const heightKey = normalizeSizeToken(height);
-    if (!sizeKey || !Array.isArray(products)) return null;
-
-    return products.find((product) => {
-        if (!product?.id1c || String(product.id) === String(parentId)) return false;
-        if (normalizeSizeToken(product.size) !== sizeKey) return false;
-        if (heightKey && normalizeSizeToken(product.height) && normalizeSizeToken(product.height) !== heightKey) {
-            return false;
-        }
-        return true;
-    }) ?? null;
-};
-
 // Категории, для которых не нужно отображать колонку "Рост"
 const CATEGORIES_WITHOUT_HEIGHT = [
     '02-obuv-',
@@ -331,28 +314,16 @@ const ClientProductComponent = ({ data, sameProducts }) => {
                 const couts = (coutsRazmerArray && coutsRazmerArray[idx] !== null && coutsRazmerArray[idx] !== undefined)
                     ? Number(coutsRazmerArray[idx]) || 0
                     : 0;
-                const variantMatch = String(size).match(/[рp]\.\s*([a-zа-я]{1,5}|\d{2,3}(?:-\d{2,3})?)\s*(?:\/\s*(\d{2,3}(?:-\d{2,3})?))?/i);
-                const variant = findSizeVariantProduct(
-                    sameProducts,
-                    variantMatch?.[1] || parsedSize,
-                    variantMatch?.[2] || parsedHeight,
-                    data.id
-                );
-                const id1c = variant?.id1c || data?.id1c || '';
 
                 return {
-                    id: variant?.id || `${data.id}::${idx}`,
-                    productId: variant?.id || data.id,
-                    id1c,
                     size: parsedSize,
                     height: parsedHeight,
                     amount: quantities[idx] || 0,
                     price: price,
                     priceSales: price,
-                    documentId: variant?.documentId || data.documentId || data.id,
-                    imgs: variant?.imgs?.length ? variant.imgs : data.imgs,
+                    documentId: data.documentId || data.id,
                     title: `${data.title} ${size}`,
-                    sku: variant?.sku || data.sku,
+                    sku: data.sku,
                     statusProduct: couts > 0 ? 'stock' : 'order'
                 };
             }).filter(item => item.amount > 0);
@@ -360,8 +331,6 @@ const ClientProductComponent = ({ data, sameProducts }) => {
             // Обычные товары
             return sameProducts.map((item, idx) => ({
                 ...item,
-                productId: item.productId || item.id,
-                id1c: item.id1c || '',
                 amount: quantities[idx] || 0
             })).filter(item => item.amount > 0);
         }
