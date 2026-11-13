@@ -55,7 +55,7 @@ export default function CartItem({ idx, el, location }) {
                 ${location === 'orderPage' ? `${styles.orderPage_info}` : ''}
                 `}>
                 <p className={styles.item_sku}>{el.sku}</p>
-                <Link className={styles.item_title} href={`/products/${el?.id}`}>{el.title}</Link>
+                <Link className={styles.item_title} href={`/products/${el?.productId || el?.id}`}>{el.title}</Link>
                 <p className={styles.item_size}>Размер: {el.size}</p>
                 <p className={styles.item_height}>Рост: {el.height}</p>
             </div>

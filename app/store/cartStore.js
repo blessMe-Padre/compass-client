@@ -43,7 +43,11 @@ const useCartStore = create(
             return {
               cartItems: state.cartItems.map(item => {
                 return item && item.id === product.id
-                  ? { ...item, quantity: (item.quantity || 0) + 1 }
+                  ? {
+                      ...item,
+                      quantity: (item.quantity || 0) + 1,
+                      id1c: product.id1c || item.id1c || '',
+                    }
                   : item;
               }), 
               lastAction: 'add'
@@ -79,7 +83,8 @@ const useCartStore = create(
                 updatedItems[existingIndex] = {
                   ...updatedItems[existingIndex],
                   quantity: (updatedItems[existingIndex].quantity || 0) + 
-                           (product.quantity || 1)
+                           (product.quantity || 1),
+                  id1c: product.id1c || updatedItems[existingIndex].id1c || '',
                 };
               } else {
                 updatedItems.push({
