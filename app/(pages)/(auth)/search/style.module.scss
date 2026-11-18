@@ -1,6 +1,25 @@
 @use '@/app/mixins' as *;
 // @include adaptiv-value("padding-bottom", 100, 40);
 
+.title {
+    font-weight: 700;
+    color: var(--toggle-color);
+    @include adaptiv-value("font-size", 36, 22);
+    @include adaptiv-value("padding-top", 40, 24);
+}
+
+.count,
+.empty {
+    color: var(--gray);
+    @include adaptiv-value("padding-top", 12, 8);
+}
+
+.status {
+    display: flex;
+    justify-content: center;
+    padding: 48px 0;
+}
+
 .list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -20,4 +39,51 @@
     @media (max-width: 576px) {
         grid-template-columns: 1fr;
     }
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    @include adaptiv-value("padding-bottom", 80, 40);
+}
+
+.page_btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--gray-gray);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--toggle-color);
+    font-family: var(--font-family);
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+        border-color: var(--new-blue);
+        color: var(--new-blue);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: default;
+    }
+}
+
+.page_btn_active {
+    background: var(--new-blue);
+    border-color: var(--new-blue);
+    color: var(--white);
+
+    &:hover:not(:disabled) {
+        color: var(--white);
+    }
+}
+
+.ellipsis {
+    color: var(--gray);
+    padding: 0 4px;
 }

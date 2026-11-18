@@ -88,17 +88,38 @@
     }
 }
 
-.list {
-    background-color: var(--white);
-    color: var(--black);
+.dropdown {
     position: absolute;
     left: 0;
     top: 64px;
+    width: 100%;
+    background-color: var(--white);
+    color: var(--black);
+    z-index: 2;
+}
+
+.list {
+    background-color: var(--white);
+    color: var(--black);
     padding: 0 20px 20px 20px;
     width: 100%;
 
     max-height: 300px;
     overflow: auto;
+}
+
+.more_link {
+    display: block;
+    text-align: center;
+    padding: 14px 20px;
+    border-top: 1px solid var(--gray-gray);
+    background-color: var(--white);
+    color: var(--new-blue);
+    font-weight: 500;
+
+    &:hover {
+        color: var(--new-orange);
+    }
 }
 
 .image {

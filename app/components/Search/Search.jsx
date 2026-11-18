@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from 'react';
 import fetchData from '../../utils/fetchData';
+import getProductWordForm from '../../utils/getProductWordForm';
 import styles from "./style.module.scss";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
@@ -13,6 +14,7 @@ export default function Search() {
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [dataList, setData] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
     const [isFocused, setIsFocused] = useState(false);
 
     const router = useRouter();
@@ -66,6 +68,7 @@ export default function Search() {
 
         if (inputValue.trim() === '') {
             setData([])
+            setTotalCount(0)
             return
         }
 
@@ -79,9 +82,11 @@ export default function Search() {
                 const filteredData = result?.data?.filter(item => item.categories.length > 0);
 
                 setData(filteredData);
+                setTotalCount(result?.meta?.pagination?.total || 0);
                 setLoading(false);
             } catch (error) {
                 console.error('Ошибка загрузки Объектов:', error)
+                setTotalCount(0);
                 setLoading(false);
             }
         }, 1000)
@@ -100,7 +105,15 @@ export default function Search() {
                             onChange={handleChange}
                             onFocus={() => setIsFocused(true)}
                             onKeyUp={handleKeyUp}
-                            onBlur={() => setTimeout(() => setIsFocused(false), 1000)} // задержка, чтобы кликнуть по элементу
+                            onBlur={(e) => {
+                                const next = e.relatedTarget;
+                                const input = e.currentTarget;
+                                setTimeout(() => {
+                                    if (document.activeElement === input) return;
+                                    if (next && input.parentElement?.parentElement?.contains(next)) return;
+                                    setIsFocused(false);
+                                }, 1000); // задержка, чтобы кликнуть по элементу
+                            }}
                             className={styles.input}
                             placeholder='Поиск'
                         />
@@ -122,10 +135,11 @@ export default function Search() {
 
                     {
                         isFocused && (
+                            <div className={styles.dropdown}>
                             <ul className={styles.list}>
                                 {inputValue.trim() === '' && <li>Начните печатать</li>}
                                 {loading && <Preloader width={20} height={20} />}
-                                {!loading && dataList.length === 0 && inputValue.trim() !== '' && (
+                                {!loading && dataList.length === 0 && inputValue.trim() !== '' && totalCount <= 24 && (
                                     <li>Ничего не найдено</li>
                                 )}
 
@@ -171,6 +185,15 @@ export default function Search() {
                                     })
                                 }
                             </ul>
+                            {!loading && totalCount > 24 && inputValue.trim() !== '' && (
+                                <Link
+                                    href={`/search?query=${encodeURIComponent(inputValue.trim())}`}
+                                    className={styles.more_link}
+                                >
+                                    Смотреть все результаты ({totalCount} {getProductWordForm(totalCount)})
+                                </Link>
+                            )}
+                            </div>
                         )
                     }
                 </div>
